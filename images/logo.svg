@@ -1,0 +1,44 @@
+<svg width="600" height="150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <!-- Outer Border Rectangle -->
+  <rect
+    width="100%"
+    height="100%"
+    style="fill:#1e2129"
+  />
+
+  <defs>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#339DFF" />
+      <stop offset="100%" stop-color="#8833FF" />
+    </linearGradient>
+    <style type="text/css">
+      .logo-text {
+        font-family: Hurmit Nerd Font Mono;
+        font-style: italic;
+        font-size: 75px;
+        fill: url(#textGradient);
+      }
+      .motion-line {
+        stroke: url(#textGradient);
+        stroke-width: 2;
+        stroke-linecap: round;
+        opacity: 0.6;
+      }
+    </style>
+  </defs>
+
+  <!-- Prompt arrow -->
+  <text x="10" y="93.75" font-size="75px" fill="#339DFF">&#x2771;</text>
+
+  <!-- Logo text -->
+  <text x="40" y="93.75" text-anchor="start" class="logo-text">typerdrive</text>
+
+  <!-- Motion lines -->
+  <line x1="100" y1="17" x2="400" y2="25.01" class="motion-line"/>
+  <line x1="130" y1="25" x2="400" y2="25.01" class="motion-line"/>
+  <!-- <line x1="60" y1="20" x2="160" y2="20.01" class="motion-line"></line> -->
+  <!-- <line x1="50" y1="80" x2="190" y2="80.01" class="motion-line" /> -->
+  <!-- <line x1="80" y1="90" x2="170" y2="90.01" class="motion-line" /> -->
+  <!-- <line x1="130" y1="45" x2="240" y2="45.01" class="motion-line" /> -->
+</svg>

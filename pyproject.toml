@@ -10,13 +10,13 @@ license-files = ["LICENSE.md"]
 
 requires-python = ">=3.12, ~=3.13"
 dependencies = [
-    "humanize>=4.12.2",
-    "inflection>=0.5.1",
+    "humanize~=4.12",
+    "inflection~=0.5",
     "py-buzz~=7.3",
-    "pydantic>=2.11.3",
+    "pydantic~=2.11",
     "snick~=2.1",
-    "typer>=0.15.2",
-    "typer-repyt>=0.7.0",
+    "typer~=0.15",
+    "typer-repyt~=0.7",
 ]
 
 
@@ -27,7 +27,7 @@ changelog = "https://github.com/dusktreader/typerdrive/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 demo = [
-    "rich>=14.0.0",
+    "rich~=14.0",
 ]
 
 [project.scripts]
@@ -36,7 +36,7 @@ typerdrive-demo = "typerdrive_demo.main:main[cli]"
 
 [dependency-groups]
 dev = [
-    "basedpyright>=1.29.1",
+    "basedpyright~=1.29",
     "debugpy~=1.8",
     "ipython~=8.18",
     "mkdocs-material~=9.6",

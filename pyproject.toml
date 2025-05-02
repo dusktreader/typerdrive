@@ -1,0 +1,108 @@
+[project]
+name = "typerdrive"
+version = "0.6.0"
+description = "Boost your command-line workflows to lightspeed"
+authors = [
+    {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
+]
+readme = "README.md"
+license-files = ["LICENSE.md"]
+
+requires-python = ">=3.12, ~=3.13"
+dependencies = [
+    "humanize>=4.12.2",
+    "inflection>=0.5.1",
+    "py-buzz~=7.3",
+    "pydantic>=2.11.3",
+    "snick~=2.1",
+    "typer>=0.15.2",
+    "typer-repyt>=0.7.0",
+]
+
+
+[project.urls]
+homepage = "https://github.com/dusktreader/typerdrive"
+source = "https://github.com/dusktreader/typerdrive"
+changelog = "https://github.com/dusktreader/typerdrive/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+demo = [
+    "rich>=14.0.0",
+]
+
+[project.scripts]
+typerdrive-demo = "typerdrive_demo.main:main[cli]"
+
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.29.1",
+    "debugpy~=1.8",
+    "ipython~=8.18",
+    "mkdocs-material~=9.6",
+    "mkdocstrings[python]~=0.29",
+    "mypy~=1.15",
+    "pyclean~=3.1",
+    "pygments~=2.19",
+    "pytest~=8.3",
+    "pytest-cov~=6.0",
+    "pytest-mock>=3.14.0",
+    "pytest-pretty~=1.2",
+    "pytest-random-order~=1.1",
+    "ruff~=0.11",
+    "typos~=1.31",
+]
+
+
+[tool.uv]
+package = true
+
+
+[tool.pytest.ini_options]
+addopts = [
+    "--random-order",
+    "--cov=src/typerdrive",
+    "--cov-report=term-missing",
+    "--cov-fail-under=85",
+    "--cov-report=xml:.coverage.xml",
+    "--junitxml=.junit.xml",
+    "--override-ini=junit_family=legacy",
+]
+
+
+[tool.ruff]
+line-length = 120
+src = ["src/typerdrive", "tests"]
+
+
+[tool.mypy]
+pretty = true
+check_untyped_defs = true
+files = ["src/typerdrive", "tests"]
+
+
+[[tool.mypy.overrides]]
+module = []
+ignore_missing_imports = true
+
+
+[tool.basedpyright]
+reportAny = false
+reportExplicitAny = false
+reportUnusedCallResult = false
+
+
+[tool.typos.default]
+extend-ignore-identifiers-re = []
+
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "src/typerdrive",
+    "src/typerdrive_demo",
+]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

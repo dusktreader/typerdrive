@@ -223,7 +223,7 @@ class TestAttachSettings:
         )
 
 
-class TestWithPrameters:
+class TestWithParameters:
     def test_attach_settings__with_settings_parameter(self):
         cli = typer.Typer()
 

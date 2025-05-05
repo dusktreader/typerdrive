@@ -40,7 +40,7 @@ object can be named anything you like!
 !!!warning "Settings model type agreement"
 
     The type of the pydantic model passed to `@attach_settings()` **MUST** match the type used for the settings
-    parameter of the command funciton. If the types do not match, a `Typer` exception will be raised saying that Typer
+    parameter of the command function. If the types do not match, a `Typer` exception will be raised saying that Typer
     doesn't know how to handle the argument.
 
 Great, now let's try a few commands in this app to see how the settings commands work.

@@ -472,6 +472,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-get_settings-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      The get_settings() functions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-add_-functions" class="md-nav__link">
     <span class="md-ellipsis">
       The add_.*() functions
@@ -751,6 +760,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-get_settings-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      The get_settings() functions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-add_-functions" class="md-nav__link">
     <span class="md-ellipsis">
       The add_.*() functions
@@ -893,15 +911,14 @@ your app's settings and allow your other commands to access the settings values 
 <span class="normal"><a href="#__codelineno-0-39">39</a></span>
 <span class="normal"><a href="#__codelineno-0-40">40</a></span>
 <span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">AfterValidator</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">snick</span><span class="w"> </span><span class="kn">import</span> <span class="n">unwrap</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.settings.commands</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_settings_subcommand</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.settings.attach</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_settings</span><span class="p">,</span> <span class="n">get_settings</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.settings.attach</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_settings</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">valid_alignment</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -923,34 +940,33 @@ your app's settings and allow your other commands to access the settings values 
 </span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>
 </span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
 </span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">SettingsModel</span><span class="p">)</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">):</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>    <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">SettingsModel</span><span class="p">)</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>    <span class="nb">print</span><span class="p">(</span>
-</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>        <span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="s2">            Look at this </span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">alignment</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">planet</span><span class="si">}</span>
-</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="s2">            </span><span class="si">{</span><span class="s1">&#39;walking&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">settings</span><span class="o">.</span><span class="n">is_humanoid</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;slithering&#39;</span><span class="si">}</span><span class="s2"> by.</span>
-</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="s2">            &quot;&quot;&quot;</span>
-</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>        <span class="p">)</span>
-</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="p">)</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">SettingsModel</span><span class="p">):</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a>    <span class="nb">print</span><span class="p">(</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>        <span class="n">unwrap</span><span class="p">(</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="s2">            Look at this </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">alignment</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">planet</span><span class="si">}</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="s2">            </span><span class="si">{</span><span class="s1">&#39;walking&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">cfg</span><span class="o">.</span><span class="n">is_humanoid</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;slithering&#39;</span><span class="si">}</span><span class="s2"> by.</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="s2">            &quot;&quot;&quot;</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>        <span class="p">)</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a>    <span class="p">)</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>
 </span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>
-</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>    <span class="n">cli</span><span class="p">()</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="n">cli</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
 <p>In this example, the app provides a <a href="https://docs.pydantic.dev/latest/">Pydantic</a> model that describes all of the
 settings values that the app needs. Then, the app calls the <code>add_settings_subcommand()</code> to add the <code>settings</code> feature to
 the CLI. That's all you need to utilize the <code>settings</code> feature in your app. Now, you can access and manage your settings
 through the various <code>settings</code> subcommands.</p>
 <p>In the <code>report</code> command, you can see how the settings values may be accessed within one of the app's other commands. The
-<code>@attach_settings</code> decorator adds the settings object to the app's <code>typer.Context</code>. Then, the <code>get_settings()</code> function
-can be called to retrieve an instance of the <code>SettingsModel</code> from the app context.</p>
-<div class="admonition note">
-<p class="admonition-title">Passing <code>type_hint</code> to <code>get_settings()</code></p>
-<p>You don't <em>have</em> to pass a type_hint to <code>get_settings()</code> for the code to work. However, static type checkers will
-object if you try to assign the returned model instance to your specific settings model. Because the model is bound
-to the settings commands <em>dynamically</em>, the <code>get_settings()</code> function needs a type hint to cast it to the
-appropriate model type.</p>
+<code>@attach_settings</code> decorator adds the settings object to the app's <code>typer.Context</code>. Then, the settings can be accessed
+by providing a parameter to the command that matches the <code>SettingsModel</code> type. The argument that will get the settings
+object can be named anything you like!</p>
+<div class="admonition warning">
+<p class="admonition-title">Settings model type agreement</p>
+<p>The type of the pydantic model passed to <code>@attach_settings()</code> <strong>MUST</strong> match the type used for the settings
+parameter of the command function. If the types do not match, a <code>Typer</code> exception will be raised saying that Typer
+doesn't know how to handle the argument.</p>
 </div>
 <p>Great, now let's try a few commands in this app to see how the settings commands work.</p>
 <p>First, we will just show the config</p>
@@ -1092,6 +1108,31 @@ then the corresponding setting value will be unset.</p>
 <p>The <code>reset</code> command returns <em>all</em> settings values to their initial state. It allows the settings to be in an invalid
 state when it is finished. It will also show the new settings values when it is done. The <code>reset</code> subcommand takes no
 arguments.</p>
+<h2 id="the-get_settings-functions">The <code>get_settings()</code> functions</h2>
+<p>In order for <code>typerdrive</code> to provide the settings through an argument to the command function, we have to tap into a bit
+of Python and Typer's "mystical energy field". If you want to use something more direct, you can access the settings
+object using the <code>get_settings()</code> function to extract it from the <code>typer.Context</code> instead. Rewriting the <code>report()</code>
+command to use the <code>get_settings()</code> function would look like this:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">SettingsModel</span><span class="p">)</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">):</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">SettingsModel</span><span class="p">)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="nb">print</span><span class="p">(</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>        <span class="n">unwrap</span><span class="p">(</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="s2">            Look at this </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">alignment</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">planet</span><span class="si">}</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="s2">            </span><span class="si">{</span><span class="s1">&#39;walking&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">cfg</span><span class="o">.</span><span class="n">is_humanoid</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;slithering&#39;</span><span class="si">}</span><span class="s2"> by.</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="s2">            &quot;&quot;&quot;</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>        <span class="p">)</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="p">)</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Passing <code>type_hint</code> to <code>get_settings()</code></p>
+<p>You don't <em>have</em> to pass a type_hint as the second argument to <code>get_settings()</code> for the code to work. However,
+static type checkers will object if you try to assign the returned model instance to your specific settings model.
+Because the model is bound to the settings commands <em>dynamically</em>, the <code>get_settings()</code> function needs a type hint
+to cast it to the appropriate model type.</p>
+</div>
 <h2 id="the-add_-functions">The <code>add_.*()</code> functions</h2>
 <p>The <code>typerdrive.settings.commands</code> module has several <code>add_.*()</code> functions. These work by adding a subcommand to the
 CLI app that is passed in. In general, you only need to use the <code>add_settings_subcommand()</code> in your app. However, if you
@@ -1101,35 +1142,35 @@ want to customize where the settings subcommands appear, you may call the other 
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_bind</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_bind</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_update"><code>add_update()</code></h3>
 <p>This method adds the <code>update</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_update</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_update</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_unset"><code>add_unset()</code></h3>
 <p>This method adds the <code>unset</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_unset</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_unset</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_show"><code>add_show()</code></h3>
 <p>This method adds the <code>show</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_show</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_show</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_reset"><code>add_reset()</code></h3>
 <p>This method adds the <code>reset</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_reset</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_reset</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_settings_subcommand"><code>add_settings_subcommand()</code></h3>
 <p>This method does three things:</p>
@@ -1140,7 +1181,7 @@ and then adds it to the <code>cli</code> argument.</p>
 </ul>
 <p>The result is that all the subcommands are available under one <code>settings</code> subcommand.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_settings_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_settings_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
 </span></code></pre></div></td></tr></table></div>
 
 

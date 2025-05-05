@@ -5,7 +5,7 @@ from snick import unwrap
 import typer
 
 from typerdrive.settings.commands import add_settings_subcommand
-from typerdrive.settings.attach import attach_settings, get_settings
+from typerdrive.settings.attach import attach_settings
 
 
 def valid_alignment(value: str) -> str:
@@ -27,13 +27,12 @@ add_settings_subcommand(cli, SettingsModel)
 
 @cli.command()
 @attach_settings(SettingsModel)
-def report(ctx: typer.Context):
-    settings = get_settings(ctx, SettingsModel)
+def report(ctx: typer.Context, cfg: SettingsModel):
     print(
         unwrap(
             f"""
-            Look at this {settings.alignment} {settings.name} from {settings.planet}
-            {'walking' if settings.is_humanoid else 'slithering'} by.
+            Look at this {cfg.alignment} {cfg.name} from {cfg.planet}
+            {'walking' if cfg.is_humanoid else 'slithering'} by.
             """
         )
     )

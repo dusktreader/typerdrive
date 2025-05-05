@@ -33,15 +33,15 @@ the CLI. That's all you need to utilize the `settings` feature in your app. Now,
 through the various `settings` subcommands.
 
 In the `report` command, you can see how the settings values may be accessed within one of the app's other commands. The
-`@attach_settings` decorator adds the settings object to the app's `typer.Context`. Then, the `get_settings()` function
-can be called to retrieve an instance of the `SettingsModel` from the app context.
+`@attach_settings` decorator adds the settings object to the app's `typer.Context`. Then, the settings can be accessed
+by providing a parameter to the command that matches the `SettingsModel` type. The argument that will get the settings
+object can be named anything you like!
 
-!!!note "Passing `type_hint` to `get_settings()`"
+!!!warning "Settings model type agreement"
 
-    You don't _have_ to pass a type_hint to `get_settings()` for the code to work. However, static type checkers will
-    object if you try to assign the returned model instance to your specific settings model. Because the model is bound
-    to the settings commands _dynamically_, the `get_settings()` function needs a type hint to cast it to the
-    appropriate model type.
+    The type of the pydantic model passed to `@attach_settings()` **MUST** match the type used for the settings
+    parameter of the command function. If the types do not match, a `Typer` exception will be raised saying that Typer
+    doesn't know how to handle the argument.
 
 Great, now let's try a few commands in this app to see how the settings commands work.
 
@@ -237,6 +237,37 @@ The `show` command just shows the current value of the settings. That's it!
 The `reset` command returns _all_ settings values to their initial state. It allows the settings to be in an invalid
 state when it is finished. It will also show the new settings values when it is done. The `reset` subcommand takes no
 arguments.
+
+
+## The `get_settings()` functions
+
+
+In order for `typerdrive` to provide the settings through an argument to the command function, we have to tap into a bit
+of Python and Typer's "mystical energy field". If you want to use something more direct, you can access the settings
+object using the `get_settings()` function to extract it from the `typer.Context` instead. Rewriting the `report()`
+command to use the `get_settings()` function would look like this:
+
+```python
+@cli.command()
+@attach_settings(SettingsModel)
+def report(ctx: typer.Context):
+    cfg = get_settings(ctx, SettingsModel)
+    print(
+        unwrap(
+            f"""
+            Look at this {cfg.alignment} {cfg.name} from {cfg.planet}
+            {'walking' if cfg.is_humanoid else 'slithering'} by.
+            """
+        )
+    )
+```
+
+!!!note "Passing `type_hint` to `get_settings()`"
+
+    You don't _have_ to pass a type_hint as the second argument to `get_settings()` for the code to work. However,
+    static type checkers will object if you try to assign the returned model instance to your specific settings model.
+    Because the model is bound to the settings commands _dynamically_, the `get_settings()` function needs a type hint
+    to cast it to the appropriate model type.
 
 
 ## The `add_.*()` functions

@@ -6,8 +6,9 @@ from rich.panel import Panel
 from snick import unwrap
 
 from typerdrive.cache.commands import add_cache_subcommand
-from typerdrive.cache.attach import attach_cache, get_manager
+from typerdrive.cache.attach import attach_cache
 from typerdrive.cache.exceptions import CacheError
+from typerdrive.cache.manager import CacheManager
 from typerdrive.env import tweak_env
 
 
@@ -45,8 +46,7 @@ speeches = dict(
 
 @cli.command()
 @attach_cache()
-def report(ctx: typer.Context):
-    manager = get_manager(ctx)
+def report(ctx: typer.Context, manager: CacheManager):
     speaker = choice(list(speeches.keys()))
     path = f"{speaker}/speech.txt"
     used_cache = False

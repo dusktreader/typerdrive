@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import cast
 
 import pytest
 import typer
@@ -12,7 +13,7 @@ from typerdrive.settings.attach import attach_settings, get_manager, get_setting
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
 
-from tests.helpers import match_output
+from tests.helpers import match_output, match_help
 from tests.settings.models import DefaultSettingsModel, RequiredFieldsModel
 
 
@@ -220,6 +221,64 @@ class TestAttachSettings:
             expected_pattern=expected_pattern,
             prog_name="test",
         )
+
+
+class TestWithPrameters:
+    def test_attach_settings__with_settings_parameter(self):
+        cli = typer.Typer()
+
+        @cli.command()
+        @attach_settings(DefaultSettingsModel, show=True)
+        def noop(ctx: typer.Context, stuff: DefaultSettingsModel):  # pyright: ignore[reportUnusedFunction]
+            assert stuff.name == "jawa"
+            assert stuff.planet == "tatooine"
+            assert stuff.is_humanoid
+            assert stuff.alignment == "neutral"
+            ctx_settings = get_settings(ctx, DefaultSettingsModel)
+            assert ctx_settings is stuff
+
+        expected_pattern = [
+            "name.*jawa",
+            "planet.*tatooine",
+            "is-humanoid.*True",
+            "alignment.*neutral",
+        ]
+        match_output(
+            cli,
+            expected_pattern=expected_pattern,
+            prog_name="test",
+        )
+
+        match_help(cli, unwanted_pattern="stuff")
+
+
+    def test_attach_settings__with_manager_parameter(self):
+        cli = typer.Typer()
+
+        @cli.command()
+        @attach_settings(DefaultSettingsModel, show=True)
+        def noop(ctx: typer.Context, mgr: SettingsManager):  # pyright: ignore[reportUnusedFunction]
+            settings: DefaultSettingsModel = cast(DefaultSettingsModel, mgr.settings_instance)
+            assert settings.name == "jawa"
+            assert settings.planet == "tatooine"
+            assert settings.is_humanoid
+            assert settings.alignment == "neutral"
+            ctx_settings = get_settings(ctx, DefaultSettingsModel)
+            assert ctx_settings is settings
+
+        expected_pattern = [
+            "name.*jawa",
+            "planet.*tatooine",
+            "is-humanoid.*True",
+            "alignment.*neutral",
+        ]
+        match_output(
+            cli,
+            expected_pattern=expected_pattern,
+            prog_name="test",
+        )
+
+        match_help(cli, unwanted_pattern="mgr")
 
 
 class TestGetSettings:

@@ -12,6 +12,8 @@ def demo_1__attach_settings__basic():
     """
     This function demonstrates the use of the `attach_settings` decorator.
     This decorator allows you to attach a Pydantic model to a typer command.
+    The settings are accessed by providing an argument with matching model type.
+    Note that the settings argument name can be anything you like.
     In order to use this decorator, your command must take a `typer.Context`
     object as the first argument.
     """
@@ -25,9 +27,8 @@ def demo_1__attach_settings__basic():
 
     @cli.command()
     @attach_settings(ExampleSettings)
-    def report(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-        settings: ExampleSettings = get_settings(ctx, ExampleSettings)
-        print(f"Look at this {settings.name} from {settings.planet}. It's soooo {settings.alignment}!")
+    def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        print(f"Look at this {cfg.name} from {cfg.planet}. It's soooo {cfg.alignment}!")
 
     cli()
 
@@ -48,7 +49,7 @@ def demo_2__attach_settings__enforce_validation():
 
     @cli.command()
     @attach_settings(ExampleSettings)
-    def report(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+    def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
         print("We will never got to this line")
 
     cli()
@@ -74,8 +75,30 @@ def demo_3__attach_settings__allow_invalid():
 
     @cli.command()
     @attach_settings(ExampleSettings, validation=Validation.NONE)
+    def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction]
+        print(f"Here are the settings that are missing a required field: {cfg}")
+
+    cli()
+
+
+def demo_4__attach_settings__access_through_context():
+    """
+    This function demonstrates how the settings can also be accessed through
+    the Typer context if you do not want to use a settings parameter. To access
+    settings with the context, use the `get_settings()` helper function.
+    """
+
+    class ExampleSettings(BaseModel):
+        name: str = "jawa"
+        planet: str = "tatooine"
+        alignment: str = "neutral"
+
+    cli = typer.Typer()
+
+    @cli.command()
+    @attach_settings(ExampleSettings)
     def report(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-        settings: ExampleSettings = get_settings(ctx, ExampleSettings)
-        print(f"Here are the settings that are missing a required field: {settings}")
+        cfg = get_settings(ctx, ExampleSettings)
+        print(f"Look at this {cfg.name} from {cfg.planet}. It's soooo {cfg.alignment}!")
 
     cli()

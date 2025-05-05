@@ -1,6 +1,7 @@
 import typer
 
-from typerdrive.cache.attach import attach_cache, get_manager
+from typerdrive.cache.attach import attach_cache
+from typerdrive.cache.manager import CacheManager
 from typerdrive.cache.exceptions import CacheError
 
 
@@ -9,8 +10,7 @@ cli = typer.Typer()
 
 @cli.command()
 @attach_cache()
-def report(ctx: typer.Context):
-    manager = get_manager(ctx)
+def report(ctx: typer.Context, manager: CacheManager):
     path = "jawa/ewok.txt"
     text: str
     try:

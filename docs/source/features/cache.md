@@ -21,7 +21,11 @@ The `typerdrive` package provides the functionality to store, retrieve, and clea
 - json data
 
 To gain access to your cache, you can retrieve the `CacheManager` that is bound to the user context through the use of
-the `@attach_cache` decorator.
+the `@attach_cache` decorator by providing an argument to your command with the `CacheManager` type.
+
+!!!note "The type is important!"
+
+    The type for you "manager" argument must be `CacehManager`, or Typer will throw an error!
 
 You can also view your cache at any time and clear one or all of the data in it through `cache` subcommands.
 
@@ -138,7 +142,12 @@ Note that you have to confirm whenever you request to clear the entire cache to 
 Let's take a closer look at the details of each `cache` subcommand and the methods of the `CacheManager`:
 
 
-### `clear`
+### `cache` sub-commands
+
+The `cache` command provides two sub-commands to manage the cache.
+
+
+#### `clear`
 
 The `clear` command gives you the ability to remove items from the cache. You can target a specific entry in the cache
 by passing it a specific path using the `--path` option. If the item is not found in the cache at that location, an
@@ -162,13 +171,25 @@ $ python examples/cache/commands.py cache clear --help
 ```
 
 
-### `show`
+#### `show`
 
 The `show` command just shows the current state of the cache. It will show the entire tree structure of the data stored
 in the cache and a report about how big the cache is and how many files are stored in it.
 
 
-### `CacheManager.resolve_path()`
+### The `get_manager()` function
+
+The `attach` submodule of `typerdrive.cache` provides a `get_manager()` function. If you want to avoid the magic of
+using a parameter to your command with the `CacheManager` type, you can get access to the `CacheManager` instance from
+the `typer.Context` using the `get_manager()` function instead.
+
+
+### `CacheManager` methods
+
+The `CacheManager` provides several methods for interacting with the cache.
+
+
+#### `CacheManager.resolve_path()`
 
 This method converts a cache target path like `yoda/speech.txt` into the absolute path to the file where the data is
 stored. It does several checks to make sure that the file exists and that the resolved path is actually within the cache
@@ -181,7 +202,7 @@ Function signature:
 ```
 
 
-### `CacheManager.store_bytes()`
+#### `CacheManager.store_bytes()`
 
 This method stores binary data in a cache target. An optional `mode` keyword argument can be provided to control the
 permissions of the cache entry. So, for example, if you want only your user to be able to read and write to the entry,
@@ -194,7 +215,7 @@ Function signature:
 ```
 
 
-### `CacheManager.store_text()`
+#### `CacheManager.store_text()`
 
 This method stores text data in a cache target. It can also be given a `mode` parameter.
 
@@ -205,7 +226,7 @@ Function signature:
 ```
 
 
-### `CacheManager.store_json()`
+#### `CacheManager.store_json()`
 
 This method stores a dictionary of data in a cache target. The dictionary must be JSON serializable or an error will be
 thrown. The JSON written to the file is formatted to be human readable. This method can also be provided a `mode`
@@ -218,7 +239,7 @@ Function signature:
 ```
 
 
-### `CacheManager.load_bytes()`
+#### `CacheManager.load_bytes()`
 
 This method loads binary data from a cache target. If the cache target does not exist, an error will be thrown.
 
@@ -227,7 +248,7 @@ This method loads binary data from a cache target. If the cache target does not 
 ```
 
 
-### `CacheManager.load_text()`
+#### `CacheManager.load_text()`
 
 This method loads text data from a cache target. If the cache target does not exist, an error will be thrown.
 
@@ -236,7 +257,7 @@ This method loads text data from a cache target. If the cache target does not ex
 ```
 
 
-### `CacheManager.load_json()`
+#### `CacheManager.load_json()`
 
 This method loads a JSON serialized dictionary from a cache target. If the cache target does not exist, an error will be
 thrown. If the data at the cache target cannot be serialized, an error will be thrown.
@@ -246,7 +267,7 @@ thrown. If the data at the cache target cannot be serialized, an error will be t
 ```
 
 
-### `CacheManager.clear_path()`
+#### `CacheManager.clear_path()`
 
 This method removes an entry from the cache at the provided target. If the target does not exist, an error will be
 thrown. If the parent directory of the entry is empty after it is removed, the parent directory will be removed as well.
@@ -256,7 +277,7 @@ thrown. If the parent directory of the entry is empty after it is removed, the p
 ```
 
 
-### `CacheManager.clear_all()`
+#### `CacheManager.clear_all()`
 
 This method will remove all items from the cache.
 
@@ -265,7 +286,7 @@ This method will remove all items from the cache.
 ```
 
 
-### `CacheManager.pretty()`
+#### `CacheManager.pretty()`
 
 This (poorly named) method gathers information about the cache and returns it in a format that can be pretty-printed by
 the `@attach_cache` decorator.

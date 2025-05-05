@@ -1,12 +1,13 @@
 from collections.abc import Callable
 from functools import wraps
-from typing import Concatenate, ParamSpec, TypeVar
+from typing import Concatenate, ParamSpec, TypeVar, Annotated
 
 import humanize
 import typer
 
 from typerdrive.cache.exceptions import CacheError
 from typerdrive.cache.manager import CacheManager
+from typerdrive.cloaked import CloakingDevice
 from typerdrive.context import from_context, to_context, get_app_name
 from typerdrive.format import terminal_message
 
@@ -26,10 +27,20 @@ ContextFunction = Callable[Concatenate[typer.Context, P], T]
 
 def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
+
+        manager_param_key: str | None = None
+        for key in func.__annotations__.keys():
+            if func.__annotations__[key] is CacheManager:
+                func.__annotations__[key] = Annotated[CacheManager | None, CloakingDevice]
+                manager_param_key = key
+
         @wraps(func)
         def wrapper(ctx: typer.Context, *args: P.args, **kwargs: P.kwargs) -> T:
             manager: CacheManager = CacheManager(get_app_name(ctx))
             to_context(ctx, "cache_manager", manager)
+
+            if manager_param_key:
+                kwargs[manager_param_key] = manager
 
             ret_val = func(ctx, *args, **kwargs)
 

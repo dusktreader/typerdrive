@@ -4,7 +4,7 @@ import typer
 from pydantic import BaseModel, AfterValidator
 from snick import unwrap
 
-from typerdrive.settings.attach import attach_settings, get_settings
+from typerdrive.settings.attach import attach_settings
 
 
 def valid_alignment(value: str) -> str:
@@ -25,13 +25,12 @@ cli = typer.Typer()
 
 @cli.command()
 @attach_settings(SettingsModel)
-def report(ctx: typer.Context):
-    settings = get_settings(ctx, SettingsModel)
+def report(ctx: typer.Context, cfg: SettingsModel):
     print(
         unwrap(
             f"""
-            Look at this {settings.alignment} {settings.name} from {settings.planet}
-            {'walking' if settings.is_humanoid else 'slithering'} by.
+            Look at this {cfg.alignment} {cfg.name} from {cfg.planet}
+            {'walking' if cfg.is_humanoid else 'slithering'} by.
             """
         )
     )

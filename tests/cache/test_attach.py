@@ -47,6 +47,32 @@ class TestAttachCache:
         )
 
 
+class TestWithParameters:
+    def test_attach_cache__with_manger_parameter(self, fake_cache_path: Path):
+        cli = typer.Typer()
+
+        @cli.command()
+        @attach_cache(show=True)
+        def noop(ctx: typer.Context, mgr: CacheManager):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+            mgr.store_bytes(b"jawa", "jawa")
+            mgr.store_bytes(b"ewok", "ewok")
+            mgr.store_bytes(b"hutt & pyke", "hutt/pyke")
+
+        expected_pattern = f"""
+            📂 {fake_cache_path}
+            ├── 📂 hutt
+            │   └── 📄pyke (11 Bytes)
+            ├── 📄ewok (4 Bytes)
+            └── 📄jawa (4 Bytes)
+        """
+        match_output(
+            cli,
+            expected_pattern=expected_pattern,
+            escape_parens=True,
+            prog_name="test",
+        )
+
+
 class TestGetManager:
     def test_get_manager__extracts_cache_manager_from_context(self, fake_cache_path: Path):
         cli = typer.Typer()

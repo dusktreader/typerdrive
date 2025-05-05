@@ -26,7 +26,7 @@ def demo_1__attach_cache__storing_data():
 
     @cli.command()
     @attach_cache(show=True)
-    def report(ctx: typer.Context, manager: CacheManager):  # pyright: ignore[reportUnusedFunction]
+    def report(ctx: typer.Context, manager: CacheManager):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
         manager.store_text("Utinni!", "jawa.txt")
         manager.store_bytes(b"Yub Nub!", "ewok")
         manager.store_json(
@@ -72,7 +72,7 @@ def demo_2__attach_cache__loading_data():
 
     @cli.command()
     @attach_cache(show=True)
-    def report(ctx: typer.Context, manager: CacheManager):  # pyright: ignore[reportUnusedFunction]
+    def report(ctx: typer.Context, manager: CacheManager):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
         jawa_quote = manager.load_text("jawa.txt")
         ewok_quote = manager.load_bytes("ewok").decode("utf-8")
         jabba_quote = manager.load_json("hutt/jabba.json")["quote"]

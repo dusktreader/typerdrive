@@ -75,7 +75,7 @@ def demo_3__attach_settings__allow_invalid():
 
     @cli.command()
     @attach_settings(ExampleSettings, validation=Validation.NONE)
-    def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction]
+    def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
         print(f"Here are the settings that are missing a required field: {cfg}")
 
     cli()

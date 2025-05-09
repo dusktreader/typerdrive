@@ -14,7 +14,7 @@
         <link rel="prev" href="../cache/">
       
       
-        <link rel="next" href="../../demo/">
+        <link rel="next" href="../client/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -530,6 +530,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      debug
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -539,6 +548,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API Clients
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -707,6 +739,15 @@
   <a href="#unwrap_message" class="md-nav__link">
     <span class="md-ellipsis">
       unwrap_message
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug" class="md-nav__link">
+    <span class="md-ellipsis">
+      debug
     </span>
   </a>
   
@@ -1065,6 +1106,13 @@ will be. Thus, it's better to let <code>rich</code> do the wrapping for us.</p>
 <p>However, sometimes the error message has a particular structure to it with indents and newlines. This is the case with
 <code>Pydantic</code> validation errors. In this case, we don't want the message unwrapped to a single line. If you set the
 <code>unwrap_message</code> kwarg to <code>False</code> the error will be printed as-is.</p>
+<h3 id="debug"><code>debug</code></h3>
+<p>By default, the <code>@handle_errors()</code> decorator will use only the <code>base_message</code> from a <code>TyperdriveError</code> (or any other
+<code>Buzz</code> exception). The <code>base_message</code> will have additional information if it was produced from a
+<a href="https://dusktreader.github.io/py-buzz/features#exception-handling-context-manager"><code>handle_errors()</code></a> or
+<a href="https://dusktreader.github.io/py-buzz/features#expression-checking-context-manager"><code>check_expressions()</code></a>
+context manager from <code>py-buzz</code>. The extended <code>message</code> in the exception may contain information that you don't want to
+show to your end user. If you want the full message to be displayed in the CLI, then set the <code>debug</code> flag to <code>True</code>.</p>
 
 
 
@@ -1111,13 +1159,13 @@ will be. Thus, it's better to let <code>rich</code> do the wrapping for us.</p>
         
         
           
-          <a href="../../demo/" class="md-footer__link md-footer__link--next" aria-label="Next: Runnable Demo">
+          <a href="../client/" class="md-footer__link md-footer__link--next" aria-label="Next: API Clients">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Runnable Demo
+                API Clients
               </div>
             </div>
             <div class="md-footer__button md-icon">

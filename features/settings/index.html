@@ -604,6 +604,29 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API Clients
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1127,11 +1150,10 @@ command to use the <code>get_settings()</code> function would look like this:</p
 </span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="p">)</span>
 </span></code></pre></div>
 <div class="admonition note">
-<p class="admonition-title">Passing <code>type_hint</code> to <code>get_settings()</code></p>
-<p>You don't <em>have</em> to pass a type_hint as the second argument to <code>get_settings()</code> for the code to work. However,
-static type checkers will object if you try to assign the returned model instance to your specific settings model.
-Because the model is bound to the settings commands <em>dynamically</em>, the <code>get_settings()</code> function needs a type hint
-to cast it to the appropriate model type.</p>
+<p class="admonition-title">The <code>type_hint</code> argument to <code>get_settings()</code></p>
+<p>Because the model is bound to the settings commands <em>dynamically</em>, the <code>get_settings()</code> function needs a type hint
+to cast it to the appropriate model type. This <code>type_hint</code> argument must match with the settings model that was
+attached or an exception will be raised.</p>
 </div>
 <h2 id="the-add_-functions">The <code>add_.*()</code> functions</h2>
 <p>The <code>typerdrive.settings.commands</code> module has several <code>add_.*()</code> functions. These work by adding a subcommand to the
@@ -1149,28 +1171,28 @@ and then adds it to the <code>cli</code> argument.</p>
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_update</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_unset"><code>add_unset()</code></h3>
 <p>This method adds the <code>unset</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_unset</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_show"><code>add_show()</code></h3>
 <p>This method adds the <code>show</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_show</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a>    <span class="k">pass</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_reset"><code>add_reset()</code></h3>
 <p>This method adds the <code>reset</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_reset</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a>    <span class="n">__manager</span><span class="p">:</span> <span class="n">SettingsManager</span> <span class="o">=</span> <span class="n">get_manager</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="add_settings_subcommand"><code>add_settings_subcommand()</code></h3>
 <p>This method does three things:</p>
@@ -1181,7 +1203,7 @@ and then adds it to the <code>cli</code> argument.</p>
 </ul>
 <p>The result is that all the subcommands are available under one <code>settings</code> subcommand.</p>
 <p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_settings_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">,</span> <span class="n">settings_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]):</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a>        <span class="p">],</span>
 </span></code></pre></div></td></tr></table></div>
 
 

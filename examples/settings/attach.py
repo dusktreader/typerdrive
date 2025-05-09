@@ -1,10 +1,9 @@
 from typing import Annotated
 
 import typer
-from pydantic import BaseModel, AfterValidator
+from pydantic import AfterValidator, BaseModel
 from snick import unwrap
-
-from typerdrive.settings.attach import attach_settings
+from typerdrive import attach_settings, set_typerdrive_config
 
 
 def valid_alignment(value: str) -> str:
@@ -21,16 +20,17 @@ class SettingsModel(BaseModel):
 
 
 cli = typer.Typer()
+set_typerdrive_config(app_name="settings-attach-example")
 
 
 @cli.command()
 @attach_settings(SettingsModel)
-def report(ctx: typer.Context, cfg: SettingsModel):
+def report(ctx: typer.Context, cfg: SettingsModel):  # pyright: ignore[reportUnusedParameter]
     print(
         unwrap(
             f"""
             Look at this {cfg.alignment} {cfg.name} from {cfg.planet}
-            {'walking' if cfg.is_humanoid else 'slithering'} by.
+            {"walking" if cfg.is_humanoid else "slithering"} by.
             """
         )
     )

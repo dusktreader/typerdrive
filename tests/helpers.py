@@ -1,11 +1,10 @@
-from itertools import pairwise
 import re
+from itertools import pairwise
 from typing import Any
 
 import typer
-from snick import conjoin, strip_ansi_escape_sequences, strip_whitespace, dedent, indent
+from snick import conjoin, dedent, indent, strip_ansi_escape_sequences, strip_whitespace
 from typer.testing import CliRunner
-
 
 runner = CliRunner()
 

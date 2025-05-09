@@ -1,8 +1,7 @@
 from pathlib import Path
 
 import typer
-
-from typerdrive.cache.commands import add_clear, add_show, add_cache_subcommand
+from typerdrive.cache.commands import add_cache_subcommand, add_clear, add_show
 from typerdrive.cache.manager import CacheManager
 from typerdrive.constants import ExitCode
 
@@ -58,7 +57,7 @@ class TestClear:
         cli = typer.Typer()
         add_clear(cli)
 
-        manager: CacheManager = CacheManager("test")
+        manager: CacheManager = CacheManager()
         manager.store_text("hive of scum and villainy", "jawa/ewok")
         manager.store_bytes(b"that's no moon", "hutt")
 
@@ -78,7 +77,7 @@ class TestClear:
         cli = typer.Typer()
         add_clear(cli)
 
-        manager: CacheManager = CacheManager("test")
+        manager: CacheManager = CacheManager()
         manager.store_text("hive of scum and villainy", "jawa/ewok")
         manager.store_bytes(b"that's no moon", "hutt")
 
@@ -97,7 +96,7 @@ class TestClear:
 
 class TestShow:
     def test_show__shows_cache_directory_tree(self, fake_cache_path: Path):
-        manager: CacheManager = CacheManager("test")
+        manager: CacheManager = CacheManager()
         manager.store_text("hive of scum and villainy", "jawa/ewok.txt")
         manager.store_bytes(b"that's no moon", "hutt")
 

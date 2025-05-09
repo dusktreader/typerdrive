@@ -1,25 +1,16 @@
-from enum import StrEnum, auto
-import traceback
-import logging
 import random
+import traceback
+from enum import StrEnum, auto
 
-from buzz import DoExceptParams
 import typer
-
-from typerdrive.exceptions import TyperdriveError, handle_errors
-from typerdrive.format import terminal_message, strip_rich_style
+from buzz import DoExceptParams
+from loguru import logger
+from typerdrive import TyperdriveError, handle_errors, strip_rich_style, terminal_message
 
 
 class CallIt(StrEnum):
     heads = auto()
     tails = auto()
-
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.CRITICAL)
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(logging.Formatter('%(asctime)s: %(levelname)s -> %(message)s'))
-logger.addHandler(console_handler)
 
 
 def log_error(params: DoExceptParams):
@@ -54,8 +45,10 @@ cli = typer.Typer()
     do_finally=log_done,
 )
 def flip(call_it: CallIt, show_logs: bool = False):
+    logger.disable(__name__)
     if show_logs:
-        logger.setLevel(logging.DEBUG)
+        logger.enable(__name__)
+
     result = random.choice([c for c in CallIt])
     logger.debug(f"Result: {result}")
     if call_it != result:

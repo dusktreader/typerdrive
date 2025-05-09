@@ -7,10 +7,7 @@ from random import randint
 import typer
 from pydantic import BaseModel
 from rich import print
-
-from typerdrive.client.attach import attach_client
-from typerdrive.client.base import TyperdriveClient
-from typerdrive.settings.attach import attach_settings
+from typerdrive import TyperdriveClient, attach_client, attach_settings
 
 
 def demo_1__attach_client__use_base_url_from_settings():
@@ -79,14 +76,12 @@ def demo_3__attach_client__multiple_clients():
         people_url: str = "https://swapi.info/api/people"
         planets_url: str = "https://swapi.info/api/planets"
 
-
     class PeopleResponse(BaseModel, extra="ignore"):
         name: str
         height: int
         mass: int
         birth_year: str
         gender: str
-
 
     class PlanetResponse(BaseModel, extra="ignore"):
         name: str

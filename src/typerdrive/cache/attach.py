@@ -1,21 +1,18 @@
 from collections.abc import Callable
 from functools import wraps
-from typing import Concatenate, ParamSpec, TypeVar, Annotated, Any
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
 
-import humanize
 import typer
 
 from typerdrive.cache.exceptions import CacheError
 from typerdrive.cache.manager import CacheManager
 from typerdrive.cloaked import CloakingDevice
-from typerdrive.context import from_context, to_context, get_app_name
-from typerdrive.format import terminal_message
+from typerdrive.context import from_context, to_context
+from typerdrive.dirs import show_directory
 
 
-def get_manager(ctx: typer.Context) -> CacheManager:
-    with CacheError.handle_errors(
-        "Cache is not bound to the context. Use the @attach_cache() decorator"
-    ):
+def get_cache_manager(ctx: typer.Context) -> CacheManager:
+    with CacheError.handle_errors("Cache is not bound to the context. Use the @attach_cache() decorator"):
         mgr: Any = from_context(ctx, "cache_manager")
     return CacheError.ensure_type(
         mgr,
@@ -31,7 +28,6 @@ ContextFunction = Callable[Concatenate[typer.Context, P], T]
 
 def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
-
         manager_param_key: str | None = None
         for key in func.__annotations__.keys():
             if func.__annotations__[key] is CacheManager:
@@ -40,7 +36,7 @@ def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
 
         @wraps(func)
         def wrapper(ctx: typer.Context, *args: P.args, **kwargs: P.kwargs) -> T:
-            manager: CacheManager = CacheManager(get_app_name(ctx))
+            manager: CacheManager = CacheManager()
             to_context(ctx, "cache_manager", manager)
 
             if manager_param_key:
@@ -49,13 +45,8 @@ def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
             ret_val = func(ctx, *args, **kwargs)
 
             if show:
-                cache_info = manager.pretty()
-                human_size = humanize.naturalsize(cache_info.total_size)
-                terminal_message(
-                    cache_info.tree,
-                    subject="Current cache",
-                    footer=f"Storing {human_size} in {cache_info.file_count} files",
-                )
+                show_directory(manager.cache_dir, subject="Current cache")
+
             return ret_val
 
         return wrapper

@@ -1,26 +1,15 @@
-import logging
-from typing import Any, Callable
+from typing import Any
 
 import pydantic
-from httpx import Client, URL, RequestError
+from httpx import URL, Client, RequestError
+from loguru import logger
 
 from typerdrive.client.exceptions import ClientError
 
 
-ClientLogFunc = Callable[[str], None]
-
-
 class TyperdriveClient(Client):
-    log_func: ClientLogFunc
-
-    def __init__(self, *args: Any, log_func: ClientLogFunc | None = None, **kwargs: Any):
+    def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
-
-        if not log_func:
-            logger: logging.Logger = logging.getLogger("typerdrive.client")
-            self.log_func = logger.debug
-        else:
-            self.log_func = log_func
 
     def request_x[RM: pydantic.BaseModel](
         self,
@@ -34,11 +23,10 @@ class TyperdriveClient(Client):
         response_model: type[RM] | None = None,
         **request_kwargs: Any,
     ) -> RM | int | dict[str, Any]:
-
-        self.log_func(f"Processing {method} request to {url}")
+        logger.debug(f"Processing {method} request to {self.base_url.join(url)}")
 
         if param_obj is not None:
-            self.log_func(f"Unpacking {param_obj=} to url params")
+            logger.debug(f"Unpacking {param_obj=} to url params")
 
             ClientError.require_condition(
                 "params" not in request_kwargs,
@@ -48,7 +36,7 @@ class TyperdriveClient(Client):
                 request_kwargs["params"] = param_obj.model_dump(mode="json")
 
         if body_obj is not None:
-            self.log_func(f"Unpacking {body_obj=} to request body")
+            logger.debug(f"Unpacking {body_obj=} to request body")
 
             ClientError.require_condition(
                 all(k not in request_kwargs for k in ["data", "json", "content"]),
@@ -62,11 +50,11 @@ class TyperdriveClient(Client):
             "Communication with the API failed",
             handle_exc_class=RequestError,
         ):
-            self.log_func("Issuing request")
+            logger.debug("Issuing request")
             response = self.request(method, url, **request_kwargs)
 
         if expected_status is not None:
-            self.log_func(f"Checking response for {expected_status=}")
+            logger.debug(f"Checking response for {expected_status=}")
             ClientError.require_condition(
                 expected_status == response.status_code,
                 "Got an unexpected status code: Expected {}, got {} -- {}".format(
@@ -76,19 +64,19 @@ class TyperdriveClient(Client):
             )
 
         if not expect_response:
-            self.log_func(f"Skipping response processing due to {expect_response=}")
+            logger.debug(f"Skipping response processing due to {expect_response=}")
             return response.status_code
 
         with ClientError.handle_errors("Failed to unpack JSON from response"):
-            self.log_func("Parsing JSON from response")
+            logger.debug("Parsing JSON from response")
             data: dict[str, Any] = response.json()
 
         if not response_model:
-            self.log_func("Returning raw data due to no response model being supplied")
+            logger.debug("Returning raw data due to no response model being supplied")
             return data
 
         with ClientError.handle_errors("Unexpected data in response"):
-            self.log_func(f"Serializing response as {response_model.__name__}")
+            logger.debug(f"Serializing response as {response_model.__name__}")
             return response_model(**data)
 
     def get_x[RM: pydantic.BaseModel](
@@ -110,7 +98,7 @@ class TyperdriveClient(Client):
             expected_status=expected_status,
             expect_response=expect_response,
             response_model=response_model,
-            **request_kwargs
+            **request_kwargs,
         )
 
     def post_x[RM: pydantic.BaseModel](
@@ -132,7 +120,7 @@ class TyperdriveClient(Client):
             expected_status=expected_status,
             expect_response=expect_response,
             response_model=response_model,
-            **request_kwargs
+            **request_kwargs,
         )
 
     def put_x[RM: pydantic.BaseModel](
@@ -154,7 +142,7 @@ class TyperdriveClient(Client):
             expected_status=expected_status,
             expect_response=expect_response,
             response_model=response_model,
-            **request_kwargs
+            **request_kwargs,
         )
 
     def patch_x[RM: pydantic.BaseModel](
@@ -176,7 +164,7 @@ class TyperdriveClient(Client):
             expected_status=expected_status,
             expect_response=expect_response,
             response_model=response_model,
-            **request_kwargs
+            **request_kwargs,
         )
 
     def delete_x[RM: pydantic.BaseModel](
@@ -198,6 +186,5 @@ class TyperdriveClient(Client):
             expected_status=expected_status,
             expect_response=expect_response,
             response_model=response_model,
-            **request_kwargs
+            **request_kwargs,
         )
-

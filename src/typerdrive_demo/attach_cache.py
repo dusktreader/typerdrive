@@ -6,9 +6,16 @@ import json
 
 import typer
 from rich import print
+from typerdrive import (
+    CacheManager,
+    TyperdriveConfig,
+    attach_cache,
+    get_cache_manager,
+    get_typerdrive_config,
+    set_typerdrive_config,
+)
 
-from typerdrive.cache.manager import get_cache_path, CacheManager
-from typerdrive.cache.attach import attach_cache, get_manager
+set_typerdrive_config(app_name="attach-cache-demo")
 
 
 def demo_1__attach_cache__storing_data():
@@ -48,15 +55,14 @@ def demo_2__attach_cache__loading_data():
     directory, the cache from the previous command is no longer
     available, so this function pre-seeds the data.
     """
-
-    cache_path = get_cache_path("demo_2__attach_cache__loading_data")
-    jawa_path = cache_path / "jawa.txt"
+    config: TyperdriveConfig = get_typerdrive_config()
+    jawa_path = config.cache_dir / "jawa.txt"
     jawa_path.parent.mkdir(parents=True, exist_ok=True)
     jawa_path.write_text("Utinni!")
-    ewok_path = cache_path / "ewok"
+    ewok_path = config.cache_dir / "ewok"
     ewok_path.parent.mkdir(parents=True, exist_ok=True)
     ewok_path.write_bytes(b"Yub Nub!")
-    jabba_path = cache_path / "hutt/jabba.json"
+    jabba_path = config.cache_dir / "hutt/jabba.json"
     jabba_path.parent.mkdir(parents=True, exist_ok=True)
     jabba_path.write_text(
         json.dumps(
@@ -88,7 +94,7 @@ def demo_4__attach_settings__access_through_context():
     This function demonstrates how the cache manager can also be accessed
     through the Typer context if you do not want to use a `CacheManager`
     parameter. To access the manager with the context, use the
-    `get_manager()` helper function
+    `get_cache_manager()` helper function
     """
 
     cli = typer.Typer()
@@ -96,7 +102,7 @@ def demo_4__attach_settings__access_through_context():
     @cli.command()
     @attach_cache(show=True)
     def report(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-        manager = get_manager(ctx)
+        manager = get_cache_manager(ctx)
         manager.store_text("Utinni!", "jawa.txt")
         manager.store_bytes(b"Yub Nub!", "ewok")
         manager.store_json(

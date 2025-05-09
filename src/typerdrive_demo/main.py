@@ -1,6 +1,6 @@
+from collections.abc import Callable
 from enum import StrEnum, auto
 from typing import Annotated
-from collections.abc import Callable
 
 import snick
 import typer
@@ -9,7 +9,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.prompt import Confirm
 
-from typerdrive_demo.helpers import run_demo, get_demo_functions
+from typerdrive_demo.helpers import get_demo_functions, run_demo
 
 
 class Feature(StrEnum):

@@ -2,7 +2,6 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-
 from typerdrive.env import tweak_env
 
 

@@ -3,18 +3,18 @@ from typing import Any
 import typer
 from pydantic import BaseModel
 from pydantic_core import PydanticUndefined
-from typer_repyt.build_command import DecDef, build_command, OptDef
+from typer_repyt.build_command import DecDef, OptDef, build_command
 from typer_repyt.constants import Sentinel
 
 from typerdrive.constants import Validation
 from typerdrive.exceptions import handle_errors
-from typerdrive.settings.attach import get_manager, attach_settings
+from typerdrive.settings.attach import attach_settings, get_settings_manager
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
 
 
 def bind(ctx: typer.Context):
-    __manager: SettingsManager = get_manager(ctx)
+    __manager: SettingsManager = get_settings_manager(ctx)
     excluded_locals = ["__manager", "ctx"]
     settings_values = {k: v for (k, v) in locals().items() if k not in excluded_locals}
     __manager.update(**settings_values)
@@ -63,7 +63,7 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
 
 
 def update(ctx: typer.Context):
-    __manager: SettingsManager = get_manager(ctx)
+    __manager: SettingsManager = get_settings_manager(ctx)
     excluded_locals = ["__manager", "ctx"]
     settings_values = {k: v for (k, v) in locals().items() if k not in excluded_locals and v is not None}
     __manager.update(**settings_values)
@@ -113,7 +113,7 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
 
 # TODO: Don't forget to add docstrings
 def unset(ctx: typer.Context):
-    __manager: SettingsManager = get_manager(ctx)
+    __manager: SettingsManager = get_settings_manager(ctx)
     excluded_locals = ["__manager", "ctx"]
     settings_values = {k: v for (k, v) in locals().items() if k not in excluded_locals and v}
     __manager.unset(*settings_values.keys())
@@ -190,7 +190,7 @@ def add_show(cli: typer.Typer, settings_model: type[BaseModel]):
 
 def reset(ctx: typer.Context):
     typer.confirm("Are you sure you want to reset your settings?", abort=True)
-    __manager: SettingsManager = get_manager(ctx)
+    __manager: SettingsManager = get_settings_manager(ctx)
     __manager.reset()
 
 

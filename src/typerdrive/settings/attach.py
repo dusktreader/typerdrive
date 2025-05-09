@@ -1,15 +1,15 @@
 from collections.abc import Callable
 from functools import wraps
-from typing import Concatenate, ParamSpec, TypeVar, Annotated, Any
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
 
 import typer
 from pydantic import BaseModel
 from typer_repyt.constants import Sentinel
 
-from typerdrive.constants import Validation
-from typerdrive.context import from_context, to_context, get_app_name
-from typerdrive.format import terminal_message
 from typerdrive.cloaked import CloakingDevice
+from typerdrive.constants import Validation
+from typerdrive.context import from_context, to_context
+from typerdrive.format import terminal_message
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
 
@@ -19,14 +19,14 @@ def get_settings[ST: BaseModel](
     type_hint: type[ST],
 ) -> ST:
     return SettingsError.ensure_type(
-        get_manager(ctx).settings_instance,
+        get_settings_manager(ctx).settings_instance,
         type_hint,
         f"Settings instance doesn't match expected {type_hint=}",
     )
 
 
 def get_settings_value(ctx: typer.Context, settings_key: str) -> Any:
-    instance: BaseModel = get_manager(ctx).settings_instance
+    instance: BaseModel = get_settings_manager(ctx).settings_instance
     ret = getattr(instance, settings_key, Sentinel.MISSING)
     SettingsError.require_condition(
         ret is not Sentinel.MISSING,
@@ -35,10 +35,8 @@ def get_settings_value(ctx: typer.Context, settings_key: str) -> Any:
     return ret
 
 
-def get_manager(ctx: typer.Context) -> SettingsManager:
-    with SettingsError.handle_errors(
-        "Settings are not bound to the context. Use the @attach_settings() decorator"
-    ):
+def get_settings_manager(ctx: typer.Context) -> SettingsManager:
+    with SettingsError.handle_errors("Settings are not bound to the context. Use the @attach_settings() decorator"):
         mgr: Any = from_context(ctx, "settings_manager")
     return SettingsError.ensure_type(
         mgr,
@@ -60,7 +58,6 @@ def attach_settings(
     show: bool = False,
 ) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
-
         manager_param_key: str | None = None
         settings_param_key: str | None = None
         for key in func.__annotations__.keys():
@@ -74,7 +71,7 @@ def attach_settings(
         # TODO: Figure out how we can make the ctx param optional for the wrapped function
         @wraps(func)
         def wrapper(ctx: typer.Context, *args: P.args, **kwargs: P.kwargs) -> T:
-            manager: SettingsManager = SettingsManager(get_app_name(ctx), settings_model)
+            manager: SettingsManager = SettingsManager(settings_model)
 
             if validation & Validation.BEFORE:
                 SettingsError.require_condition(

@@ -3,10 +3,11 @@ This set of demos shows the use of the various settings-related commands.
 """
 
 import typer
-from typerdrive.cache.commands import add_cache_subcommand
-from typerdrive.cache.manager import CacheManager
+from typerdrive import CacheManager, add_cache_subcommand, set_typerdrive_config
 
 from typerdrive_demo.helpers import fake_input
+
+set_typerdrive_config(app_name="cache-command-demo")
 
 
 def demo_1__clear__specific_path():
@@ -15,7 +16,7 @@ def demo_1__clear__specific_path():
     targeting a specific item of cached data identified by its path.
     """
 
-    manager = CacheManager("demo_1__clear__specific_path")
+    manager = CacheManager()
     manager.store_text("Utinni!", "jawa.txt")
     manager.store_bytes(b"Yub Nub!", "ewok")
     manager.store_json(
@@ -39,7 +40,7 @@ def demo_2__clear__full_cache():
     confirmation before proceeding with the deletion.
     """
 
-    manager = CacheManager("demo_2__clear__full_cache")
+    manager = CacheManager()
     manager.store_text("Utinni!", "jawa.txt")
     manager.store_bytes(b"Yub Nub!", "ewok")
     manager.store_json(
@@ -65,7 +66,7 @@ def demo_3__show():
     including the size of the files within it.
     """
 
-    manager = CacheManager("demo_3__show")
+    manager = CacheManager()
     manager.store_text("Utinni!", "jawa.txt")
     manager.store_bytes(b"Yub Nub!", "ewok")
     manager.store_json(

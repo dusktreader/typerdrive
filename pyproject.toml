@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.3.0"
+version = "0.4.0"
 description = "Boost your command-line workflows to lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -75,7 +75,11 @@ addopts = [
 
 [tool.ruff]
 line-length = 120
-src = ["src/typerdrive", "tests"]
+src = ["src/typerdrive", "tests", "src/typerdrive_demo", "examples"]
+
+
+[tool.ruff.format]
+docstring-code-format = true
 
 
 [tool.mypy]

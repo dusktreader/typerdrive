@@ -177,11 +177,11 @@ The `show` command just shows the current state of the cache. It will show the e
 in the cache and a report about how big the cache is and how many files are stored in it.
 
 
-### The `get_manager()` function
+### The `get_cache_manager()` function
 
-The `attach` submodule of `typerdrive.cache` provides a `get_manager()` function. If you want to avoid the magic of
-using a parameter to your command with the `CacheManager` type, you can get access to the `CacheManager` instance from
-the `typer.Context` using the `get_manager()` function instead.
+The `attach` submodule of `typerdrive.cache` provides a `get_cache_manager()` function. If you want to avoid the magic
+of using a parameter to your command with the `CacheManager` type, you can get access to the `CacheManager` instance
+from the `typer.Context` using the `get_cache_manager()` function instead.
 
 
 ### `CacheManager` methods
@@ -195,11 +195,7 @@ This method converts a cache target path like `yoda/speech.txt` into the absolut
 stored. It does several checks to make sure that the file exists and that the resolved path is actually within the cache
 directory (to prevent sneaky use of `..`).
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:108:108"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.resolve_path)
 
 
 #### `CacheManager.store_bytes()`
@@ -208,22 +204,14 @@ This method stores binary data in a cache target. An optional `mode` keyword arg
 permissions of the cache entry. So, for example, if you want only your user to be able to read and write to the entry,
 you might use a `mode` of `0o600`.
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:125:125"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.store_bytes)
 
 
 #### `CacheManager.store_text()`
 
 This method stores text data in a cache target. It can also be given a `mode` parameter.
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:133:133"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.store_text)
 
 
 #### `CacheManager.store_json()`
@@ -232,29 +220,21 @@ This method stores a dictionary of data in a cache target. The dictionary must b
 thrown. The JSON written to the file is formatted to be human readable. This method can also be provided a `mode`
 parameter.
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:136:136"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.store_json)
 
 
 #### `CacheManager.load_bytes()`
 
 This method loads binary data from a cache target. If the cache target does not exist, an error will be thrown.
 
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:139:139"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.load_bytes)
 
 
 #### `CacheManager.load_text()`
 
 This method loads text data from a cache target. If the cache target does not exist, an error will be thrown.
 
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:145:145"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.load_text)
 
 
 #### `CacheManager.load_json()`
@@ -262,9 +242,7 @@ This method loads text data from a cache target. If the cache target does not ex
 This method loads a JSON serialized dictionary from a cache target. If the cache target does not exist, an error will be
 thrown. If the data at the cache target cannot be serialized, an error will be thrown.
 
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:148:148"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.load_json)
 
 
 #### `CacheManager.clear_path()`
@@ -272,25 +250,11 @@ thrown. If the data at the cache target cannot be serialized, an error will be t
 This method removes an entry from the cache at the provided target. If the target does not exist, an error will be
 thrown. If the parent directory of the entry is empty after it is removed, the parent directory will be removed as well.
 
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:153:153"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.clear_path)
 
 
 #### `CacheManager.clear_all()`
 
 This method will remove all items from the cache.
 
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:162:162"
-```
-
-
-#### `CacheManager.pretty()`
-
-This (poorly named) method gathers information about the cache and returns it in a format that can be pretty-printed by
-the `@attach_cache` decorator.
-
-```python {linenums="1"}
---8<-- "src/typerdrive/cache/manager.py:166:166"
-```
+[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.clear_all)

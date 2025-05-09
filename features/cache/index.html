@@ -14,7 +14,7 @@
         <link rel="prev" href="../settings/">
       
       
-        <link rel="next" href="../exceptions/">
+        <link rel="next" href="../logging/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -478,9 +478,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-get_manager-function" class="md-nav__link">
+  <a href="#the-get_cache_manager-function" class="md-nav__link">
     <span class="md-ellipsis">
-      The get_manager() function
+      The get_cache_manager() function
     </span>
   </a>
   
@@ -577,15 +577,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#cachemanagerpretty" class="md-nav__link">
-    <span class="md-ellipsis">
-      CacheManager.pretty()
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -600,6 +591,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logging
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -790,9 +804,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#the-get_manager-function" class="md-nav__link">
+  <a href="#the-get_cache_manager-function" class="md-nav__link">
     <span class="md-ellipsis">
-      The get_manager() function
+      The get_cache_manager() function
     </span>
   </a>
   
@@ -884,15 +898,6 @@
   <a href="#cachemanagerclear_all" class="md-nav__link">
     <span class="md-ellipsis">
       CacheManager.clear_all()
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cachemanagerpretty" class="md-nav__link">
-    <span class="md-ellipsis">
-      CacheManager.pretty()
     </span>
   </a>
   
@@ -1019,82 +1024,74 @@ the <code>@attach_cache</code> decorator by providing an argument to your comman
 <span class="normal"><a href="#__codelineno-0-65">65</a></span>
 <span class="normal"><a href="#__codelineno-0-66">66</a></span>
 <span class="normal"><a href="#__codelineno-0-67">67</a></span>
-<span class="normal"><a href="#__codelineno-0-68">68</a></span>
-<span class="normal"><a href="#__codelineno-0-69">69</a></span>
-<span class="normal"><a href="#__codelineno-0-70">70</a></span>
-<span class="normal"><a href="#__codelineno-0-71">71</a></span>
-<span class="normal"><a href="#__codelineno-0-72">72</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">choice</span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">choice</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.panel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Panel</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">snick</span><span class="w"> </span><span class="kn">import</span> <span class="n">unwrap</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.cache.commands</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_cache_subcommand</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.cache.attach</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_cache</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.cache.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">CacheError</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.cache.manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">CacheManager</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">tweak_env</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">CacheError</span><span class="p">,</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">add_cache_subcommand</span><span class="p">,</span> <span class="n">attach_cache</span><span class="p">,</span> <span class="n">set_typerdrive_config</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">tweak_env</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="n">cli</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="n">add_cache_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="n">set_typerdrive_config</span><span class="p">(</span><span class="n">app_name</span><span class="o">=</span><span class="s2">&quot;cache-commands-example&quot;</span><span class="p">)</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="n">cli</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="n">add_cache_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="n">speeches</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>    <span class="n">yoda</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="sd">        Size matters not. Look at me. Judge me by my size, do you? Hmm? Hmm. And well you should not. For my ally is the</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="sd">        Force, and a powerful ally it is. Life creates it, makes it grow. Its energy surrounds us and binds us. Luminous</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="sd">        beings are we, not this crude matter. You must feel the Force around you; here, between you, me, the tree, the</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="sd">        rock, everywhere, yes. Even between the land and the ship.</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="p">),</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>    <span class="n">leia</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">        General Kenobi. Years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="sd">        against the Empire. I regret that I am unable to present my father&#39;s request to you in person, but my ship has</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="sd">        fallen under attack, and now I&#39;m afraid my mission to bring you to Alderaan has failed.  I have placed</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="sd">        information vital of the survival of the Rebellion into the memory systems of this R2 unit.My father will know</span>
-</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="sd">        how to retrieve it. You must see this droid safely delivered to him on Alderaan. This is our most desperate</span>
-</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="sd">        hour. Help me, Obi-Wan Kenobi. You&#39;re my only hope.</span>
-</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a>    <span class="p">),</span>
-</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a>    <span class="n">han</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="sd">        Kid, I&#39;ve flown from one side of this galaxy to the other; I&#39;ve seen a lot of strange stuff. But I&#39;ve never seen</span>
-</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="sd">        anything to make me believe that there&#39;s one all-powerful Force controlling everything. There&#39;s no mystical</span>
-</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="sd">        energy field that controls my destiny. Anyway, it&#39;s all a lot of simple tricks and nonsense.</span>
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>    <span class="p">)</span>
-</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="p">)</span>
-</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>
-</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>
-</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="nd">@attach_cache</span><span class="p">()</span>
-</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>
-</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>    <span class="n">speaker</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">speeches</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">speaker</span><span class="si">}</span><span class="s2">/speech.txt&quot;</span>
-</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="n">used_cache</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>    <span class="k">try</span><span class="p">:</span>
-</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">load_text</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>    <span class="k">except</span> <span class="n">CacheError</span><span class="p">:</span>
-</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Cache miss![/red] Loading text for </span><span class="si">{</span><span class="n">speaker</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">speeches</span><span class="p">[</span><span class="n">speaker</span><span class="p">]</span>
-</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Cache hit![/green] Loaded text from cache target [yellow]</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
-</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>        <span class="n">used_cache</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>
-</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>    <span class="k">with</span> <span class="n">tweak_env</span><span class="p">(</span><span class="n">COLUMNS</span><span class="o">=</span><span class="s2">&quot;80&quot;</span><span class="p">):</span>
-</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="n">speeches</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>    <span class="n">yoda</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="sd">        Size matters not. Look at me. Judge me by my size, do you? Hmm? Hmm. And well you should not. For my ally is the</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="sd">        Force, and a powerful ally it is. Life creates it, makes it grow. Its energy surrounds us and binds us. Luminous</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="sd">        beings are we, not this crude matter. You must feel the Force around you; here, between you, me, the tree, the</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="sd">        rock, everywhere, yes. Even between the land and the ship.</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>    <span class="p">),</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>    <span class="n">leia</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">        General Kenobi. Years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="sd">        against the Empire. I regret that I am unable to present my father&#39;s request to you in person, but my ship has</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="sd">        fallen under attack, and now I&#39;m afraid my mission to bring you to Alderaan has failed.  I have placed</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">        information vital of the survival of the Rebellion into the memory systems of this R2 unit.My father will know</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">        how to retrieve it. You must see this droid safely delivered to him on Alderaan. This is our most desperate</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="sd">        hour. Help me, Obi-Wan Kenobi. You&#39;re my only hope.</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>    <span class="p">),</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>    <span class="n">han</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="sd">        Kid, I&#39;ve flown from one side of this galaxy to the other; I&#39;ve seen a lot of strange stuff. But I&#39;ve never seen</span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="sd">        anything to make me believe that there&#39;s one all-powerful Force controlling everything. There&#39;s no mystical</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="sd">        energy field that controls my destiny. Anyway, it&#39;s all a lot of simple tricks and nonsense.</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="p">),</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="p">)</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>  <span class="c1"># pyright: ignore[reportUnusedParameter]</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="n">speaker</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">speeches</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>    <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">speaker</span><span class="si">}</span><span class="s2">/speech.txt&quot;</span>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="n">used_cache</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>    <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">load_text</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="k">except</span> <span class="n">CacheError</span><span class="p">:</span>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Cache miss![/red] Loading text for </span><span class="si">{</span><span class="n">speaker</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">speeches</span><span class="p">[</span><span class="n">speaker</span><span class="p">]</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Cache hit![/green] Loaded text from cache target [yellow]</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="n">used_cache</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="k">with</span> <span class="n">tweak_env</span><span class="p">(</span><span class="n">COLUMNS</span><span class="o">=</span><span class="s2">&quot;80&quot;</span><span class="p">):</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">used_cache</span><span class="p">:</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>        <span class="n">manager</span><span class="o">.</span><span class="n">store_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored text at cache target [yellow]</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
 </span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a>
-</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">used_cache</span><span class="p">:</span>
-</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a>        <span class="n">manager</span><span class="o">.</span><span class="n">store_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored text at cache target [yellow]</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
-</span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a>
-</span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a>
-</span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-</span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a>    <span class="n">cli</span><span class="p">()</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>
+</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>    <span class="n">cli</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
 <p>In this toy example, some text is stored in the cache to be used for future executions of the <code>report</code> command.</p>
 <p>If the data isn't in the cache yet, it's "loaded". The data is printed and then stored in the cache for future use:</p>
@@ -1197,65 +1194,47 @@ your action to make sure that mistakes are not made.</p>
 <h4 id="show"><code>show</code></h4>
 <p>The <code>show</code> command just shows the current state of the cache. It will show the entire tree structure of the data stored
 in the cache and a report about how big the cache is and how many files are stored in it.</p>
-<h3 id="the-get_manager-function">The <code>get_manager()</code> function</h3>
-<p>The <code>attach</code> submodule of <code>typerdrive.cache</code> provides a <code>get_manager()</code> function. If you want to avoid the magic of
-using a parameter to your command with the <code>CacheManager</code> type, you can get access to the <code>CacheManager</code> instance from
-the <code>typer.Context</code> using the <code>get_manager()</code> function instead.</p>
+<h3 id="the-get_cache_manager-function">The <code>get_cache_manager()</code> function</h3>
+<p>The <code>attach</code> submodule of <code>typerdrive.cache</code> provides a <code>get_cache_manager()</code> function. If you want to avoid the magic
+of using a parameter to your command with the <code>CacheManager</code> type, you can get access to the <code>CacheManager</code> instance
+from the <code>typer.Context</code> using the <code>get_cache_manager()</code> function instead.</p>
 <h3 id="cachemanager-methods"><code>CacheManager</code> methods</h3>
 <p>The <code>CacheManager</code> provides several methods for interacting with the cache.</p>
 <h4 id="cachemanagerresolve_path"><code>CacheManager.resolve_path()</code></h4>
 <p>This method converts a cache target path like <code>yoda/speech.txt</code> into the absolute path to the file where the data is
 stored. It does several checks to make sure that the file exists and that the resolved path is actually within the cache
 directory (to prevent sneaky use of <code>..</code>).</p>
-<p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mkdir</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.resolve_path">Method Reference</a></p>
 <h4 id="cachemanagerstore_bytes"><code>CacheManager.store_bytes()</code></h4>
 <p>This method stores binary data in a cache target. An optional <code>mode</code> keyword argument can be provided to control the
 permissions of the cache entry. So, for example, if you want only your user to be able to read and write to the entry,
 you might use a <code>mode</code> of <code>0o600</code>.</p>
-<p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">store_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.store_bytes">Method Reference</a></p>
 <h4 id="cachemanagerstore_text"><code>CacheManager.store_text()</code></h4>
 <p>This method stores text data in a cache target. It can also be given a <code>mode</code> parameter.</p>
-<p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">store_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.store_text">Method Reference</a></p>
 <h4 id="cachemanagerstore_json"><code>CacheManager.store_json()</code></h4>
 <p>This method stores a dictionary of data in a cache target. The dictionary must be JSON serializable or an error will be
 thrown. The JSON written to the file is formatted to be human readable. This method can also be provided a <code>mode</code>
 parameter.</p>
-<p>Function signature:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">store_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.store_json">Method Reference</a></p>
 <h4 id="cachemanagerload_bytes"><code>CacheManager.load_bytes()</code></h4>
 <p>This method loads binary data from a cache target. If the cache target does not exist, an error will be thrown.</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.load_bytes">Method Reference</a></p>
 <h4 id="cachemanagerload_text"><code>CacheManager.load_text()</code></h4>
 <p>This method loads text data from a cache target. If the cache target does not exist, an error will be thrown.</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.load_text">Method Reference</a></p>
 <h4 id="cachemanagerload_json"><code>CacheManager.load_json()</code></h4>
 <p>This method loads a JSON serialized dictionary from a cache target. If the cache target does not exist, an error will be
 thrown. If the data at the cache target cannot be serialized, an error will be thrown.</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">load_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.load_json">Method Reference</a></p>
 <h4 id="cachemanagerclear_path"><code>CacheManager.clear_path()</code></h4>
 <p>This method removes an entry from the cache at the provided target. If the target does not exist, an error will be
 thrown. If the parent directory of the entry is empty after it is removed, the parent directory will be removed as well.</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.clear_path">Method Reference</a></p>
 <h4 id="cachemanagerclear_all"><code>CacheManager.clear_all()</code></h4>
 <p>This method will remove all items from the cache.</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">clear_all</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span></code></pre></div></td></tr></table></div>
-<h4 id="cachemanagerpretty"><code>CacheManager.pretty()</code></h4>
-<p>This (poorly named) method gathers information about the cache and returns it in a format that can be pretty-printed by
-the <code>@attach_cache</code> decorator.</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">pretty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CacheInfo</span><span class="p">:</span>
-</span></code></pre></div></td></tr></table></div>
+<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.clear_all">Method Reference</a></p>
 
 
 
@@ -1302,13 +1281,13 @@ the <code>@attach_cache</code> decorator.</p>
         
         
           
-          <a href="../exceptions/" class="md-footer__link md-footer__link--next" aria-label="Next: Error Handling">
+          <a href="../logging/" class="md-footer__link md-footer__link--next" aria-label="Next: Logging">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Error Handling
+                Logging
               </div>
             </div>
             <div class="md-footer__button md-icon">

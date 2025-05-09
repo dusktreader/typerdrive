@@ -18,11 +18,26 @@ class TyperdriveError(Buzz):
     subject: str | None = None
     footer: str | None = None
     exit_code: ExitCode = ExitCode.GENERAL_ERROR
+    details: Any | None = None
 
-    def __init__(self, *args: Any, subject: str | None = None, footer: str | None = None, **kwargs: Any):
+    def __init__(
+        self,
+        *args: Any,
+        subject: str | None = None,
+        footer: str | None = None,
+        details: Any | None = None,
+        exit_code: ExitCode | None = None,
+        **kwargs: Any,
+    ):
         super().__init__(*args, **kwargs)
-        self.subject = subject
-        self.footer = footer
+        if subject:
+            self.subject = subject
+        if footer:
+            self.footer = footer
+        if details:
+            self.details = details
+        if exit_code:
+            self.exit_code = exit_code
 
 
 class ContextError(TyperdriveError):
@@ -47,6 +62,7 @@ def handle_errors(
     do_else: Callable[[], None] | None = None,
     do_finally: Callable[[], None] | None = None,
     unwrap_message: bool = True,
+    debug: bool = False,
 ) -> Callable[[WrappedFunction[P, T]], WrappedFunction[P, T]]:
     class _DefaultIgnoreException(Exception):
         """
@@ -95,11 +111,12 @@ def handle_errors(
                         subject = err.subject
                     if err.footer:
                         footer = err.footer
-
-                    if unwrap_message:
-                        message = snick.unwrap(err.message)
-                    else:
+                    if debug:
                         message = err.message
+                    else:
+                        message = err.base_message or err.message
+                    if unwrap_message:
+                        message = snick.unwrap(message)
                     exit_code = err.exit_code
                 else:
                     message = str(err)

@@ -1,6 +1,6 @@
 from collections.abc import Callable
 from functools import wraps
-from typing import Concatenate, ParamSpec, TypeVar, Annotated
+from typing import Concatenate, ParamSpec, TypeVar, Annotated, Any
 
 import humanize
 import typer
@@ -13,8 +13,12 @@ from typerdrive.format import terminal_message
 
 
 def get_manager(ctx: typer.Context) -> CacheManager:
+    with CacheError.handle_errors(
+        "Cache is not bound to the context. Use the @attach_cache() decorator"
+    ):
+        mgr: Any = from_context(ctx, "cache_manager")
     return CacheError.ensure_type(
-        from_context(ctx, "cache_manager"),
+        mgr,
         CacheManager,
         "Item in user context at `cache_manager` was not a CacheManager",
     )

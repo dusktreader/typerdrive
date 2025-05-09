@@ -8,7 +8,6 @@ from pydantic import BaseModel
 from typer.testing import CliRunner
 
 from typerdrive.constants import Validation
-from typerdrive.exceptions import ContextError
 from typerdrive.settings.attach import attach_settings, get_manager, get_settings
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
@@ -307,8 +306,8 @@ class TestGetSettings:
 
         match_output(
             cli,
-            exception_type=ContextError,
-            exception_pattern="not bound to context",
+            exception_type=SettingsError,
+            exception_pattern="Settings are not bound to the context",
             exit_code=1,
             prog_name="test",
         )
@@ -356,6 +355,22 @@ class TestGetManager:
             cli,
             expected_pattern=["Passed"],
             exit_code=0,
+            prog_name="test",
+        )
+
+    def test_get_manager__raises_exception_if_context_has_no_manager(self):
+        cli = typer.Typer()
+
+        @cli.command()
+        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+            get_manager(ctx)
+            print("Passed!")
+
+        match_output(
+            cli,
+            exception_type=SettingsError,
+            exception_pattern="Settings are not bound to the context",
+            exit_code=1,
             prog_name="test",
         )
 

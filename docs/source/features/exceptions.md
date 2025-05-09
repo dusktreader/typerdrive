@@ -246,3 +246,13 @@ will be. Thus, it's better to let `rich` do the wrapping for us.
 However, sometimes the error message has a particular structure to it with indents and newlines. This is the case with
 `Pydantic` validation errors. In this case, we don't want the message unwrapped to a single line. If you set the
 `unwrap_message` kwarg to `False` the error will be printed as-is.
+
+
+### `debug`
+
+By default, the `@handle_errors()` decorator will use only the `base_message` from a `TyperdriveError` (or any other
+`Buzz` exception). The `base_message` will have additional information if it was produced from a
+[`handle_errors()`](https://dusktreader.github.io/py-buzz/features#exception-handling-context-manager) or
+[`check_expressions()`](https://dusktreader.github.io/py-buzz/features#expression-checking-context-manager)
+context manager from `py-buzz`. The extended `message` in the exception may contain information that you don't want to
+show to your end user. If you want the full message to be displayed in the CLI, then set the `debug` flag to `True`.

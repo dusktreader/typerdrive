@@ -1,9 +1,10 @@
 from collections.abc import Callable
 from functools import wraps
-from typing import Concatenate, ParamSpec, TypeVar, Annotated
+from typing import Concatenate, ParamSpec, TypeVar, Annotated, Any
 
 import typer
 from pydantic import BaseModel
+from typer_repyt.constants import Sentinel
 
 from typerdrive.constants import Validation
 from typerdrive.context import from_context, to_context, get_app_name
@@ -13,15 +14,34 @@ from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
 
 
-def get_settings[ST: BaseModel](ctx: typer.Context, type_hint: type[ST]) -> ST:
+def get_settings[ST: BaseModel](
+    ctx: typer.Context,
+    type_hint: type[ST],
+) -> ST:
     return SettingsError.ensure_type(
-        get_manager(ctx).settings_instance, type_hint, f"Settings instance doesn't match expected {type_hint=}"
+        get_manager(ctx).settings_instance,
+        type_hint,
+        f"Settings instance doesn't match expected {type_hint=}",
     )
 
 
+def get_settings_value(ctx: typer.Context, settings_key: str) -> Any:
+    instance: BaseModel = get_manager(ctx).settings_instance
+    ret = getattr(instance, settings_key, Sentinel.MISSING)
+    SettingsError.require_condition(
+        ret is not Sentinel.MISSING,
+        f"Settings instance doesn't have field {settings_key}",
+    )
+    return ret
+
+
 def get_manager(ctx: typer.Context) -> SettingsManager:
+    with SettingsError.handle_errors(
+        "Settings are not bound to the context. Use the @attach_settings() decorator"
+    ):
+        mgr: Any = from_context(ctx, "settings_manager")
     return SettingsError.ensure_type(
-        from_context(ctx, "settings_manager"),
+        mgr,
         SettingsManager,
         "Item in user context at `settings_manager` was not a SettingsManager",
     )

@@ -45,7 +45,7 @@ class TestHandleErrors:
         @cli.command()
         @attach_settings(SettingsModel)
         def _(ctx: typer.Context):
-            settings = get_settings(ctx, SettingsModel)
+            settings: SettingsModel = get_settings(ctx, SettingsModel)
             assert settings.name == "jawa"
             print("We're all fine here now, thank you. How are you?")
 

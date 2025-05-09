@@ -18,6 +18,8 @@ class Feature(StrEnum):
     attach_cache = auto()
     cache_commands = auto()
     handle_errors = auto()
+    attach_client = auto()
+    typerdrive_client = auto()
 
 
 def start(

@@ -262,12 +262,11 @@ def report(ctx: typer.Context):
     )
 ```
 
-!!!note "Passing `type_hint` to `get_settings()`"
+!!!note "The `type_hint` argument to `get_settings()`"
 
-    You don't _have_ to pass a type_hint as the second argument to `get_settings()` for the code to work. However,
-    static type checkers will object if you try to assign the returned model instance to your specific settings model.
     Because the model is bound to the settings commands _dynamically_, the `get_settings()` function needs a type hint
-    to cast it to the appropriate model type.
+    to cast it to the appropriate model type. This `type_hint` argument must match with the settings model that was
+    attached or an exception will be raised.
 
 
 ## The `add_.*()` functions

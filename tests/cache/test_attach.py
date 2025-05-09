@@ -48,7 +48,7 @@ class TestAttachCache:
 
 
 class TestWithParameters:
-    def test_attach_cache__with_manger_parameter(self, fake_cache_path: Path):
+    def test_attach_cache__with_manager_parameter(self, fake_cache_path: Path):
         cli = typer.Typer()
 
         @cli.command()
@@ -90,6 +90,22 @@ class TestGetManager:
             cli,
             expected_pattern=["Passed"],
             exit_code=0,
+            prog_name="test",
+        )
+
+    def test_get_manager__raises_exception_if_context_has_no_manager(self):
+        cli = typer.Typer()
+
+        @cli.command()
+        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+            get_manager(ctx)
+            print("Passed!")
+
+        match_output(
+            cli,
+            exception_type=CacheError,
+            exception_pattern="Cache is not bound to the context",
+            exit_code=1,
             prog_name="test",
         )
 

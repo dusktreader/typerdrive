@@ -4,8 +4,7 @@ This set of demos shows the use of the `attach_settings` decorator.
 
 import typer
 from pydantic import BaseModel
-from typerdrive.constants import Validation
-from typerdrive.settings.attach import attach_settings, get_settings
+from typerdrive import Validation, attach_settings, get_settings
 
 
 def demo_1__attach_settings__basic():

@@ -4,16 +4,12 @@ import typer
 from rich import print
 from rich.panel import Panel
 from snick import unwrap
-
-from typerdrive.cache.commands import add_cache_subcommand
-from typerdrive.cache.attach import attach_cache
-from typerdrive.cache.exceptions import CacheError
-from typerdrive.cache.manager import CacheManager
+from typerdrive import CacheError, CacheManager, add_cache_subcommand, attach_cache, set_typerdrive_config
 from typerdrive.env import tweak_env
-
 
 cli = typer.Typer()
 add_cache_subcommand(cli)
+set_typerdrive_config(app_name="cache-commands-example")
 
 speeches = dict(
     yoda=unwrap(
@@ -40,13 +36,13 @@ speeches = dict(
         anything to make me believe that there's one all-powerful Force controlling everything. There's no mystical
         energy field that controls my destiny. Anyway, it's all a lot of simple tricks and nonsense.
         """
-    )
+    ),
 )
 
 
 @cli.command()
 @attach_cache()
-def report(ctx: typer.Context, manager: CacheManager):
+def report(ctx: typer.Context, manager: CacheManager):  # pyright: ignore[reportUnusedParameter]
     speaker = choice(list(speeches.keys()))
     path = f"{speaker}/speech.txt"
     used_cache = False

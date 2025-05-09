@@ -2,14 +2,13 @@ from collections.abc import Callable
 from functools import wraps
 from typing import Any, ParamSpec, TypeVar
 
-from buzz import Buzz, DoExceptParams, reformat_exception, get_traceback
-from rich import traceback
 import snick
 import typer
+from buzz import Buzz, DoExceptParams, get_traceback, reformat_exception
+from rich import traceback
 
 from typerdrive.constants import ExitCode
 from typerdrive.format import terminal_message
-
 
 traceback.install()
 

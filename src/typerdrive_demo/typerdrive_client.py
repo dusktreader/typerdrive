@@ -2,8 +2,7 @@ from datetime import datetime
 from typing import cast
 
 from pydantic import BaseModel
-
-from typerdrive.client.base import TyperdriveClient
+from typerdrive import TyperdriveClient
 
 
 def demo_1__typerdrive_client__using_a_query_param_model():
@@ -19,7 +18,6 @@ def demo_1__typerdrive_client__using_a_query_param_model():
     class QueryParams(BaseModel):
         search: str
 
-
     class People(BaseModel, extra="ignore"):
         name: str
         birth_year: str
@@ -27,7 +25,6 @@ def demo_1__typerdrive_client__using_a_query_param_model():
 
     class ResponseModel(BaseModel, extra="ignore"):
         results: list[People]
-
 
     client = TyperdriveClient(base_url="https://swapi.py4e.com/api/")
     param_obj = QueryParams(search="skywalker")
@@ -52,18 +49,15 @@ def demo_2__typerdrive_client__using_a_request_body_model():
         gender: str
         species: str
 
-
     class Body(BaseModel):
         name: str
         data: PeopleData
-
 
     class ResponseModel(BaseModel, extra="ignore"):
         id: str
         name: str
         createdAt: datetime
         data: PeopleData
-
 
     client = TyperdriveClient(base_url="https://api.restful-api.dev/")
     body_obj = Body(name="Mara Jade Skywalker", data=PeopleData(birth_year="17 BBY", gender="Female", species="Human"))

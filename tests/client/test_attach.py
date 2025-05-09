@@ -1,8 +1,7 @@
 import typer
 from pydantic import BaseModel
-
+from typerdrive.client.attach import attach_client, get_client_manager
 from typerdrive.client.base import TyperdriveClient
-from typerdrive.client.attach import get_manager, attach_client
 from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager
 from typerdrive.settings.attach import attach_settings
@@ -21,7 +20,7 @@ class TestAttachClient:
         @cli.command()
         @attach_client()
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            manager = get_manager(ctx)
+            manager = get_client_manager(ctx)
             assert isinstance(manager, ClientManager)
             assert manager.clients == {}
             print("Passed!")
@@ -34,7 +33,7 @@ class TestAttachClient:
         @cli.command()
         @attach_client(jedi="https://the.force.io")
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            manager = get_manager(ctx)
+            manager = get_client_manager(ctx)
             assert len(manager.clients) == 1
             client = manager.clients.get("jedi")
             assert client is not None
@@ -50,7 +49,7 @@ class TestAttachClient:
         @attach_settings(ClientSettings)
         @attach_client(jedi="url_base")
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            manager = get_manager(ctx)
+            manager = get_client_manager(ctx)
             assert len(manager.clients) == 1
             client = manager.clients.get("jedi")
             assert client is not None
@@ -66,7 +65,7 @@ class TestAttachClient:
         @attach_settings(ClientSettings)
         @attach_client(jedi="not-a-url")
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            get_manager(ctx)
+            get_client_manager(ctx)
             print("We should never get here")
 
         match_output(
@@ -84,8 +83,8 @@ class TestAttachClient:
         @cli.command()
         @attach_settings(ClientSettings)
         @attach_client(sith="https://the.dark.side", jedi="url_base")
-        def noop(ctx: typer.Context): # pyright: ignore[reportUnusedFunction]
-            manager = get_manager(ctx)
+        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+            manager = get_client_manager(ctx)
             assert len(manager.clients) == 2
 
             sith_client = manager.clients.get("sith")
@@ -131,25 +130,25 @@ class TestWithParameters:
 
 
 class TestGetManager:
-    def test_get_manager__extracts_client_manager_from_context(self):
+    def test_get_client_manager__extracts_client_manager_from_context(self):
         cli = typer.Typer()
 
         @cli.command()
         @attach_client()
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            manager = get_manager(ctx)
+            manager = get_client_manager(ctx)
             assert isinstance(manager, ClientManager)
             assert manager.clients == {}
             print("Passed!")
 
         check_output(cli, prog_name="test", expected_substring="Passed!")
 
-    def test_get_manager__raises_exception_if_context_has_no_manager(self):
+    def test_get_client_manager__raises_exception_if_context_has_no_manager(self):
         cli = typer.Typer()
 
         @cli.command()
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            get_manager(ctx)
+            get_client_manager(ctx)
             print("Passed!")
 
         match_output(
@@ -161,14 +160,14 @@ class TestGetManager:
             prog_name="test",
         )
 
-    def test_get_manager__raises_exception_if_non_manager_retrieved(self):
+    def test_get_client_manager__raises_exception_if_non_manager_retrieved(self):
         cli = typer.Typer()
 
         @cli.command()
         @attach_client()
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             ctx.obj.client_manager = "Not a manager!"
-            get_manager(ctx)
+            get_client_manager(ctx)
             print("Passed!")
 
         match_output(

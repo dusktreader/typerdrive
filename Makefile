@@ -50,7 +50,8 @@ qa/full: qa/test qa/lint qa/types  ## Run the full set of quality checks
 
 .PHONY: qa/format
 qa/format:  ## RUn code formatter
-	uv run ruff format ${PACKAGE_TARGET} tests src/typerdrive_demo
+	uv run ruff check --select I --fix ${PACKAGE_TARGET} tests src/typerdrive_demo examples
+	uv run ruff format ${PACKAGE_TARGET} tests src/typerdrive_demo examples
 
 
 # ==== Documentation ===================================================================================================
@@ -77,3 +78,10 @@ demo/run:  ## Run the app in debug mode
 .PHONY: demo/debug
 demo/debug:  ## Run the app in debug mode
 	uv run debugpy --listen localhost:5678 --wait-for-client src/typerdrive_demo/main.py
+
+
+# ==== Other Commands ==================================================================================================
+.PHONY: publish
+publish: confirm
+	git tag v$(uv version --short)
+	git push origin v$(uv version --short)

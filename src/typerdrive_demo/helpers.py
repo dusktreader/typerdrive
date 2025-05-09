@@ -1,23 +1,22 @@
-import io
 import inspect
-from pathlib import Path
+import io
 import re
 import sys
 import tempfile
 import textwrap
-from importlib import import_module
-from typing import Any
 from collections.abc import Callable
 from dataclasses import dataclass
+from importlib import import_module
+from pathlib import Path
+from typing import Any
 
 import snick
 from rich import box
 from rich.console import Console, Group, RenderableType
+from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.prompt import Confirm
-from rich.markdown import Markdown
 from rich.rule import Rule
-
 from typerdrive.env import tweak_env
 
 

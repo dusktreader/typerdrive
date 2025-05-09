@@ -5,19 +5,17 @@ from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
 import typer
 from pydantic import BaseModel
 
-from typerdrive.client.base import TyperdriveClient, ClientLogFunc
+from typerdrive.client.base import TyperdriveClient
 from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager, ClientSpec
 from typerdrive.cloaked import CloakingDevice
 from typerdrive.context import from_context, to_context
-from typerdrive.settings.attach import get_manager as get_settings_manager
+from typerdrive.settings.attach import get_settings_manager
 from typerdrive.settings.exceptions import SettingsError
 
 
-def get_manager(ctx: typer.Context) -> ClientManager:
-    with ClientError.handle_errors(
-        "Client(s) are not bound to the context. Use the @attach_client() decorator"
-    ):
+def get_client_manager(ctx: typer.Context) -> ClientManager:
+    with ClientError.handle_errors("Client(s) are not bound to the context. Use the @attach_client() decorator"):
         mgr: Any = from_context(ctx, "client_manager")
     return ClientError.ensure_type(
         mgr,
@@ -27,7 +25,7 @@ def get_manager(ctx: typer.Context) -> ClientManager:
 
 
 def get_client(ctx: typer.Context, name: str) -> TyperdriveClient:
-    return get_manager(ctx).get_client(name)
+    return get_client_manager(ctx).get_client(name)
 
 
 P = ParamSpec("P")
@@ -35,12 +33,8 @@ T = TypeVar("T")
 ContextFunction = Callable[Concatenate[typer.Context, P], T]
 
 
-def attach_client(
-    log_func: ClientLogFunc | None = None,
-    **client_urls_or_settings_keys: str,
-) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
+def attach_client(**client_urls_or_settings_keys: str) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
-
         manager_param_key: str | None = None
         client_param_keys: list[str] = []
         for key in func.__annotations__.keys():
@@ -63,12 +57,12 @@ def attach_client(
             except SettingsError:
                 settings = None
 
-            for (name, url_or_settings_key) in client_urls_or_settings_keys.items():
+            for name, url_or_settings_key in client_urls_or_settings_keys.items():
                 base_url: str = getattr(settings, url_or_settings_key, url_or_settings_key)
                 with ClientError.handle_errors(
                     f"Couldn't use {base_url=} for client. If using a settings key, make sure settings are attached."
                 ):
-                    client_spec = ClientSpec(base_url=base_url, log_func=log_func)
+                    client_spec = ClientSpec(base_url=base_url)
                 manager.add_client(name, client_spec)
 
             to_context(ctx, "client_manager", manager)

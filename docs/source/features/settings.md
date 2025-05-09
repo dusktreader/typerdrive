@@ -282,11 +282,8 @@ This method adds the `bind` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-Function signature:
+[Function Reference](../../reference/#typerdrive.settings.commands.add_bind)
 
-```python {linenums="1"}
---8<-- "src/typerdrive/settings/commands.py:23:23"
-```
 
 
 ### `add_update()`
@@ -295,11 +292,7 @@ This method adds the `update` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/settings/commands.py:71:71"
-```
+[Function Reference](../../reference/#typerdrive.settings.commands.add_update)
 
 
 ### `add_unset()`
@@ -308,11 +301,7 @@ This method adds the `unset` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/settings/commands.py:120:120"
-```
+[Function Reference](../../reference/#typerdrive.settings.commands.add_unset)
 
 
 ### `add_show()`
@@ -321,11 +310,7 @@ This method adds the `show` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/settings/commands.py:162:162"
-```
+[Function Reference](../../reference/#typerdrive.settings.commands.add_show)
 
 
 ### `add_reset()`
@@ -334,11 +319,7 @@ This method adds the `reset` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/settings/commands.py:193:193"
-```
+[Function Reference](../../reference/#typerdrive.settings.commands.add_reset)
 
 
 ### `add_settings_subcommand()`
@@ -351,10 +332,4 @@ This method does three things:
 
 The result is that all the subcommands are available under one `settings` subcommand.
 
-Function signature:
-
-```python {linenums="1"}
---8<-- "src/typerdrive/settings/commands.py:218:218"
-```
-
-
+[Function Reference](../../reference/#typerdrive.settings.commands.add_settings_subcommand)

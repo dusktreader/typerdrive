@@ -1,6 +1,5 @@
-from pydantic import ValidationError
 import pytest
-
+from pydantic import ValidationError
 from typerdrive.client.base import TyperdriveClient
 from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager, ClientSpec

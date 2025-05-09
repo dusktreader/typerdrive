@@ -34,6 +34,7 @@ nav:
   - Features:
     - Settings: features/settings.md
     - Cache: features/cache.md
+    - Logging: features/logging.md
     - Error Handling: features/exceptions.md
     - API Clients: features/client.md
   - Runnable Demo: demo.md

@@ -18,6 +18,7 @@ _Boost your command-line workflows to lightspeed_
 
 - [Settings management & commands](https://dusktreader.github.io/typerdrive/features/settings)
 - [Cache management & commands](https://dusktreader.github.io/typerdrive/features/cache)
+- [Logging management & commands](https://dusktreader.github.io/typerdrive/features/logging.md)
 - [User-friendly error handling](https://dusktreader.github.io/typerdrive/features/exceptions)
 - [Powered Up API clients](https://dusktreader.github.io/typerdrive/features/client)
 

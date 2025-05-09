@@ -3,8 +3,10 @@ from pathlib import Path
 from typing import Any, cast
 
 from inflection import dasherize
+from loguru import logger
 from pydantic import BaseModel, ValidationError
 
+from typerdrive.config import TyperdriveConfig, get_typerdrive_config
 from typerdrive.settings.exceptions import (
     SettingsInitError,
     SettingsResetError,
@@ -14,17 +16,19 @@ from typerdrive.settings.exceptions import (
 )
 
 
-def get_settings_path(app_name: str) -> Path:
-    return Path.home() / ".local/share" / app_name / "settings.json"
-
-
 class SettingsManager:
-    def __init__(self, app_name: str, settings_model: type[BaseModel]):
-        self.app_name: str = app_name
-        self.settings_model: type[BaseModel] = settings_model
-        self.settings_path: Path = get_settings_path(self.app_name)
-        self.invalid_warnings: dict[str, str] = {}
-        self.settings_instance: BaseModel
+    settings_model: type[BaseModel]
+    settings_path: Path
+    invalid_warnings: dict[str, str]
+    settings_instance: BaseModel
+
+    def __init__(self, settings_model: type[BaseModel]):
+        config: TyperdriveConfig = get_typerdrive_config()
+
+        self.settings_model = settings_model
+        self.settings_path = config.settings_path
+        self.invalid_warnings = {}
+
         with SettingsInitError.handle_errors("Failed to initialize settings"):
             settings_values: dict[str, Any] = {}
             if self.settings_path.exists():
@@ -43,6 +47,8 @@ class SettingsManager:
             self.invalid_warnings[key] = message
 
     def update(self, **settings_values: Any):
+        logger.debug(f"Updating settings with {settings_values}")
+
         with SettingsUpdateError.handle_errors("Failed to update settings"):
             combined_settings = {**self.settings_instance.model_dump(), **settings_values}
             try:
@@ -53,6 +59,8 @@ class SettingsManager:
                 self.set_warnings(err)
 
     def unset(self, *unset_keys: str):
+        logger.debug(f"Unsetting keys {unset_keys}")
+
         with SettingsUnsetError.handle_errors("Failed to remove keys"):
             settings_values = {k: v for (k, v) in self.settings_instance.model_dump().items() if k not in unset_keys}
             try:
@@ -63,6 +71,8 @@ class SettingsManager:
                 self.set_warnings(err)
 
     def reset(self):
+        logger.debug("Resetting all settings")
+
         with SettingsResetError.handle_errors("Failed to reset settings"):
             try:
                 self.settings_instance = self.settings_model()
@@ -98,6 +108,8 @@ class SettingsManager:
         return "\n".join(lines)
 
     def save(self):
+        logger.debug(f"Saving settings to {self.settings_path}")
+
         with SettingsSaveError.handle_errors(f"Failed to save settings to {self.settings_path}"):
             self.settings_path.parent.mkdir(parents=True, exist_ok=True)
             self.settings_path.write_text(self.settings_instance.model_dump_json(indent=2))

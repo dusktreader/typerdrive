@@ -4,8 +4,7 @@ This set of demos shows the use of the `handle_errors` decorator.
 
 import typer
 from buzz import DoExceptParams
-
-from typerdrive.exceptions import TyperdriveError, handle_errors
+from typerdrive import TyperdriveError, handle_errors
 
 
 def demo_1__handle_errors__no_handler():

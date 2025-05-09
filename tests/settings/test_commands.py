@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 
 import typer
-
 from typerdrive.constants import ExitCode
 from typerdrive.settings.commands import add_bind, add_reset, add_settings_subcommand, add_show, add_unset, add_update
 

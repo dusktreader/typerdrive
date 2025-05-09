@@ -2,7 +2,7 @@ from typing import Annotated
 
 import typer
 
-from typerdrive.cache.attach import get_manager, attach_cache
+from typerdrive.cache.attach import attach_cache, get_cache_manager
 from typerdrive.cache.exceptions import CacheError
 from typerdrive.cache.manager import CacheManager
 from typerdrive.exceptions import handle_errors
@@ -18,7 +18,7 @@ def clear(
         typer.Option(help="Clear only the entry matching this path. If not provided, clear the entire cache"),
     ] = None,
 ):
-    manager: CacheManager = get_manager(ctx)
+    manager: CacheManager = get_cache_manager(ctx)
     if path:
         manager.clear_path(path)
         terminal_message(f"Cleared entry at cache target {str(path)}")

@@ -6,13 +6,12 @@ import pytest
 import typer
 from pydantic import BaseModel
 from typer.testing import CliRunner
-
 from typerdrive.constants import Validation
-from typerdrive.settings.attach import attach_settings, get_manager, get_settings
+from typerdrive.settings.attach import attach_settings, get_settings, get_settings_manager
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
 
-from tests.helpers import match_output, match_help
+from tests.helpers import match_help, match_output
 from tests.settings.models import DefaultSettingsModel, RequiredFieldsModel
 
 
@@ -250,7 +249,6 @@ class TestWithParameters:
 
         match_help(cli, unwanted_pattern="stuff")
 
-
     def test_attach_settings__with_manager_parameter(self):
         cli = typer.Typer()
 
@@ -336,15 +334,14 @@ class TestGetSettings:
 
 
 class TestGetManager:
-    def test_get_manager__extracts_settings_manager_from_context(self, fake_settings_path: Path):
+    def test_get_settings_manager__extracts_settings_manager_from_context(self, fake_settings_path: Path):
         cli = typer.Typer()
 
         @cli.command()
         @attach_settings(DefaultSettingsModel)
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            manager = get_manager(ctx)
+            manager = get_settings_manager(ctx)
             assert isinstance(manager, SettingsManager)
-            assert manager.app_name == "test"
             assert manager.settings_model == DefaultSettingsModel
             assert manager.settings_path == fake_settings_path
             assert manager.invalid_warnings == {}
@@ -358,12 +355,12 @@ class TestGetManager:
             prog_name="test",
         )
 
-    def test_get_manager__raises_exception_if_context_has_no_manager(self):
+    def test_get_settings_manager__raises_exception_if_context_has_no_manager(self):
         cli = typer.Typer()
 
         @cli.command()
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            get_manager(ctx)
+            get_settings_manager(ctx)
             print("Passed!")
 
         match_output(
@@ -374,14 +371,14 @@ class TestGetManager:
             prog_name="test",
         )
 
-    def test_get_manager__raises_exception_if_non_manager_retrieved(self):
+    def test_get_settings_manager__raises_exception_if_non_manager_retrieved(self):
         cli = typer.Typer()
 
         @cli.command()
         @attach_settings(DefaultSettingsModel)
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             ctx.obj.settings_manager = "Not a manager!"
-            get_manager(ctx)
+            get_settings_manager(ctx)
             print("Passed!")
 
         match_output(

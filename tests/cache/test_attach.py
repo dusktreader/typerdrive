@@ -1,8 +1,8 @@
-import typer
 from pathlib import Path
 
+import typer
+from typerdrive.cache.attach import attach_cache, get_cache_manager
 from typerdrive.cache.exceptions import CacheError
-from typerdrive.cache.attach import get_manager, attach_cache
 from typerdrive.cache.manager import CacheManager
 
 from tests.helpers import check_output, match_output
@@ -17,7 +17,6 @@ class TestAttachCache:
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             manager = ctx.obj.cache_manager
             assert isinstance(manager, CacheManager)
-            assert manager.app_name == "test"
 
         check_output(cli, prog_name="test")
 
@@ -27,7 +26,7 @@ class TestAttachCache:
         @cli.command()
         @attach_cache(show=True)
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            manager = get_manager(ctx)
+            manager = get_cache_manager(ctx)
             manager.store_bytes(b"jawa", "jawa")
             manager.store_bytes(b"ewok", "ewok")
             manager.store_bytes(b"hutt & pyke", "hutt/pyke")
@@ -74,16 +73,15 @@ class TestWithParameters:
 
 
 class TestGetManager:
-    def test_get_manager__extracts_cache_manager_from_context(self, fake_cache_path: Path):
+    def test_get_cache_manager__extracts_cache_manager_from_context(self, fake_cache_path: Path):
         cli = typer.Typer()
 
         @cli.command()
         @attach_cache()
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            manager = get_manager(ctx)
+            manager = get_cache_manager(ctx)
             assert isinstance(manager, CacheManager)
-            assert manager.app_name == "test"
-            assert manager.cache_path == fake_cache_path
+            assert manager.cache_dir == fake_cache_path
             print("Passed!")
 
         match_output(
@@ -93,12 +91,12 @@ class TestGetManager:
             prog_name="test",
         )
 
-    def test_get_manager__raises_exception_if_context_has_no_manager(self):
+    def test_get_cache_manager__raises_exception_if_context_has_no_manager(self):
         cli = typer.Typer()
 
         @cli.command()
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
-            get_manager(ctx)
+            get_cache_manager(ctx)
             print("Passed!")
 
         match_output(
@@ -109,14 +107,14 @@ class TestGetManager:
             prog_name="test",
         )
 
-    def test_get_manager__raises_exception_if_non_manager_retrieved(self):
+    def test_get_cache_manager__raises_exception_if_non_manager_retrieved(self):
         cli = typer.Typer()
 
         @cli.command()
         @attach_cache()
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             ctx.obj.cache_manager = "Not a manager!"
-            get_manager(ctx)
+            get_cache_manager(ctx)
             print("Passed!")
 
         match_output(

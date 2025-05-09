@@ -1,11 +1,10 @@
 import typer
 from pydantic import BaseModel
 from pytest_mock import MockerFixture
-
+from typerdrive.cache.attach import attach_cache
+from typerdrive.cache.manager import CacheManager
 from typerdrive.constants import ExitCode
 from typerdrive.exceptions import TyperdriveError, handle_errors
-from typerdrive.cache.manager import CacheManager
-from typerdrive.cache.attach import attach_cache
 from typerdrive.settings.attach import attach_settings, get_settings
 
 from tests.helpers import check_output
@@ -31,7 +30,6 @@ class TestHandleErrors:
         def _(ctx: typer.Context):
             manager = ctx.obj.cache_manager
             assert isinstance(manager, CacheManager)
-            assert manager.app_name == "test"
             print("We're all fine here now, thank you. How are you?")
 
         check_output(cli, expected_substring="thank you", unwanted_substring="What happened?", prog_name="test")

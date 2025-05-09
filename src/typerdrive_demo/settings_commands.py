@@ -7,8 +7,11 @@ from pathlib import Path
 
 import typer
 from pydantic import BaseModel
-from typerdrive.settings.commands import add_settings_subcommand
+from typerdrive import add_settings_subcommand, set_typerdrive_config
+
 from typerdrive_demo.helpers import fake_input
+
+set_typerdrive_config(app_name="settings-commands-demo")
 
 
 def demo_1__bind__basic():

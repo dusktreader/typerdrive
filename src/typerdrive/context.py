@@ -1,17 +1,17 @@
 from dataclasses import dataclass
-from typing import cast, get_origin, get_args
 from types import NoneType, UnionType
+from typing import get_args, get_origin
 
-from buzz import require_condition
 import typer
+from buzz import require_condition
 
 from typerdrive.cache.manager import CacheManager
 from typerdrive.client.manager import ClientManager
 from typerdrive.exceptions import ContextError
+from typerdrive.logging.manager import LoggingManager
 from typerdrive.settings.manager import SettingsManager
 
-
-type TyperdriveManager = SettingsManager | CacheManager | ClientManager
+type TyperdriveManager = SettingsManager | CacheManager | ClientManager | LoggingManager
 
 
 @dataclass
@@ -19,6 +19,7 @@ class TyperdriveContext:
     settings_manager: SettingsManager | None = None
     cache_manager: CacheManager | None = None
     client_manager: ClientManager | None = None
+    logging_manager: LoggingManager | None = None
 
 
 def get_user_context(ctx: typer.Context):
@@ -49,9 +50,3 @@ def to_context(ctx: typer.Context, name: str, val: TyperdriveManager) -> None:
 def from_context(ctx: typer.Context, name: str) -> TyperdriveManager:
     user_context = get_user_context(ctx)
     return ContextError.enforce_defined(getattr(user_context, name), f"{name} is not bound to context")
-
-
-def get_app_name(ctx: typer.Context) -> str:
-    if ctx.parent:
-        return get_app_name(cast(typer.Context, ctx.parent))
-    return ContextError.enforce_defined(ctx.info_name, "typerdrive requires the app to have a name")

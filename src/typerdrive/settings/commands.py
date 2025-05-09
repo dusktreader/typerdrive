@@ -47,6 +47,7 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
                 dec_kwargs=dict(
                     handle_exc_class=SettingsError,
                     unwrap_message=False,
+                    debug=True,
                 ),
                 is_simple=False,
             ),
@@ -95,6 +96,7 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
                 dec_kwargs=dict(
                     handle_exc_class=SettingsError,
                     unwrap_message=False,
+                    debug=True,
                 ),
                 is_simple=False,
             ),
@@ -141,6 +143,7 @@ def add_unset(cli: typer.Typer, settings_model: type[BaseModel]):
                 dec_kwargs=dict(
                     handle_exc_class=SettingsError,
                     unwrap_message=False,
+                    debug=True,
                 ),
                 is_simple=False,
             ),
@@ -170,6 +173,7 @@ def add_show(cli: typer.Typer, settings_model: type[BaseModel]):
                 dec_kwargs=dict(
                     handle_exc_class=SettingsError,
                     unwrap_message=False,
+                    debug=True,
                 ),
                 is_simple=False,
             ),
@@ -201,6 +205,7 @@ def add_reset(cli: typer.Typer, settings_model: type[BaseModel]):
                 dec_kwargs=dict(
                     handle_exc_class=SettingsError,
                     unwrap_message=False,
+                    debug=True,
                 ),
                 is_simple=False,
             ),

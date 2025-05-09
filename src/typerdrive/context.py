@@ -6,14 +6,19 @@ from buzz import require_condition
 import typer
 
 from typerdrive.cache.manager import CacheManager
+from typerdrive.client.manager import ClientManager
 from typerdrive.exceptions import ContextError
 from typerdrive.settings.manager import SettingsManager
+
+
+type TyperdriveManager = SettingsManager | CacheManager | ClientManager
 
 
 @dataclass
 class TyperdriveContext:
     settings_manager: SettingsManager | None = None
     cache_manager: CacheManager | None = None
+    client_manager: ClientManager | None = None
 
 
 def get_user_context(ctx: typer.Context):
@@ -22,7 +27,7 @@ def get_user_context(ctx: typer.Context):
     return ctx.obj
 
 
-def to_context(ctx: typer.Context, name: str, val: SettingsManager | CacheManager):
+def to_context(ctx: typer.Context, name: str, val: TyperdriveManager) -> None:
     user_context = get_user_context(ctx)
     field_type = TyperdriveContext.__dataclass_fields__[name].type
 
@@ -41,7 +46,7 @@ def to_context(ctx: typer.Context, name: str, val: SettingsManager | CacheManage
     setattr(user_context, name, val)
 
 
-def from_context(ctx: typer.Context, name: str) -> SettingsManager | CacheManager:
+def from_context(ctx: typer.Context, name: str) -> TyperdriveManager:
     user_context = get_user_context(ctx)
     return ContextError.enforce_defined(getattr(user_context, name), f"{name} is not bound to context")
 

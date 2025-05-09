@@ -22,3 +22,4 @@ Many features are planned, but these are the ones that are available thus far:
 - [Settings management & commands](features/settings.md)
 - [Cache management & commands](features/cache.md)
 - [User-friendly error handling](features/exceptions.md)
+- [Powered Up API clients](features/client.md)

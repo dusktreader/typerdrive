@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.2.0"
+version = "0.3.0"
 description = "Boost your command-line workflows to lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -10,6 +10,7 @@ license-files = ["LICENSE.md"]
 
 requires-python = ">=3.12, ~=3.13"
 dependencies = [
+    "httpx~=0.28",
     "humanize~=4.12",
     "inflection~=0.5",
     "py-buzz~=7.3",
@@ -39,6 +40,7 @@ dev = [
     "basedpyright~=1.29",
     "debugpy~=1.8",
     "ipython~=8.18",
+    "loguru>=0.7.3",
     "mkdocs-material~=9.6",
     "mkdocstrings[python]~=0.29",
     "mypy~=1.15",
@@ -49,6 +51,7 @@ dev = [
     "pytest-mock>=3.14.0",
     "pytest-pretty~=1.2",
     "pytest-random-order~=1.1",
+    "respx>=0.22.0",
     "ruff~=0.11",
     "typos~=1.31",
 ]
@@ -76,6 +79,7 @@ src = ["src/typerdrive", "tests"]
 
 
 [tool.mypy]
+plugins = ["pydantic.mypy"]
 pretty = true
 check_untyped_defs = true
 files = ["src/typerdrive", "tests"]

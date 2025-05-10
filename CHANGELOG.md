@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.5.0 - 2025-05-10
+- Accidentally bumped minor version instead of patch
+
+
 ## v0.4.2 - 2025-05-10
 - Fixed `app_name`
 

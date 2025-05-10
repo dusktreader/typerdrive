@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.4.1"
+version = "0.5.0"
 description = "Boost your command-line workflows to lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},

@@ -1030,7 +1030,7 @@ wheels = [
 
 [[package]]
 name = "typerdrive"
-version = "0.4.0"
+version = "0.4.1"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
@@ -1074,7 +1074,7 @@ requires-dist = [
     { name = "httpx", specifier = "~=0.28" },
     { name = "humanize", specifier = "~=4.12" },
     { name = "inflection", specifier = "~=0.5" },
-    { name = "loguru", specifier = ">=0.7.3" },
+    { name = "loguru", specifier = "~=0.7" },
     { name = "py-buzz", specifier = "~=7.3" },
     { name = "pydantic", specifier = "~=2.11" },
     { name = "rich", marker = "extra == 'demo'", specifier = "~=14.0" },

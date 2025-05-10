@@ -9,7 +9,7 @@ from typerdrive.types import FileRetentionSpec, FileRotationSpec, FileCompressio
 
 
 class TyperdriveConfig(BaseModel):
-    app_name: str = sys.argv[0]
+    app_name: str = sys.argv[0].split("/")[-1]
     log_file_rotation: FileRotationSpec = "1 week"
     log_file_retention: FileRetentionSpec = "1 month"
     log_file_compression: FileCompressionSpec = "tar.gz"

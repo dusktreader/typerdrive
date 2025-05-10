@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.4.0"
+version = "0.4.1"
 description = "Boost your command-line workflows to lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -13,6 +13,7 @@ dependencies = [
     "httpx~=0.28",
     "humanize~=4.12",
     "inflection~=0.5",
+    "loguru~=0.7",
     "py-buzz~=7.3",
     "pydantic~=2.11",
     "snick~=2.1",
@@ -40,7 +41,6 @@ dev = [
     "basedpyright~=1.29",
     "debugpy~=1.8",
     "ipython~=8.18",
-    "loguru>=0.7.3",
     "mkdocs-material~=9.6",
     "mkdocstrings[python]~=0.29",
     "mypy~=1.15",

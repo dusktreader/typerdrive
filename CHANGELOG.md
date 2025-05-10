@@ -6,8 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## v0.4.0 - 2025-05-09
+## v0.4.1 - 2025-05-09
+- Fixed missing loguru dependency
 
+## v0.4.0 - 2025-05-09
 - Added `@attach_logging()` decorator and logs subcommands
 - Added TyperdriveConfig to control global configuration for typerdrive specifically
 - Moved `app_name` to `TyperdriveConfig`

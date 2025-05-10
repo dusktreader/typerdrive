@@ -6,8 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.4.2 - 2025-05-10
+- Fixed `app_name`
+
+
 ## v0.4.1 - 2025-05-09
 - Fixed missing loguru dependency
+
 
 ## v0.4.0 - 2025-05-09
 - Added `@attach_logging()` decorator and logs subcommands

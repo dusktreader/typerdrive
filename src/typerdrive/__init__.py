@@ -10,7 +10,7 @@ from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config, set_typerdrive_config
 from typerdrive.constants import Validation
-from typerdrive.exceptions import TyperdriveError, handle_errors
+from typerdrive.exceptions import TyperdriveError, handle_errors, log_error
 from typerdrive.format import simple_message, strip_rich_style, terminal_message
 from typerdrive.logging.attach import attach_logging, get_logging_manager
 from typerdrive.logging.commands import add_logs_subcommand
@@ -70,6 +70,7 @@ __all__ = [
     "get_settings_value",
     "get_typerdrive_config",
     "handle_errors",
+    "log_error",
     "set_typerdrive_config",
     "simple_message",
     "strip_rich_style",

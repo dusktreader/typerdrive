@@ -1,3 +1,4 @@
+from traceback import format_tb
 from collections.abc import Callable
 from functools import wraps
 from typing import Any, ParamSpec, TypeVar
@@ -5,10 +6,12 @@ from typing import Any, ParamSpec, TypeVar
 import snick
 import typer
 from buzz import Buzz, DoExceptParams, get_traceback, reformat_exception
+from loguru import logger
 from rich import traceback
 
 from typerdrive.constants import ExitCode
 from typerdrive.format import terminal_message
+from typerdrive.format import strip_rich_style
 
 traceback.install()
 
@@ -141,3 +144,16 @@ def handle_errors(
         return wrapper
 
     return _decorate
+
+
+def log_error(params: DoExceptParams):
+    logger.error(
+        "\n".join(
+            [
+                strip_rich_style(params.final_message),
+                "--------",
+                "Traceback:",
+                "".join(format_tb(params.trace)),
+            ]
+        )
+    )

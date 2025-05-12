@@ -48,7 +48,7 @@ def flip(call_it: CallIt, show_logs: bool = False):
     logger.disable(__name__)
     if show_logs:
         logger.enable(__name__)
-
+        logger.info("Logging enabled")
     result = random.choice([c for c in CallIt])
     logger.debug(f"Result: {result}")
     if call_it != result:

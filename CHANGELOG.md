@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.5.2 - 2025-05-12
+- Fixed error when showing settings where none are set (have defaults)
+
+
 ## v0.5.1 - 2025-05-12
 - Added `log_errors` utility function
 

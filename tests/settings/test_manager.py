@@ -243,16 +243,44 @@ class TestSettingsManager:
         manager = SettingsManager(RequiredFieldsModel)
         manager.update(name="pyke", alignment="negative")
         computed = manager.pretty()
-        print(computed)
         expected = snick.dedent(
             """
             [bold]       name[/bold] -> pyke
+            [bold]     planet[/bold] -> [red]<UNSET>[/red]
             [bold]is-humanoid[/bold] -> True
             [bold]  alignment[/bold] -> [red]negative[/red]
 
             [red]Settings are invalid:[/red]
             [bold]     planet[/bold] -> Field required
             [bold]  alignment[/bold] -> Value error, negative is an invalid alignment
+            """
+        ).strip()
+        print(expected)
+        assert expected == computed
+
+
+    def test_pretty__does_not_error_with_no_default_fields(self):
+
+        class NoDefaultsModel(BaseModel):
+            name: str
+            planet: str
+            is_humanoid: bool
+            alignment: Annotated[str, AfterValidator(valid_alignment)]
+
+        manager = SettingsManager(NoDefaultsModel)
+        computed = manager.pretty()
+        expected = snick.dedent(
+            """
+            [bold]       name[/bold] -> [red]<UNSET>[/red]
+            [bold]     planet[/bold] -> [red]<UNSET>[/red]
+            [bold]is-humanoid[/bold] -> [red]<UNSET>[/red]
+            [bold]  alignment[/bold] -> [red]<UNSET>[/red]
+
+            [red]Settings are invalid:[/red]
+            [bold]       name[/bold] -> Field required
+            [bold]     planet[/bold] -> Field required
+            [bold]is-humanoid[/bold] -> Field required
+            [bold]  alignment[/bold] -> Field required
             """
         ).strip()
         print(expected)
@@ -268,6 +296,7 @@ class TestSettingsManager:
             + snick.dedent(
                 """
                    name -> pyke
+                 planet -> <UNSET>
             is-humanoid -> True
               alignment -> negative
 

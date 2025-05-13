@@ -89,10 +89,13 @@ class SettingsManager:
         (red_, _red) = ("[red]", "[/red]") if with_style else ("", "")
         lines: list[str] = []
         parts: list[tuple[str, Any]] = []
-        for field_name, field_value in self.settings_instance:
+        for field_name in self.settings_instance.__class__.model_fields:
             if field_name == "invalid_warning":
                 continue
-            field_string = str(field_value)
+            try:
+                field_string = str(getattr(self.settings_instance, field_name))
+            except AttributeError:
+                field_string = "<UNSET>"
             if field_name in self.invalid_warnings:
                 field_string = f"{red_}{field_string}{_red}"
             parts.append((dasherize(field_name), field_string))
@@ -103,7 +106,9 @@ class SettingsManager:
         if self.invalid_warnings:
             lines.append("")
             lines.append(f"{red_}Settings are invalid:{_red}")
-            lines.extend(f"{bold_}{k:>{max_field_len}}{_bold} -> {v}" for k, v in self.invalid_warnings.items())
+            lines.extend(
+                f"{bold_}{dasherize(k):>{max_field_len}}{_bold} -> {v}" for k, v in self.invalid_warnings.items()
+            )
 
         return "\n".join(lines)
 

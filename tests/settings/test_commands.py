@@ -114,11 +114,12 @@ class TestUpdate:
         add_update(cli, RequiredFieldsModel)
 
         expected_pattern = [
-            "name.*hutt",
-            "is-humanoid.*True",
-            "alignment.*neutral",
+            "name -> hutt",
+            "planet -> <UNSET>",
+            "is-humanoid -> True",
+            "alignment -> neutral",
             "Settings are invalid:",
-            "planet.*Field required",
+            "planet -> Field required",
             f"saved to {str(fake_settings_path)[:40]}",
         ]
         match_output(
@@ -204,11 +205,13 @@ class TestUnset:
         add_unset(cli, RequiredFieldsModel)
 
         expected_pattern = [
-            "is-humanoid.*True",
-            "alignment.*evil",
+            "name -> <UNSET>",
+            "planet -> <UNSET>",
+            "is-humanoid -> True",
+            "alignment -> evil",
             "Settings are invalid:",
-            "name.*Field required",
-            "planet.*Field required",
+            "name -> Field required",
+            "planet -> Field required",
             f"saved to {str(fake_settings_path)[:40]}",
         ]
         match_output(
@@ -292,11 +295,13 @@ class TestReset:
         add_reset(cli, RequiredFieldsModel)
 
         expected_pattern = [
-            "is-humanoid.*True",
-            "alignment.*neutral",
+            "name -> <UNSET>",
+            "planet -> <UNSET>",
+            "is-humanoid -> True",
+            "alignment -> neutral",
             "Settings are invalid:",
-            "name.*Field required",
-            "planet.*Field required",
+            "name -> Field required",
+            "planet -> Field required",
             f"saved to {str(fake_settings_path)[:40]}",
         ]
         match_output(

@@ -4,11 +4,6 @@
 [![Documentation Status](https://github.com/dusktreader/typerdrive/actions/workflows/docs.yml/badge.svg)](https://dusktreader.github.io/typerdrive/)
 
 
-> [!IMPORTANT]
-> I'm looking for a job right now! If you know of any openings that match my skill-set, please let me know! You can
-> read my resume over at my [cv site](https://cv.dusktreader.dev). Thanks!
-
-
 ![typerdrive-logo](https://github.com/dusktreader/typerdrive/blob/main/docs/source/images/logo-dark.png)
 
 _Boost your command-line workflows to lightspeed_

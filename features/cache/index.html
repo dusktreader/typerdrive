@@ -506,6 +506,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cachemanagerlist_items" class="md-nav__link">
+    <span class="md-ellipsis">
+      CacheManager.list_items()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cachemanagerstore_bytes" class="md-nav__link">
     <span class="md-ellipsis">
       CacheManager.store_bytes()
@@ -972,6 +981,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cachemanagerlist_items" class="md-nav__link">
+    <span class="md-ellipsis">
+      CacheManager.list_items()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cachemanagerstore_bytes" class="md-nav__link">
     <span class="md-ellipsis">
       CacheManager.store_bytes()
@@ -1345,6 +1363,10 @@ from the <code>typer.Context</code> using the <code>get_cache_manager()</code> f
 stored. It does several checks to make sure that the file exists and that the resolved path is actually within the cache
 directory (to prevent sneaky use of <code>..</code>).</p>
 <p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.resolve_path">Method Reference</a></p>
+<h4 id="cachemanagerlist_items"><code>CacheManager.list_items()</code></h4>
+<p>This method shows all the items stored in a path within the cache. It will only list files, not directories. If the
+target path does not exist or is not a directory, an exception will be raised.</p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.list_items">Method Reference</a></p>
 <h4 id="cachemanagerstore_bytes"><code>CacheManager.store_bytes()</code></h4>
 <p>This method stores binary data in a cache target. An optional <code>mode</code> keyword argument can be provided to control the
 permissions of the cache entry. So, for example, if you want only your user to be able to read and write to the entry,

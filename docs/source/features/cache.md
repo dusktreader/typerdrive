@@ -195,7 +195,7 @@ This method converts a cache target path like `yoda/speech.txt` into the absolut
 stored. It does several checks to make sure that the file exists and that the resolved path is actually within the cache
 directory (to prevent sneaky use of `..`).
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.resolve_path)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.resolve_path)
 
 
 #### `CacheManager.store_bytes()`
@@ -204,14 +204,14 @@ This method stores binary data in a cache target. An optional `mode` keyword arg
 permissions of the cache entry. So, for example, if you want only your user to be able to read and write to the entry,
 you might use a `mode` of `0o600`.
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.store_bytes)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.store_bytes)
 
 
 #### `CacheManager.store_text()`
 
 This method stores text data in a cache target. It can also be given a `mode` parameter.
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.store_text)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.store_text)
 
 
 #### `CacheManager.store_json()`
@@ -220,21 +220,21 @@ This method stores a dictionary of data in a cache target. The dictionary must b
 thrown. The JSON written to the file is formatted to be human readable. This method can also be provided a `mode`
 parameter.
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.store_json)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.store_json)
 
 
 #### `CacheManager.load_bytes()`
 
 This method loads binary data from a cache target. If the cache target does not exist, an error will be thrown.
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.load_bytes)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.load_bytes)
 
 
 #### `CacheManager.load_text()`
 
 This method loads text data from a cache target. If the cache target does not exist, an error will be thrown.
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.load_text)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.load_text)
 
 
 #### `CacheManager.load_json()`
@@ -242,7 +242,7 @@ This method loads text data from a cache target. If the cache target does not ex
 This method loads a JSON serialized dictionary from a cache target. If the cache target does not exist, an error will be
 thrown. If the data at the cache target cannot be serialized, an error will be thrown.
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.load_json)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.load_json)
 
 
 #### `CacheManager.clear_path()`
@@ -250,11 +250,11 @@ thrown. If the data at the cache target cannot be serialized, an error will be t
 This method removes an entry from the cache at the provided target. If the target does not exist, an error will be
 thrown. If the parent directory of the entry is empty after it is removed, the parent directory will be removed as well.
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.clear_path)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.clear_path)
 
 
 #### `CacheManager.clear_all()`
 
 This method will remove all items from the cache.
 
-[Method Reference](../../reference/#typerdrive.cache.manager.CacheManager.clear_all)
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.clear_all)

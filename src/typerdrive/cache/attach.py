@@ -1,3 +1,7 @@
+"""
+Provide a decorator that attaches the `typerdrive` cache to a `typer` command function.
+"""
+
 from collections.abc import Callable
 from functools import wraps
 from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
@@ -12,6 +16,9 @@ from typerdrive.dirs import show_directory
 
 
 def get_cache_manager(ctx: typer.Context) -> CacheManager:
+    """
+    Retrieve the `CacheManager` from the `TyperdriveContext`.
+    """
     with CacheError.handle_errors("Cache is not bound to the context. Use the @attach_cache() decorator"):
         mgr: Any = from_context(ctx, "cache_manager")
     return CacheError.ensure_type(
@@ -27,6 +34,12 @@ ContextFunction = Callable[Concatenate[typer.Context, P], T]
 
 
 def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
+    """
+    Attach the `typerdrive` cache to the decorated `typer` command function.
+
+    Parameters:
+        show: If set, show the cache after the function runs.
+    """
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         for key in func.__annotations__.keys():

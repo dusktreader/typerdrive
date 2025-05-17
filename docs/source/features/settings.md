@@ -282,7 +282,7 @@ This method adds the `bind` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-[Function Reference](../../reference/#typerdrive.settings.commands.add_bind)
+[Function Reference](../reference/settings.md/#typerdrive.settings.commands.add_bind)
 
 
 
@@ -292,7 +292,7 @@ This method adds the `update` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-[Function Reference](../../reference/#typerdrive.settings.commands.add_update)
+[Function Reference](../reference/settings.md/#typerdrive.settings.commands.add_update)
 
 
 ### `add_unset()`
@@ -301,7 +301,7 @@ This method adds the `unset` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-[Function Reference](../../reference/#typerdrive.settings.commands.add_unset)
+[Function Reference](../reference/settings.md/#typerdrive.settings.commands.add_unset)
 
 
 ### `add_show()`
@@ -310,7 +310,7 @@ This method adds the `show` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-[Function Reference](../../reference/#typerdrive.settings.commands.add_show)
+[Function Reference](../reference/settings.md/#typerdrive.settings.commands.add_show)
 
 
 ### `add_reset()`
@@ -319,7 +319,7 @@ This method adds the `reset` subcommand to the provided CLI app. It uses the
 [`build_command()`](https://dusktreader.github.io/typer-repyt/build_command/) function to dynamically create a command
 and then adds it to the `cli` argument.
 
-[Function Reference](../../reference/#typerdrive.settings.commands.add_reset)
+[Function Reference](../reference/settings.md/#typerdrive.settings.commands.add_reset)
 
 
 ### `add_settings_subcommand()`
@@ -332,4 +332,4 @@ This method does three things:
 
 The result is that all the subcommands are available under one `settings` subcommand.
 
-[Function Reference](../../reference/#typerdrive.settings.commands.add_settings_subcommand)
+[Function Reference](../reference/settings.md/#typerdrive.settings.commands.add_settings_subcommand)

@@ -1,3 +1,7 @@
+"""
+Provide a specialized HTTP client for making requests to APIs.
+"""
+
 from typing import Any
 
 import pydantic
@@ -8,8 +12,9 @@ from typerdrive.client.exceptions import ClientError
 
 
 class TyperdriveClient(Client):
-    def __init__(self, *args: Any, **kwargs: Any):
-        super().__init__(*args, **kwargs)
+    """
+    Extend the `http.Client` with `*_x()` methods that provide useful features for processing requests.
+    """
 
     def request_x[RM: pydantic.BaseModel](
         self,
@@ -23,6 +28,33 @@ class TyperdriveClient(Client):
         response_model: type[RM] | None = None,
         **request_kwargs: Any,
     ) -> RM | int | dict[str, Any]:
+        """
+        Make a request against an API.
+
+        Provides functionality to take url params and request body from instances of `pydantic` models.
+        Also, provides checks for the status code returned from the API.
+        Will deserialize the response into a `pydantic` model if one is provided.
+
+        Note that all the arguments of `httpx.Client` are also supported.
+
+        Parameters:
+            method:           The HTTP method to use in the request
+            url:              The url to use for the request. Will be appended to `base_url` if one has been set.
+            param_obj:        An optional `pydantic` model to use for url params. This will be serialized to JSON and
+                              passed as the request URL parameters.
+                              If set, and params are passed through another mechanism as well, an exception will be
+                              raised.
+            body_obj:         An optional `pydantic` model to use for request body. This will be serialized to JSON and
+                              passed as the request body.
+                              If set, and the body is passed through another mechanism as well, an exception will be
+                              raised.
+            expected_status:  If provided, check the response code from the API. If the code doesn't match, raise an
+                              exception.
+            expect_response:  If set, expect the response to have a JSON body that needs to be deserialized. If not set,
+                              just return the status code.
+            response_model:   If provided, deserialize the response into an instance of this model. If not provided,
+                              the return value will just be a dictionary containing the response data.
+        """
         logger.debug(f"Processing {method} request to {self.base_url.join(url)}")
 
         if param_obj is not None:
@@ -90,6 +122,9 @@ class TyperdriveClient(Client):
         response_model: type[RM] | None = None,
         **request_kwargs: Any,
     ) -> RM | int | dict[str, Any]:
+        """
+        Make a GET request against an API using the `request_x()` method.
+        """
         return self.request_x(
             "GET",
             url,
@@ -112,6 +147,9 @@ class TyperdriveClient(Client):
         response_model: type[RM] | None = None,
         **request_kwargs: Any,
     ) -> RM | int | dict[str, Any]:
+        """
+        Make a POST request against an API using the `request_x()` method.
+        """
         return self.request_x(
             "POST",
             url,
@@ -134,6 +172,9 @@ class TyperdriveClient(Client):
         response_model: type[RM] | None = None,
         **request_kwargs: Any,
     ) -> RM | int | dict[str, Any]:
+        """
+        Make a PUT request against an API using the `request_x()` method.
+        """
         return self.request_x(
             "PUT",
             url,
@@ -156,6 +197,9 @@ class TyperdriveClient(Client):
         response_model: type[RM] | None = None,
         **request_kwargs: Any,
     ) -> RM | int | dict[str, Any]:
+        """
+        Make a PATCH request against an API using the `request_x()` method.
+        """
         return self.request_x(
             "PATCH",
             url,
@@ -178,6 +222,9 @@ class TyperdriveClient(Client):
         response_model: type[RM] | None = None,
         **request_kwargs: Any,
     ) -> RM | int | dict[str, Any]:
+        """
+        Make a DELETE request against an API using the `request_x()` method.
+        """
         return self.request_x(
             "DELETE",
             url,

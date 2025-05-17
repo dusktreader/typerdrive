@@ -46,7 +46,7 @@ class TestAttachSettings:
         cli = typer.Typer()
 
         @cli.command()
-        @attach_settings(RequiredFieldsModel, validation=Validation.NONE)
+        @attach_settings(RequiredFieldsModel, validation=Validation.NEVER)
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             settings = get_settings(ctx, RequiredFieldsModel)
             assert not hasattr(settings, "name")

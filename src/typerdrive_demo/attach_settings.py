@@ -59,7 +59,7 @@ def demo_3__attach_settings__allow_invalid():
     This function demonstrates how the `validation` argument passed to the
     `attach_settings` decorator works. By default this flag is set to
     `Validation.BEFORE`, meaning the settings must be valid before it is
-    attached to the app's context. If you set it to `Validation.NONE`, the
+    attached to the app's context. If you set it to `Validation.NEVER`, the
     settings will be bound even if there are invalid settings. This is
     important because your settings may have non-default settings that need
     to be set _through_ a command.
@@ -73,7 +73,7 @@ def demo_3__attach_settings__allow_invalid():
     cli = typer.Typer()
 
     @cli.command()
-    @attach_settings(ExampleSettings, validation=Validation.NONE)
+    @attach_settings(ExampleSettings, validation=Validation.NEVER)
     def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
         print(f"Here are the settings that are missing a required field: {cfg}")
 

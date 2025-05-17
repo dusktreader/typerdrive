@@ -53,6 +53,26 @@ class TestSettingsManager:
         full_path = manager.resolve_path(test_path)
         assert full_path == fake_cache_path / test_path
 
+    def test_list_items__basic(self, fake_cache_path: Path):
+        test_path = fake_cache_path / "jawa"
+        test_path.mkdir()
+        names = ["ewok.txt", "hutt.txt", "pyke.txt"]
+        for name in names:
+            (test_path / name).touch()
+        manager = CacheManager()
+        assert sorted(manager.list_items("jawa")) == sorted(names)
+
+    def test_list_items__raises_error_if_path_does_not_exist(self):
+        manager = CacheManager()
+        with pytest.raises(CacheError, match="Resolved cache path .* does not exist"):
+            manager.list_items("jawa")
+
+    def test_list_items__raises_error_if_path_is_not_a_directory(self, fake_cache_path: Path):
+        (fake_cache_path / "jawa").touch()
+        manager = CacheManager()
+        with pytest.raises(CacheError, match="Resolved cache path .* is not a directory"):
+            manager.list_items("jawa")
+
     def test_store_bytes__basic(self, fake_cache_path: Path):
         test_path = Path("jawa/ewok/hutt")
         manager = CacheManager()

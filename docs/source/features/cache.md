@@ -198,6 +198,14 @@ directory (to prevent sneaky use of `..`).
 [Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.resolve_path)
 
 
+#### `CacheManager.list_items()`
+
+This method shows all the items stored in a path within the cache. It will only list files, not directories. If the
+target path does not exist or is not a directory, an exception will be raised.
+
+[Method Reference](../reference/cache.md/#typerdrive.cache.manager.CacheManager.list_items)
+
+
 #### `CacheManager.store_bytes()`
 
 This method stores binary data in a cache target. An optional `mode` keyword argument can be provided to control the

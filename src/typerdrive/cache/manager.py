@@ -65,6 +65,30 @@ class CacheManager:
             full_path.parent.mkdir(parents=True, exist_ok=True)
         return full_path
 
+    def list_items(self, path: Path | str) -> list[str]:
+        """
+        List items at a given path.
+
+        Items will be all non-directory entries in the given path.
+
+        If the path doesn't exist or is not a directory, an exception will be raised.
+        """
+        full_path = self.resolve_path(path)
+        CacheError.require_condition(
+            full_path.exists(),
+            f"Resolved cache path {str(full_path)} does not exist",
+        )
+        CacheError.require_condition(
+            full_path.is_dir(),
+            "Resolved cache path {str(full_path)} is not a directory",
+        )
+        items: list[str] = []
+        for path in full_path.iterdir():
+            if path.is_dir():
+                continue
+            items.append(str(path.name))
+        return items
+
     def store_bytes(self, data: bytes, path: Path | str, mode: int | None = None):
         """
         Store data at the given cache key.

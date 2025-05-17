@@ -2,38 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>http://dusktreader.github.io/typerdrive/</loc>
-         <lastmod>2025-05-16</lastmod>
+         <lastmod>2025-05-17</lastmod>
     </url>
     <url>
          <loc>http://dusktreader.github.io/typerdrive/demo/</loc>
-         <lastmod>2025-05-16</lastmod>
+         <lastmod>2025-05-17</lastmod>
     </url>
     <url>
          <loc>http://dusktreader.github.io/typerdrive/quickstart/</loc>
-         <lastmod>2025-05-16</lastmod>
-    </url>
-    <url>
-         <loc>http://dusktreader.github.io/typerdrive/reference/</loc>
-         <lastmod>2025-05-16</lastmod>
+         <lastmod>2025-05-17</lastmod>
     </url>
     <url>
          <loc>http://dusktreader.github.io/typerdrive/features/cache/</loc>
-         <lastmod>2025-05-16</lastmod>
+         <lastmod>2025-05-17</lastmod>
     </url>
     <url>
          <loc>http://dusktreader.github.io/typerdrive/features/client/</loc>
-         <lastmod>2025-05-16</lastmod>
+         <lastmod>2025-05-17</lastmod>
     </url>
     <url>
          <loc>http://dusktreader.github.io/typerdrive/features/exceptions/</loc>
-         <lastmod>2025-05-16</lastmod>
+         <lastmod>2025-05-17</lastmod>
     </url>
     <url>
          <loc>http://dusktreader.github.io/typerdrive/features/logging/</loc>
-         <lastmod>2025-05-16</lastmod>
+         <lastmod>2025-05-17</lastmod>
     </url>
     <url>
          <loc>http://dusktreader.github.io/typerdrive/features/settings/</loc>
-         <lastmod>2025-05-16</lastmod>
+         <lastmod>2025-05-17</lastmod>
+    </url>
+    <url>
+         <loc>http://dusktreader.github.io/typerdrive/reference/base_modules/</loc>
+         <lastmod>2025-05-17</lastmod>
+    </url>
+    <url>
+         <loc>http://dusktreader.github.io/typerdrive/reference/cache/</loc>
+         <lastmod>2025-05-17</lastmod>
+    </url>
+    <url>
+         <loc>http://dusktreader.github.io/typerdrive/reference/client/</loc>
+         <lastmod>2025-05-17</lastmod>
+    </url>
+    <url>
+         <loc>http://dusktreader.github.io/typerdrive/reference/logging/</loc>
+         <lastmod>2025-05-17</lastmod>
+    </url>
+    <url>
+         <loc>http://dusktreader.github.io/typerdrive/reference/settings/</loc>
+         <lastmod>2025-05-17</lastmod>
     </url>
 </urlset>

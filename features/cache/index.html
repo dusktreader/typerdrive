@@ -700,9 +700,22 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../reference/" class="md-nav__link">
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
   
   
   <span class="md-ellipsis">
@@ -711,7 +724,134 @@
   </span>
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/base_modules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Base Modules
+    
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/cache/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cache
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Client
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logging
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Settings
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1204,37 +1344,37 @@ from the <code>typer.Context</code> using the <code>get_cache_manager()</code> f
 <p>This method converts a cache target path like <code>yoda/speech.txt</code> into the absolute path to the file where the data is
 stored. It does several checks to make sure that the file exists and that the resolved path is actually within the cache
 directory (to prevent sneaky use of <code>..</code>).</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.resolve_path">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.resolve_path">Method Reference</a></p>
 <h4 id="cachemanagerstore_bytes"><code>CacheManager.store_bytes()</code></h4>
 <p>This method stores binary data in a cache target. An optional <code>mode</code> keyword argument can be provided to control the
 permissions of the cache entry. So, for example, if you want only your user to be able to read and write to the entry,
 you might use a <code>mode</code> of <code>0o600</code>.</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.store_bytes">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.store_bytes">Method Reference</a></p>
 <h4 id="cachemanagerstore_text"><code>CacheManager.store_text()</code></h4>
 <p>This method stores text data in a cache target. It can also be given a <code>mode</code> parameter.</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.store_text">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.store_text">Method Reference</a></p>
 <h4 id="cachemanagerstore_json"><code>CacheManager.store_json()</code></h4>
 <p>This method stores a dictionary of data in a cache target. The dictionary must be JSON serializable or an error will be
 thrown. The JSON written to the file is formatted to be human readable. This method can also be provided a <code>mode</code>
 parameter.</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.store_json">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.store_json">Method Reference</a></p>
 <h4 id="cachemanagerload_bytes"><code>CacheManager.load_bytes()</code></h4>
 <p>This method loads binary data from a cache target. If the cache target does not exist, an error will be thrown.</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.load_bytes">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.load_bytes">Method Reference</a></p>
 <h4 id="cachemanagerload_text"><code>CacheManager.load_text()</code></h4>
 <p>This method loads text data from a cache target. If the cache target does not exist, an error will be thrown.</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.load_text">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.load_text">Method Reference</a></p>
 <h4 id="cachemanagerload_json"><code>CacheManager.load_json()</code></h4>
 <p>This method loads a JSON serialized dictionary from a cache target. If the cache target does not exist, an error will be
 thrown. If the data at the cache target cannot be serialized, an error will be thrown.</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.load_json">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.load_json">Method Reference</a></p>
 <h4 id="cachemanagerclear_path"><code>CacheManager.clear_path()</code></h4>
 <p>This method removes an entry from the cache at the provided target. If the target does not exist, an error will be
 thrown. If the parent directory of the entry is empty after it is removed, the parent directory will be removed as well.</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.clear_path">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.clear_path">Method Reference</a></p>
 <h4 id="cachemanagerclear_all"><code>CacheManager.clear_all()</code></h4>
 <p>This method will remove all items from the cache.</p>
-<p><a href="../../reference/#typerdrive.cache.manager.CacheManager.clear_all">Method Reference</a></p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.clear_all">Method Reference</a></p>
 
 
 

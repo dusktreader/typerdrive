@@ -685,9 +685,22 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../reference/" class="md-nav__link">
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
   
   
   <span class="md-ellipsis">
@@ -696,7 +709,134 @@
   </span>
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/base_modules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Base Modules
+    
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/cache/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cache
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Client
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logging
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Settings
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -1184,27 +1324,27 @@ want to customize where the settings subcommands appear, you may call the other 
 <p>This method adds the <code>bind</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
-<p><a href="../../reference/#typerdrive.settings.commands.add_bind">Function Reference</a></p>
+<p><a href="../../reference/settings/#typerdrive.settings.commands.add_bind">Function Reference</a></p>
 <h3 id="add_update"><code>add_update()</code></h3>
 <p>This method adds the <code>update</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
-<p><a href="../../reference/#typerdrive.settings.commands.add_update">Function Reference</a></p>
+<p><a href="../../reference/settings/#typerdrive.settings.commands.add_update">Function Reference</a></p>
 <h3 id="add_unset"><code>add_unset()</code></h3>
 <p>This method adds the <code>unset</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
-<p><a href="../../reference/#typerdrive.settings.commands.add_unset">Function Reference</a></p>
+<p><a href="../../reference/settings/#typerdrive.settings.commands.add_unset">Function Reference</a></p>
 <h3 id="add_show"><code>add_show()</code></h3>
 <p>This method adds the <code>show</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
-<p><a href="../../reference/#typerdrive.settings.commands.add_show">Function Reference</a></p>
+<p><a href="../../reference/settings/#typerdrive.settings.commands.add_show">Function Reference</a></p>
 <h3 id="add_reset"><code>add_reset()</code></h3>
 <p>This method adds the <code>reset</code> subcommand to the provided CLI app. It uses the
 <a href="https://dusktreader.github.io/typer-repyt/build_command/"><code>build_command()</code></a> function to dynamically create a command
 and then adds it to the <code>cli</code> argument.</p>
-<p><a href="../../reference/#typerdrive.settings.commands.add_reset">Function Reference</a></p>
+<p><a href="../../reference/settings/#typerdrive.settings.commands.add_reset">Function Reference</a></p>
 <h3 id="add_settings_subcommand"><code>add_settings_subcommand()</code></h3>
 <p>This method does three things:</p>
 <ul>
@@ -1213,7 +1353,7 @@ and then adds it to the <code>cli</code> argument.</p>
 <li>Adds the new app as a subcommand of the Typer CLI that you provide</li>
 </ul>
 <p>The result is that all the subcommands are available under one <code>settings</code> subcommand.</p>
-<p><a href="../../reference/#typerdrive.settings.commands.add_settings_subcommand">Function Reference</a></p>
+<p><a href="../../reference/settings/#typerdrive.settings.commands.add_settings_subcommand">Function Reference</a></p>
 
 
 

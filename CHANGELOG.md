@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.6.1 - 2025-05-16
+- Added the `list_items()` method to the cache
+
+
 ## v0.6.0 - 2025-05-16
 - Reorganized modules a little
 - Added docstrings throughout

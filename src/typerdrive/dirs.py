@@ -1,3 +1,7 @@
+"""
+Provide methods for working with directories.
+"""
+
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -11,6 +15,11 @@ from typerdrive.format import terminal_message
 
 
 def _clear_dir(path: Path) -> int:
+    """
+    INTERNAL FUNCTION: Should not be used externally.
+
+    Used for recursively clearing a directory.
+    """
     count = 0
     for sub_path in path.iterdir():
         if sub_path.is_dir():
@@ -23,6 +32,12 @@ def _clear_dir(path: Path) -> int:
 
 
 def clear_directory(path: Path) -> int:
+    """
+    Delete all files and directories in the directory at the given path.
+
+    If the target path is not a directory, an exception will be raised.
+    If the target path does not exist, an exception will be raised.
+    """
     TyperdriveError.require_condition(path.exists(), f"Target {path=} does not exist")
     TyperdriveError.require_condition(path.is_dir(), f"Target {path=} is not a directory")
     with TyperdriveError.handle_errors(f"Failed to clear directory at {path=}"):
@@ -31,12 +46,21 @@ def clear_directory(path: Path) -> int:
 
 @dataclass
 class DirInfo:
+    """
+    Describes directory info needed for the `render_directory()` function.
+    """
+
     tree: Tree
     file_count: int
     total_size: int
 
 
 def render_directory(path: Path, is_root: bool = True) -> DirInfo:
+    """
+    Render a visualization of the directory at the given path using `rich.tree`.
+
+    This is a recursive function. If calling this function, you should call it with `is_root=True`.
+    """
     root_label: str
     if is_root:
         root_label = str(path)
@@ -77,6 +101,9 @@ def render_directory(path: Path, is_root: bool = True) -> DirInfo:
 
 
 def show_directory(path: Path, subject: str | None = None):
+    """
+    Print the visualization of a target directory retrieved with `render_directory()` using `terminal_message`.
+    """
     dir_info = render_directory(path)
     human_size = humanize.naturalsize(dir_info.total_size)
     terminal_message(
@@ -86,7 +113,10 @@ def show_directory(path: Path, subject: str | None = None):
     )
 
 
-def is_child(path: Path, parent: Path):
+def is_child(path: Path, parent: Path) -> bool:
+    """
+    Return true if the given path is a child of the given parent.
+    """
     root_path = Path(path.parts[0])
     temp_path = path
     while temp_path != root_path:

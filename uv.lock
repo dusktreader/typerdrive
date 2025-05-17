@@ -826,6 +826,12 @@ wheels = [
 ]
 
 [[package]]
+name = "pyperclip"
+version = "1.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/30/23/2f0a3efc4d6a32f3b63cdff36cd398d9701d26cda58e3ab97ac79fb5e60d/pyperclip-1.9.0.tar.gz", hash = "sha256:b7de0142ddc81bfc5c7507eea19da920b92252b548b96186caf94a5e2527d310", size = 20961, upload-time = "2024-06-18T20:38:48.401Z" }
+
+[[package]]
 name = "pytest"
 version = "8.3.5"
 source = { registry = "https://pypi.org/simple" }
@@ -1101,7 +1107,7 @@ wheels = [
 
 [[package]]
 name = "typerdrive"
-version = "0.5.2"
+version = "0.5.3"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
@@ -1110,6 +1116,7 @@ dependencies = [
     { name = "loguru" },
     { name = "py-buzz" },
     { name = "pydantic" },
+    { name = "pyperclip" },
     { name = "snick" },
     { name = "typer" },
     { name = "typer-repyt" },
@@ -1148,6 +1155,7 @@ requires-dist = [
     { name = "loguru", specifier = "~=0.7" },
     { name = "py-buzz", specifier = "~=7.3" },
     { name = "pydantic", specifier = "~=2.11" },
+    { name = "pyperclip", specifier = "~=1.9" },
     { name = "rich", marker = "extra == 'demo'", specifier = "~=14.0" },
     { name = "snick", specifier = "~=2.1" },
     { name = "typer", specifier = "~=0.15" },
@@ -1167,7 +1175,7 @@ dev = [
     { name = "pygments", specifier = "~=2.19" },
     { name = "pytest", specifier = "~=8.3" },
     { name = "pytest-cov", specifier = "~=6.0" },
-    { name = "pytest-mock", specifier = ">=3.14.0" },
+    { name = "pytest-mock", specifier = "~=3.14" },
     { name = "pytest-pretty", specifier = "~=1.2" },
     { name = "pytest-random-order", specifier = "~=1.1" },
     { name = "respx", specifier = ">=0.22.0" },

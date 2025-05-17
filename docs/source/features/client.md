@@ -103,7 +103,7 @@ This parameter can be any function that acts on a string, but usually you would 
 just the builtin `print` function, or (as I usually prefer) a `loguru.Logger` method. If it is not provided, the
 `TyperdriveClient` will use a builtin logger named `typerdrive.client` and log all its messages at a `DEBUG` level.
 
-[Method Reference](../../reference/#typerdrive.client.base.TyperdriveClient.__init__)
+[Method Reference](../reference/client.md/#typerdrive.client.base.TyperdriveClient.__init__)
 
 
 #### `TyperdriveClient.request_x()`
@@ -114,7 +114,7 @@ but it provides a lot of functionality that is controlled by it's keyword argume
 The `TyperdriveClient` accepts all the same args and kwargs as it's parent `httpx.Client` (and passes them along at init
 time), but also accepts additional kwargs.
 
-[Method Reference](../../reference/#typerdrive.client.base.TyperdriveClient.request_x)
+[Method Reference](../reference/client.md/#typerdrive.client.base.TyperdriveClient.request_x)
 
 
 ##### `param_obj`
@@ -243,35 +243,35 @@ client.request_x("POST", "/smuggler", response_model=TransportAgreement)
 
 This method simply calls `request_x()` with a fixed method of `GET`.
 
-[Method Reference](../../reference/#typerdrive.client.base.TyperdriveClient.get_x)
+[Method Reference](../reference/client.md/#typerdrive.client.base.TyperdriveClient.get_x)
 
 
 #### `TyperdriveClient.post_x()`
 
 This method simply calls `request_x()` with a fixed method of `POST`.
 
-[Method Reference](../../reference/#typerdrive.client.base.TyperdriveClient.post_x)
+[Method Reference](../reference/client.md/#typerdrive.client.base.TyperdriveClient.post_x)
 
 
 #### `TyperdriveClient.put_x()`
 
 This method simply calls `request_x()` with a fixed method of `PUT`.
 
-[Method Reference](../../reference/#typerdrive.client.base.TyperdriveClient.put_x)
+[Method Reference](../reference/client.md/#typerdrive.client.base.TyperdriveClient.put_x)
 
 
 #### `TyperdriveClient.patch_x()`
 
 This method simply calls `request_x()` with a fixed method of `PATCH`.
 
-[Method Reference](../../reference/#typerdrive.client.base.TyperdriveClient.patch_x)
+[Method Reference](../reference/client.md/#typerdrive.client.base.TyperdriveClient.patch_x)
 
 
 #### `TyperdriveClient.delete_x()`
 
 This method simply calls `request_x()` with a fixed method of `DELETE`.
 
-[Method Reference](../../reference/#typerdrive.client.base.TyperdriveClient.delete_x)
+[Method Reference](../reference/client.md/#typerdrive.client.base.TyperdriveClient.delete_x)
 
 
 ### `attach_client()`
@@ -353,4 +353,4 @@ http/https URL, however, an exception will be raised:
 Finally, it should be noted that if you pass a `log_func` value to the `@attach_client()` decorator, this will be passed
 to each client instance to use to log its work.
 
-[Function Reference](../../reference/#typerdrive.client.attach.attach_client)
+[Function Reference](../reference/client.md/#typerdrive.client.attach.attach_client)

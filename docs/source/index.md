@@ -4,7 +4,7 @@
 # typerdrive
 
 
-_Boost your command-line workflows to lightspeed_
+_Develop API-Connected Typer Apps at Lightspeed_
 
 
 ## Overview

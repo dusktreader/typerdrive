@@ -1,3 +1,7 @@
+"""
+Provide a decorator that attaches logging functionality to a `typer` command function.
+"""
+
 from collections.abc import Callable
 from functools import wraps
 from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
@@ -12,6 +16,9 @@ from typerdrive.logging.manager import LoggingManager
 
 
 def get_logging_manager(ctx: typer.Context) -> LoggingManager:
+    """
+    Retrieve the `LoggingManager` from the `TyperdriveContext`.
+    """
     with LoggingError.handle_errors("Logging is not bound to the context. Use the @attach_logging() decorator"):
         mgr: Any = from_context(ctx, "logging_manager")
     return LoggingError.ensure_type(
@@ -27,6 +34,12 @@ ContextFunction = Callable[Concatenate[typer.Context, P], T]
 
 
 def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
+    """
+    Attach a logging functinoality  to the decorated `typer` command function.
+
+    Parameters:
+        verbose: A `verbose` flag passed along to the `LoggingManager`
+    """
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         for key in func.__annotations__.keys():

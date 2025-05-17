@@ -1,3 +1,7 @@
+"""
+Provide a decorator that attaches the `typerdrive` settings to a `typer` command function.
+"""
+
 from collections.abc import Callable
 from functools import wraps
 from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
@@ -18,6 +22,9 @@ def get_settings[ST: BaseModel](
     ctx: typer.Context,
     type_hint: type[ST],
 ) -> ST:
+    """
+    Get the settings instance from the `TyperdriveContext`.
+    """
     return SettingsError.ensure_type(
         get_settings_manager(ctx).settings_instance,
         type_hint,
@@ -26,6 +33,9 @@ def get_settings[ST: BaseModel](
 
 
 def get_settings_value(ctx: typer.Context, settings_key: str) -> Any:
+    """
+    Get a particular settings value from the `TyperdriveContext`.
+    """
     instance: BaseModel = get_settings_manager(ctx).settings_instance
     ret = getattr(instance, settings_key, Sentinel.MISSING)
     SettingsError.require_condition(
@@ -36,6 +46,9 @@ def get_settings_value(ctx: typer.Context, settings_key: str) -> Any:
 
 
 def get_settings_manager(ctx: typer.Context) -> SettingsManager:
+    """
+    Retrieve the `SettingsManager` from the `TyperdriveContext`.
+    """
     with SettingsError.handle_errors("Settings are not bound to the context. Use the @attach_settings() decorator"):
         mgr: Any = from_context(ctx, "settings_manager")
     return SettingsError.ensure_type(
@@ -57,6 +70,20 @@ def attach_settings(
     persist: bool = False,
     show: bool = False,
 ) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
+    """
+    Attach the `typerdrive` settings to the decorated `typer` command function.
+
+    Parameters:
+        validation: Indicates when validation should happen in the decorator:
+
+                    - If `BEFORE`, validate before calling the function
+                    - If `AFTER`, validate after calling the function
+                    - If `BOTH`, validate before and after calling the function
+                    - If `NEVER`, don't validate
+
+        persist:    If set, the settings values will be stored in the settings file
+        show:       If set, show the current settings after running the function
+    """
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         settings_param_key: str | None = None

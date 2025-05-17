@@ -1,3 +1,7 @@
+"""
+Provide a class for managing the `typerdrive` logging feature.
+"""
+
 import sys
 from pathlib import Path
 from typing import Any
@@ -10,8 +14,15 @@ from typerdrive.dirs import clear_directory, show_directory
 
 
 class LoggingManager:
+    """
+    Manage logs for the `typerdrive` app.
+    """
+
     log_dir: Path
+    """ The directory where the logs are stored. """
+
     log_file: Path
+    """ The filename for the log file. """
 
     def __init__(self, *, verbose: bool = False):
         config: TyperdriveConfig = get_typerdrive_config()
@@ -42,12 +53,21 @@ class LoggingManager:
         logger.enable("typerdrive")
 
     def show(self):
+        """
+        Show the current log file.
+        """
         console = Console()
         with console.pager(styles=True):
             console.print(self.log_file.read_text())
 
     def audit(self):
+        """
+        Show the directory containing the log files.
+        """
         show_directory(self.log_dir, subject="Current log files")
 
     def clear(self):
+        """
+        Remove all log files.
+        """
         clear_directory(self.log_dir)

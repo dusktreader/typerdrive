@@ -1,7 +1,7 @@
 [project]
 name = "typerdrive"
-version = "0.5.3"
-description = "Boost your command-line workflows to lightspeed"
+version = "0.6.0"
+description = "Develop API-Connected Typer Apps at Lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
 ]
@@ -16,6 +16,7 @@ dependencies = [
     "loguru~=0.7",
     "py-buzz~=7.3",
     "pydantic~=2.11",
+    "pyperclip~=1.9",
     "snick~=2.1",
     "typer~=0.15",
     "typer-repyt~=0.7",
@@ -48,7 +49,7 @@ dev = [
     "pygments~=2.19",
     "pytest~=8.3",
     "pytest-cov~=6.0",
-    "pytest-mock>=3.14.0",
+    "pytest-mock~=3.14",
     "pytest-pretty~=1.2",
     "pytest-random-order~=1.1",
     "respx>=0.22.0",
@@ -90,7 +91,9 @@ files = ["src/typerdrive", "tests"]
 
 
 [[tool.mypy.overrides]]
-module = []
+module = [
+    "pyperclip",
+]
 ignore_missing_imports = true
 
 

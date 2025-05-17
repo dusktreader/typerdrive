@@ -1,15 +1,19 @@
+"""
+Provide some constants for the project.
+"""
+
 from enum import Flag, IntEnum, auto
 
 
 class Validation(Flag):
     """
-    Defines whether validation should happen "before", "after", "both", or "none"
+    Defines when validation of settings should happen in the `@attach_settings` context manager.
     """
 
     BEFORE = auto()
     AFTER = auto()
     BOTH = BEFORE | AFTER
-    NONE = 0
+    NEVER = 0
 
 
 class ExitCode(IntEnum):

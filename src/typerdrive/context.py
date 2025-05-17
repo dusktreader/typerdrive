@@ -1,3 +1,7 @@
+"""
+Provide tools for working with the `TyperContext` and the `TyperdriveContext`.
+"""
+
 from dataclasses import dataclass
 from types import NoneType, UnionType
 from typing import get_args, get_origin
@@ -16,6 +20,9 @@ type TyperdriveManager = SettingsManager | CacheManager | ClientManager | Loggin
 
 @dataclass
 class TyperdriveContext:
+    """
+    Define the `typerdrive` context that is attached to the `Typer.Context` as `obj`.
+    """
     settings_manager: SettingsManager | None = None
     cache_manager: CacheManager | None = None
     client_manager: ClientManager | None = None
@@ -23,12 +30,22 @@ class TyperdriveContext:
 
 
 def get_user_context(ctx: typer.Context):
+    """
+    Retrieve the user context from the `typer.Context`.
+
+    If a user context has not been established yet, it will be initialized.
+
+    Read the ['click' docs](https://click.palletsprojects.com/en/stable/complex/#contexts) to learn more.
+    """
     if not ctx.obj:
         ctx.obj = TyperdriveContext()
     return ctx.obj
 
 
 def to_context(ctx: typer.Context, name: str, val: TyperdriveManager) -> None:
+    """
+    Attach a `TyperdriveManager` object to the `TyperdriveContext` at the given `name`.
+    """
     user_context = get_user_context(ctx)
     field_type = TyperdriveContext.__dataclass_fields__[name].type
 
@@ -48,5 +65,8 @@ def to_context(ctx: typer.Context, name: str, val: TyperdriveManager) -> None:
 
 
 def from_context(ctx: typer.Context, name: str) -> TyperdriveManager:
+    """
+    Retrieve a `TyperdriveManager` from the `TyperdriveContext` at the given `name`.
+    """
     user_context = get_user_context(ctx)
     return ContextError.enforce_defined(getattr(user_context, name), f"{name} is not bound to context")

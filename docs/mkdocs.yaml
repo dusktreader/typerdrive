@@ -38,7 +38,12 @@ nav:
     - Error Handling: features/exceptions.md
     - API Clients: features/client.md
   - Runnable Demo: demo.md
-  - Reference: reference.md
+  - Reference:
+    - Base Modules: reference/base_modules.md
+    - Cache: reference/cache.md
+    - Client: reference/client.md
+    - Logging: reference/logging.md
+    - Settings: reference/settings.md
 plugins:
   search:
     lang: en
@@ -48,13 +53,13 @@ plugins:
       python:
         paths: [../src/typerdrive]
         options:
-          heading_level: 3
           show_root_heading: true
           separate_signature: true
           show_if_no_docstring: true
           show_signature_annotations: true
-          show_source: false
+          show_source: true
           docstring_style: google
+          show_category_heading: true
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true

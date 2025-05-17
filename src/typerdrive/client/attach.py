@@ -1,3 +1,7 @@
+"""
+Provide a decorator that attaches `TyperdriveClient` instances to a `typer` command function.
+"""
+
 from collections.abc import Callable
 from functools import wraps
 from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
@@ -15,6 +19,9 @@ from typerdrive.settings.exceptions import SettingsError
 
 
 def get_client_manager(ctx: typer.Context) -> ClientManager:
+    """
+    Retrieve the `ClientManager` from the `TyperdriveContext`.
+    """
     with ClientError.handle_errors("Client(s) are not bound to the context. Use the @attach_client() decorator"):
         mgr: Any = from_context(ctx, "client_manager")
     return ClientError.ensure_type(
@@ -25,6 +32,9 @@ def get_client_manager(ctx: typer.Context) -> ClientManager:
 
 
 def get_client(ctx: typer.Context, name: str) -> TyperdriveClient:
+    """
+    Retrieve a specific `TyperdriveClient` from the `TyperdriveContext`.
+    """
     return get_client_manager(ctx).get_client(name)
 
 
@@ -34,6 +44,16 @@ ContextFunction = Callable[Concatenate[typer.Context, P], T]
 
 
 def attach_client(**client_urls_or_settings_keys: str) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
+    """
+    Attach `TyperdriveClient` instances to the decorated `typer` command function.
+
+    Parameters:
+        client_urls_or_settings_keys: A key/value mapping for base urls to use in the clients.
+                                      The key will be the name of the client.
+                                      The value will be either the base url to be used by the client or a key to the
+                                      settings where the base url can be found.
+    """
+
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         client_param_keys: list[str] = []

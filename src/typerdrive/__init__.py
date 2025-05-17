@@ -10,12 +10,14 @@ from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config, set_typerdrive_config
 from typerdrive.constants import Validation
-from typerdrive.exceptions import TyperdriveError, handle_errors, log_error
+from typerdrive.exceptions import TyperdriveError
 from typerdrive.format import simple_message, strip_rich_style, terminal_message
+from typerdrive.handle_errors import handle_errors
 from typerdrive.logging.attach import attach_logging, get_logging_manager
 from typerdrive.logging.commands import add_logs_subcommand
 from typerdrive.logging.exceptions import LoggingError
 from typerdrive.logging.manager import LoggingManager
+from typerdrive.logging.utilities import log_error
 from typerdrive.settings.attach import attach_settings, get_settings, get_settings_manager, get_settings_value
 from typerdrive.settings.commands import add_settings_subcommand
 from typerdrive.settings.exceptions import (

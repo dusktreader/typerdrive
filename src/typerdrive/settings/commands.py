@@ -1,3 +1,7 @@
+"""
+Provide commands that can be added to a `typer` app to manage settings.
+"""
+
 from typing import Any
 
 import typer
@@ -7,13 +11,16 @@ from typer_repyt.build_command import DecDef, OptDef, build_command
 from typer_repyt.constants import Sentinel
 
 from typerdrive.constants import Validation
-from typerdrive.exceptions import handle_errors
+from typerdrive.handle_errors import handle_errors
 from typerdrive.settings.attach import attach_settings, get_settings_manager
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
 
 
 def bind(ctx: typer.Context):
+    """
+    Bind all settings for the app.
+    """
     __manager: SettingsManager = get_settings_manager(ctx)
     excluded_locals = ["__manager", "ctx"]
     settings_values = {k: v for (k, v) in locals().items() if k not in excluded_locals}
@@ -21,6 +28,9 @@ def bind(ctx: typer.Context):
 
 
 def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
+    """
+    Add the `bind` command to the given `typer` app.
+    """
     opt_defs: list[OptDef] = []
     for name, field_info in settings_model.model_fields.items():
         default = field_info.default if field_info.default is not PydanticUndefined else Sentinel.NOT_GIVEN
@@ -63,6 +73,9 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
 
 
 def update(ctx: typer.Context):
+    """
+    Update some settings for the app.
+    """
     __manager: SettingsManager = get_settings_manager(ctx)
     excluded_locals = ["__manager", "ctx"]
     settings_values = {k: v for (k, v) in locals().items() if k not in excluded_locals and v is not None}
@@ -70,6 +83,9 @@ def update(ctx: typer.Context):
 
 
 def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
+    """
+    Add the `update` command to the given `typer` app.
+    """
     opt_defs: list[OptDef] = []
     for name, field_info in settings_model.model_fields.items():
         param_type: type[Any] = SettingsError.enforce_defined(field_info.annotation, "Option type may not be `None`")
@@ -103,7 +119,7 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.NONE, persist=True, show=True),
+                dec_kwargs=dict(validation=Validation.NEVER, persist=True, show=True),
                 is_simple=False,
             ),
         ],
@@ -111,8 +127,10 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
     )
 
 
-# TODO: Don't forget to add docstrings
 def unset(ctx: typer.Context):
+    """
+    Remove some settings from the app.
+    """
     __manager: SettingsManager = get_settings_manager(ctx)
     excluded_locals = ["__manager", "ctx"]
     settings_values = {k: v for (k, v) in locals().items() if k not in excluded_locals and v}
@@ -120,6 +138,9 @@ def unset(ctx: typer.Context):
 
 
 def add_unset(cli: typer.Typer, settings_model: type[BaseModel]):
+    """
+    Add the `unset` command to the given `typer` app.
+    """
     opt_defs: list[OptDef] = []
     for name, field_info in settings_model.model_fields.items():
         opt_defs.append(
@@ -150,7 +171,7 @@ def add_unset(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.NONE, persist=True, show=True),
+                dec_kwargs=dict(validation=Validation.NEVER, persist=True, show=True),
                 is_simple=False,
             ),
         ],
@@ -159,10 +180,15 @@ def add_unset(cli: typer.Typer, settings_model: type[BaseModel]):
 
 
 def show(ctx: typer.Context):  # pyright: ignore[reportUnusedParameter]
-    pass
+    """
+    Show the current app's settings.
+    """
 
 
 def add_show(cli: typer.Typer, settings_model: type[BaseModel]):
+    """
+    Add the `show` command to the given `typer` app.
+    """
     build_command(
         cli,
         show,
@@ -180,7 +206,7 @@ def add_show(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.NONE, persist=False, show=True),
+                dec_kwargs=dict(validation=Validation.NEVER, persist=False, show=True),
                 is_simple=False,
             ),
         ],
@@ -189,12 +215,18 @@ def add_show(cli: typer.Typer, settings_model: type[BaseModel]):
 
 
 def reset(ctx: typer.Context):
+    """
+    Remove all settings from the app.
+    """
     typer.confirm("Are you sure you want to reset your settings?", abort=True)
     __manager: SettingsManager = get_settings_manager(ctx)
     __manager.reset()
 
 
 def add_reset(cli: typer.Typer, settings_model: type[BaseModel]):
+    """
+    Add the `reset` command to the given `typer` app.
+    """
     build_command(
         cli,
         reset,
@@ -212,7 +244,7 @@ def add_reset(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.NONE, persist=True, show=True),
+                dec_kwargs=dict(validation=Validation.NEVER, persist=True, show=True),
                 is_simple=False,
             ),
         ],
@@ -221,6 +253,9 @@ def add_reset(cli: typer.Typer, settings_model: type[BaseModel]):
 
 
 def add_settings_subcommand(cli: typer.Typer, settings_model: type[BaseModel]):
+    """
+    Add all `settings` commands to the given app.
+    """
     settings_cli = typer.Typer(help="Manage settings for the app")
 
     for cmd in [add_bind, add_update, add_unset, add_reset, add_show]:

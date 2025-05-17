@@ -1,3 +1,7 @@
+"""
+Provide a class for managing the `typerdrive` settings feature.
+"""
+
 import json
 from pathlib import Path
 from typing import Any, cast
@@ -17,10 +21,21 @@ from typerdrive.settings.exceptions import (
 
 
 class SettingsManager:
+    """
+    Manage settings for the `typerdrive` app.
+    """
+
     settings_model: type[BaseModel]
+    """ A `pydantic` model _type_ that defines the app's settings """
+
     settings_path: Path
+    """ The path to the file where settings are persisted """
+
     invalid_warnings: dict[str, str]
+    """ Tracks which fields of the settings instance are invalid """
+
     settings_instance: BaseModel
+    """ An instance of the `settings_model` that holds the app's current settings """
 
     def __init__(self, settings_model: type[BaseModel]):
         config: TyperdriveConfig = get_typerdrive_config()
@@ -40,6 +55,9 @@ class SettingsManager:
                 self.set_warnings(err)
 
     def set_warnings(self, err: ValidationError):
+        """
+        Given a `ValidationError`, extract the field names and messages to the `invalid_warnings` dict.
+        """
         self.invalid_warnings = {}
         for data in err.errors():
             key: str = cast(str, data["loc"][0])
@@ -47,6 +65,11 @@ class SettingsManager:
             self.invalid_warnings[key] = message
 
     def update(self, **settings_values: Any):
+        """
+        Update the app settings given the provided key/value pairs.
+
+        If validation fails, the `invalid_warngings` will be updated, but all valid fields will remain set.
+        """
         logger.debug(f"Updating settings with {settings_values}")
 
         with SettingsUpdateError.handle_errors("Failed to update settings"):
@@ -59,6 +82,9 @@ class SettingsManager:
                 self.set_warnings(err)
 
     def unset(self, *unset_keys: str):
+        """
+        Remove all the settings corresponding to the provided keys.
+        """
         logger.debug(f"Unsetting keys {unset_keys}")
 
         with SettingsUnsetError.handle_errors("Failed to remove keys"):
@@ -71,6 +97,9 @@ class SettingsManager:
                 self.set_warnings(err)
 
     def reset(self):
+        """
+        Reset the settings back to defaults.
+        """
         logger.debug("Resetting all settings")
 
         with SettingsResetError.handle_errors("Failed to reset settings"):
@@ -82,9 +111,17 @@ class SettingsManager:
                 self.set_warnings(err)
 
     def validate(self):
+        """
+        Validate the current settings values.
+
+        If invalid, `ValidationError` exceptions will be raised
+        """
         self.settings_model(**self.settings_instance.model_dump())
 
     def pretty(self, with_style: bool = True) -> str:
+        """
+        Return a pretty representation of the settings.
+        """
         (bold_, _bold) = ("[bold]", "[/bold]") if with_style else ("", "")
         (red_, _red) = ("[red]", "[/red]") if with_style else ("", "")
         lines: list[str] = []
@@ -113,6 +150,9 @@ class SettingsManager:
         return "\n".join(lines)
 
     def save(self):
+        """
+        Write the current settings to disk.
+        """
         logger.debug(f"Saving settings to {self.settings_path}")
 
         with SettingsSaveError.handle_errors(f"Failed to save settings to {self.settings_path}"):

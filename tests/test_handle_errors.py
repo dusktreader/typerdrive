@@ -4,7 +4,8 @@ from pytest_mock import MockerFixture
 from typerdrive.cache.attach import attach_cache
 from typerdrive.cache.manager import CacheManager
 from typerdrive.constants import ExitCode
-from typerdrive.exceptions import TyperdriveError, handle_errors
+from typerdrive.exceptions import TyperdriveError
+from typerdrive.handle_errors import handle_errors
 from typerdrive.settings.attach import attach_settings, get_settings
 
 from tests.helpers import check_output
@@ -310,7 +311,7 @@ class TestHandleErrors:
         assert "I don't care what you smell" in garbage_chute
 
     def test_handle_errors__raises_runtime_error_if_format_fails(self, mocker: MockerFixture):
-        mocker.patch("typerdrive.exceptions.reformat_exception", side_effect=ValueError("BOOM!"))
+        mocker.patch("typerdrive.handle_errors.reformat_exception", side_effect=ValueError("BOOM!"))
 
         cli: typer.Typer = typer.Typer()
 

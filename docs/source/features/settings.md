@@ -159,13 +159,13 @@ $ python examples/settings/commands.py settings bind --help
 
  Usage: commands.py settings bind [OPTIONS]
 
-╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ *  --name                               TEXT  [default: None] [required]                                                                                                                                                                                                                │
-│ *  --planet                             TEXT  [default: None] [required]                                                                                                                                                                                                                │
-│    --is-humanoid    --no-is-humanoid          [default: is-humanoid]                                                                                                                                                                                                                    │
-│    --alignment                          TEXT  [default: neutral]                                                                                                                                                                                                                        │
-│    --help                                     Show this message and exit.                                                                                                                                                                                                               │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────╮
+│ *  --name                               TEXT  [default: None] [required]                   │
+│ *  --planet                             TEXT  [default: None] [required]                   │
+│    --is-humanoid    --no-is-humanoid          [default: is-humanoid]                       │
+│    --alignment                          TEXT  [default: neutral]                           │
+│    --help                                     Show this message and exit.                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 
@@ -237,6 +237,34 @@ The `show` command just shows the current value of the settings. That's it!
 The `reset` command returns _all_ settings values to their initial state. It allows the settings to be in an invalid
 state when it is finished. It will also show the new settings values when it is done. The `reset` subcommand takes no
 arguments.
+
+
+## Nested settings models
+
+It is possible to have your settings model include nested pydantic models for the settings values. If the settings
+model has nested models, the arguments to `bind` and `update` should be JSON strings.
+
+Consider this example:
+
+```python {linenums="1"}
+--8<-- "examples/settings/nested.py"
+```
+
+With such a settings configuration, you would bind your settings with a command like:
+
+```
+$ python examples/settings/nested.py settings bind --name=jawa --planet=tatooine --coloration='{"eyes": "yellow", "hair": "black"}'
+
+╭─ Current settings ─────────────────────────────────────────────────────────────────────────╮
+│                                                                                            │
+│          name -> jawa                                                                      │
+│        planet -> tatooine                                                                  │
+│    coloration -> eyes='yellow' hair='black'                                                │
+│   is-humanoid -> True                                                                      │
+│     alignment -> neutral                                                                   │
+│                                                                                            │
+╰─ saved to /home/dusktreader/.local/share/settings-nested-example/settings.json ────────────╯
+```
 
 
 ## The `get_settings()` functions

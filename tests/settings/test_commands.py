@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import typer
+from pydantic import BaseModel
 from typerdrive.constants import ExitCode
 from typerdrive.settings.commands import add_bind, add_reset, add_settings_subcommand, add_show, add_unset, add_update
 
@@ -78,6 +79,38 @@ class TestBind:
             prog_name="test",
         )
 
+    def test_bind__with_nested_pydantic_models(self, fake_settings_path: Path):
+        cli = typer.Typer()
+
+        class Nested(BaseModel):
+            name: str
+            planet: str
+
+        class Settings(BaseModel):
+            nested: Nested
+
+        add_bind(cli, Settings)
+
+        expected_pattern = [
+            "nested.*name='jawa' planet='tatooine'",
+            f"saved to {str(fake_settings_path)[:40]}",
+        ]
+        match_output(
+            cli,
+            """--nested={"name": "jawa", "planet": "tatooine"}""",
+            expected_pattern=expected_pattern,
+            prog_name="test",
+        )
+
+        assert fake_settings_path.exists()
+        data = json.loads(fake_settings_path.read_text())
+        assert data == dict(
+            nested=dict(
+                name="jawa",
+                planet="tatooine",
+            ),
+        )
+
 
 class TestUpdate:
     def test_update__updates_settings_with_cli_args(self, fake_settings_path: Path):
@@ -145,6 +178,38 @@ class TestUpdate:
             cli,
             expected_pattern=expected_pattern,
             prog_name="test",
+        )
+
+    def test_update__with_nested_pydantic_models(self, fake_settings_path: Path):
+        cli = typer.Typer()
+
+        class Nested(BaseModel):
+            name: str
+            planet: str
+
+        class Settings(BaseModel):
+            nested: Nested
+
+        add_update(cli, Settings)
+
+        expected_pattern = [
+            "nested.*name='jawa' planet='tatooine'",
+            f"saved to {str(fake_settings_path)[:40]}",
+        ]
+        match_output(
+            cli,
+            """--nested={"name": "jawa", "planet": "tatooine"}""",
+            expected_pattern=expected_pattern,
+            prog_name="test",
+        )
+
+        assert fake_settings_path.exists()
+        data = json.loads(fake_settings_path.read_text())
+        assert data == dict(
+            nested=dict(
+                name="jawa",
+                planet="tatooine",
+            ),
         )
 
 

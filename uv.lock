@@ -1090,7 +1090,7 @@ wheels = [
 
 [[package]]
 name = "typer-repyt"
-version = "0.7.2"
+version = "0.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "humanize" },
@@ -1100,14 +1100,14 @@ dependencies = [
     { name = "snick" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/39/7c/8084be5cbf9f73704a7b0b7a2a3ccbc0b478096024403267a524c87b3a95/typer_repyt-0.7.2.tar.gz", hash = "sha256:6f5c50bd22d246d8e938f976ec37ca45701fb8bc3165b60dc592ea2fdb979e0e", size = 106752, upload-time = "2025-05-16T18:24:09.487Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/23/a4/557e56907a7c00adc3a397898d59ff51fd2b081573b56b006e15022e3dfa/typer_repyt-0.8.0.tar.gz", hash = "sha256:fbb081db7e337ce405c1ad75843089c4af1f904148845b784ca3edea65391f63", size = 107102, upload-time = "2025-05-21T05:14:04.938Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/91/f5/f8cf8de49239f4e4f16a00f565c98988bf5aade494777f45e4522eefa67b/typer_repyt-0.7.2-py3-none-any.whl", hash = "sha256:89e452f6c564d5d5f501ef9e57b6457d61a90f00d8077767587d3e1243ba4d93", size = 13435, upload-time = "2025-05-16T18:24:08.038Z" },
+    { url = "https://files.pythonhosted.org/packages/33/ac/88d365a4ff4ad4163551dbcafdfb76ff8971715cd2b25eb57b302c703547/typer_repyt-0.8.0-py3-none-any.whl", hash = "sha256:0f7b1cfa779a8e1720417d0678afe65a14b82682827f7f931e5b788de4a6da13", size = 13500, upload-time = "2025-05-21T05:14:03.641Z" },
 ]
 
 [[package]]
 name = "typerdrive"
-version = "0.6.0"
+version = "0.6.1"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
@@ -1159,7 +1159,7 @@ requires-dist = [
     { name = "rich", marker = "extra == 'demo'", specifier = "~=14.0" },
     { name = "snick", specifier = "~=2.1" },
     { name = "typer", specifier = "~=0.15" },
-    { name = "typer-repyt", specifier = "~=0.7" },
+    { name = "typer-repyt", specifier = "~=0.8.0" },
 ]
 provides-extras = ["demo"]
 

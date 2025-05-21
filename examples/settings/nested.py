@@ -12,16 +12,22 @@ def valid_alignment(value: str) -> str:
     return value
 
 
+class ColorModel(BaseModel):
+    eyes: str
+    hair: str
+
+
 class SettingsModel(BaseModel):
     name: str
     planet: str
+    coloration: ColorModel
     is_humanoid: bool = True
     alignment: Annotated[str, AfterValidator(valid_alignment)] = "neutral"
 
 
 cli = typer.Typer()
 add_settings_subcommand(cli, SettingsModel)
-set_typerdrive_config(app_name="settings-commands-example")
+set_typerdrive_config(app_name="settings-nested-example")
 
 
 @cli.command()
@@ -31,6 +37,7 @@ def report(ctx: typer.Context, cfg: SettingsModel):
         unwrap(
             f"""
             Look at this {cfg.alignment} {cfg.name} from {cfg.planet}
+            with {cfg.coloration.eyes} eyes and {cfg.coloration.hair} hair
             {"walking" if cfg.is_humanoid else "slithering"} by.
             """
         )

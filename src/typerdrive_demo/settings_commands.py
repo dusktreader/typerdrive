@@ -14,7 +14,7 @@ from typerdrive_demo.helpers import fake_input
 set_typerdrive_config(app_name="settings-commands-demo")
 
 
-def demo_1__bind__basic():
+def demo_01__bind__basic():
     """
     This function demonstrates the use of the `bind` settings command.
     This command allows you to set the settings values for your app as
@@ -35,7 +35,7 @@ def demo_1__bind__basic():
     cli(["settings", "bind", "--name=jawa", "--planet=tatooine"])
 
 
-def demo_2__bind__invalid_settings():
+def demo_02__bind__invalid_settings():
     """
     This function demonstrates how the `bind` settings command
     requires all settings that do not have a default to be provided
@@ -54,7 +54,7 @@ def demo_2__bind__invalid_settings():
     cli(["settings", "bind", "--name=jawa"])
 
 
-def demo_3__bind__help():
+def demo_03__bind__help():
     """
     This function demonstrates the help text that's provided with
     the `bind` command.
@@ -71,7 +71,7 @@ def demo_3__bind__help():
     cli(["settings", "bind", "--help"])
 
 
-def demo_4__update():
+def demo_04__update():
     """
     This function demonstrates the use of the `update` settings command.
     This command allows you to set _some_ of the settings values for your
@@ -93,7 +93,7 @@ def demo_4__update():
     cli(["settings", "update", "--planet=tatooine"])
 
 
-def demo_5__update__help():
+def demo_05__update__help():
     """
     This function demonstrates the help text that's provided with
     the `update` command.
@@ -110,7 +110,7 @@ def demo_5__update__help():
     cli(["settings", "update", "--help"])
 
 
-def demo_6__unset():
+def demo_06__unset():
     """
     This function demonstrates the use of the `unset` settings command.
     This command allows you to return settings values to their defaults.
@@ -148,7 +148,7 @@ def demo_6__unset():
     cli(["settings", "unset", "--name", "--alignment"])
 
 
-def demo_7__unset__help():
+def demo_07__unset__help():
     """
     This function demonstrates the help text that's provided with
     the `unset` command.
@@ -165,7 +165,7 @@ def demo_7__unset__help():
     cli(["settings", "unset", "--help"])
 
 
-def demo_8__show():
+def demo_08__show():
     """
     This function demonstrates the `show` command. It simply shows
     the current settings.
@@ -182,7 +182,7 @@ def demo_8__show():
     cli(["settings", "show"])
 
 
-def demo_9__reset():
+def demo_09__reset():
     """
     This function demonstrates the `reset` command. It clears all the
     settings. All settings values with defaults are reset to their
@@ -220,3 +220,26 @@ def demo_9__reset():
 
     fake_input("y")
     cli(["settings", "reset"])
+
+def demo_10__bind__nested():
+    """
+    This function demonstrates the use of the `bind` settings command
+    with a settings model that includes a nested pydantic model.
+    If a nested model is used, the `bind` (and `update`) command will
+    parse JSON for the nested settings value
+    """
+
+    class ColorModel(BaseModel):
+        eyes: str
+        hair: str
+
+    class ExampleSettings(BaseModel):
+        name: str
+        planet: str
+        coloration: ColorModel
+        is_humanoid: bool = True
+        alignment: str = "neutral"
+
+    cli = typer.Typer()
+    add_settings_subcommand(cli, ExampleSettings)
+    cli(["settings", "bind", "--name=jawa", "--planet=tatooine", """--coloration={"eyes": "yellow", "hair": "black"}"""])

@@ -2,6 +2,7 @@
 Provide commands that can be added to a `typer` app to manage settings.
 """
 
+import json
 from typing import Any
 
 import typer
@@ -15,6 +16,8 @@ from typerdrive.handle_errors import handle_errors
 from typerdrive.settings.attach import attach_settings, get_settings_manager
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
+
+
 
 
 def bind(ctx: typer.Context):
@@ -37,14 +40,26 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
         param_type: type[Any] = SettingsError.enforce_defined(
             field_info.annotation, "Option type may not be `None`"
         )  # TODO: Figure out if this can even be triggered
+        opt_kwargs: dict[str, Any] = dict(
+            name=name,
+            param_type=param_type,
+            default=default,
+            help=field_info.description,
+            show_default=True,
+        )
+        if issubclass(param_type, BaseModel):
+            model_type = param_type
+            def model_parser(val: str):
+                """
+                Provide a parser that converts a string into an instance of the nested model.
+
+                This is needed for the settings commands to be able to use nested pydantic models.
+                """
+                return model_type(**json.loads(val))
+            opt_kwargs["parser"] = model_parser
+
         opt_defs.append(
-            OptDef(
-                name=name,
-                param_type=param_type,
-                default=default,
-                help=field_info.description,
-                show_default=True,
-            )
+            OptDef(**opt_kwargs)
         )
     build_command(
         cli,
@@ -90,17 +105,27 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
     for name, field_info in settings_model.model_fields.items():
         param_type: type[Any] = SettingsError.enforce_defined(field_info.annotation, "Option type may not be `None`")
         default: None | bool = None
+        opt_kwargs: dict[str, Any] = dict(
+            name=name,
+            param_type=param_type | None,
+            default=default,
+            help=field_info.description,
+            show_default=True,
+        )
         if param_type is bool:
             default = field_info.default
-        opt_defs.append(
-            OptDef(
-                name=name,
-                param_type=param_type | None,
-                default=default,
-                help=field_info.description,
-                show_default=True,
-            )
-        )
+        elif issubclass(param_type, BaseModel):
+            model_type = param_type
+            def model_parser(val: str):
+                """
+                Provide a parser that converts a string into an instance of the nested model.
+
+                This is needed for the settings commands to be able to use nested pydantic models.
+                """
+                return model_type(**json.loads(val))
+            opt_kwargs["parser"] = model_parser
+
+        opt_defs.append(OptDef(**opt_kwargs))
     build_command(
         cli,
         update,

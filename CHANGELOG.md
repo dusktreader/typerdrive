@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.7.2 - 2025-05-22
+- Pinned typer-repyt version to make sure metavar is available
+
+
 ## v0.7.1 - 2025-05-22
 - Improved nested settings support
 

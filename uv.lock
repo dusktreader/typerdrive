@@ -1159,7 +1159,7 @@ requires-dist = [
     { name = "rich", marker = "extra == 'demo'", specifier = "~=14.0" },
     { name = "snick", specifier = "~=2.2" },
     { name = "typer", specifier = "~=0.15" },
-    { name = "typer-repyt", specifier = "~=0.8.0" },
+    { name = "typer-repyt", specifier = ">=0.8.1,<0.9" },
 ]
 provides-extras = ["demo"]
 

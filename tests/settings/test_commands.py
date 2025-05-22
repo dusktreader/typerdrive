@@ -79,25 +79,28 @@ class TestBind:
             prog_name="test",
         )
 
-    def test_bind__with_nested_pydantic_models(self, fake_settings_path: Path):
+    def test_bind__with_single_nested_pydantic_models(self, fake_settings_path: Path):
         cli = typer.Typer()
 
-        class Nested(BaseModel):
+        class Planet(BaseModel):
             name: str
-            planet: str
+            climate: str
 
         class Settings(BaseModel):
-            nested: Nested
+            name: str
+            planet: Planet
 
         add_bind(cli, Settings)
 
         expected_pattern = [
-            "nested.*name='jawa' planet='tatooine'",
+            "name.*jawa",
+            "planet.*name='tatooine' climate='desert'",
             f"saved to {str(fake_settings_path)[:40]}",
         ]
         match_output(
             cli,
-            """--nested={"name": "jawa", "planet": "tatooine"}""",
+            "--name=jawa",
+            """--planet={"name": "tatooine", "climate": "desert"}""",
             expected_pattern=expected_pattern,
             prog_name="test",
         )
@@ -105,9 +108,57 @@ class TestBind:
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
         assert data == dict(
-            nested=dict(
-                name="jawa",
-                planet="tatooine",
+            name="jawa",
+            planet=dict(
+                name="tatooine",
+                climate="desert",
+            ),
+        )
+
+    def test_bind__with_multiple_nested_pydantic_models(self, fake_settings_path: Path):
+        cli = typer.Typer()
+
+        class Planet(BaseModel):
+            name: str
+            climate: str
+
+        class Coloration(BaseModel):
+            eyes: str
+            hair: str
+
+        class Settings(BaseModel):
+            name: str
+            planet: Planet
+            coloration: Coloration
+
+        add_bind(cli, Settings)
+
+        expected_pattern = [
+            "name.*jawa",
+            "planet.*name='tatooine' climate='desert'",
+            "coloration.*eyes='yellow' hair='black'",
+            f"saved to {str(fake_settings_path)[:40]}",
+        ]
+        match_output(
+            cli,
+            "--name=jawa",
+            """--planet={"name": "tatooine", "climate": "desert"}""",
+            """--coloration={"eyes": "yellow", "hair": "black"}""",
+            expected_pattern=expected_pattern,
+            prog_name="test",
+        )
+
+        assert fake_settings_path.exists()
+        data = json.loads(fake_settings_path.read_text())
+        assert data == dict(
+            name="jawa",
+            planet=dict(
+                name="tatooine",
+                climate="desert",
+            ),
+            coloration=dict(
+                eyes="yellow",
+                hair="black",
             ),
         )
 
@@ -147,11 +198,11 @@ class TestUpdate:
         add_update(cli, RequiredFieldsModel)
 
         expected_pattern = [
-            "name -> hutt",
-            "planet -> <UNSET>",
-            "is-humanoid -> True",
-            "alignment -> neutral",
-            "Settings are invalid:",
+            "name str -> hutt",
+            "planet str -> <UNSET>",
+            "is-humanoid bool -> True",
+            "alignment str -> neutral",
+            "Invalid Values",
             "planet -> Field required",
             f"saved to {str(fake_settings_path)[:40]}",
         ]
@@ -270,11 +321,11 @@ class TestUnset:
         add_unset(cli, RequiredFieldsModel)
 
         expected_pattern = [
-            "name -> <UNSET>",
-            "planet -> <UNSET>",
-            "is-humanoid -> True",
-            "alignment -> evil",
-            "Settings are invalid:",
+            "name str -> <UNSET>",
+            "planet str -> <UNSET>",
+            "is-humanoid bool -> True",
+            "alignment str -> evil",
+            "Invalid Values",
             "name -> Field required",
             "planet -> Field required",
             f"saved to {str(fake_settings_path)[:40]}",
@@ -360,11 +411,11 @@ class TestReset:
         add_reset(cli, RequiredFieldsModel)
 
         expected_pattern = [
-            "name -> <UNSET>",
-            "planet -> <UNSET>",
-            "is-humanoid -> True",
-            "alignment -> neutral",
-            "Settings are invalid:",
+            "name str -> <UNSET>",
+            "planet str -> <UNSET>",
+            "is-humanoid bool -> True",
+            "alignment str -> neutral",
+            "Invalid Values",
             "name -> Field required",
             "planet -> Field required",
             f"saved to {str(fake_settings_path)[:40]}",

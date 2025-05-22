@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.7.1 - 2025-05-22
+- Improved nested settings support
+
+
 ## v0.7.0 - 2025-05-20
 - Added support for nested settings models
 

@@ -1031,14 +1031,14 @@ wheels = [
 
 [[package]]
 name = "snick"
-version = "2.1.0"
+version = "2.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pprintpp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/38/26/223b168124d6b48571db0330f529dbb970b1b92435b29800c01b74e0cf0a/snick-2.1.0.tar.gz", hash = "sha256:4c12a0e30481ab2652b005ae4073dffdcf236ad08f129a0377466a6c5c0da050", size = 49164, upload-time = "2025-04-18T22:42:46.879Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/42/25/4970bb6cf0f0c89294f53f9860ffca2c6f8401f1aac13874454f5218cac8/snick-2.2.0.tar.gz", hash = "sha256:081b2848f124b1b6910c98975e289295e6d8356aba76420979deef724640467b", size = 50737, upload-time = "2025-05-22T22:24:16.537Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3f/b7/786e34365ca25600f1baebd11d579b9dbfd5aae7552d4ee174bb79ee01c3/snick-2.1.0-py3-none-any.whl", hash = "sha256:eb9b321b130cb1135d88df750053394e0de6ed1e9695b381d7a39e173f871fc9", size = 7569, upload-time = "2025-04-18T22:42:46.057Z" },
+    { url = "https://files.pythonhosted.org/packages/8c/64/f436c57bbba05ca0d1ad1abbdcb771729777f3ef77936072afc6a644ff2a/snick-2.2.0-py3-none-any.whl", hash = "sha256:0d96608de3a57f0ae26eb0009f63a7abbe177be7633b82bb6f39b233710e29cf", size = 7719, upload-time = "2025-05-22T22:24:15.299Z" },
 ]
 
 [[package]]
@@ -1090,7 +1090,7 @@ wheels = [
 
 [[package]]
 name = "typer-repyt"
-version = "0.8.0"
+version = "0.8.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "humanize" },
@@ -1100,14 +1100,14 @@ dependencies = [
     { name = "snick" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/23/a4/557e56907a7c00adc3a397898d59ff51fd2b081573b56b006e15022e3dfa/typer_repyt-0.8.0.tar.gz", hash = "sha256:fbb081db7e337ce405c1ad75843089c4af1f904148845b784ca3edea65391f63", size = 107102, upload-time = "2025-05-21T05:14:04.938Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/99/98/246ba1a841946f5e63f80ffcad9ded8778ec24274a112949e9423dbb8c4d/typer_repyt-0.8.1.tar.gz", hash = "sha256:666d28ab984e98e90198bfa06fa53a97a2da70db2c1f998c33365802a81ff89a", size = 107303, upload-time = "2025-05-22T16:34:03.801Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/33/ac/88d365a4ff4ad4163551dbcafdfb76ff8971715cd2b25eb57b302c703547/typer_repyt-0.8.0-py3-none-any.whl", hash = "sha256:0f7b1cfa779a8e1720417d0678afe65a14b82682827f7f931e5b788de4a6da13", size = 13500, upload-time = "2025-05-21T05:14:03.641Z" },
+    { url = "https://files.pythonhosted.org/packages/56/f9/137368d7904ca4025a3103343ee04c52c0915c2d5d125af38b84b195a8cf/typer_repyt-0.8.1-py3-none-any.whl", hash = "sha256:d9e2bd7747bbe7b02b33ccc438144b8fce65af5ad7c3bc7998c4a808324a2178", size = 13499, upload-time = "2025-05-22T16:34:02.578Z" },
 ]
 
 [[package]]
 name = "typerdrive"
-version = "0.6.1"
+version = "0.7.0"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
@@ -1157,7 +1157,7 @@ requires-dist = [
     { name = "pydantic", specifier = "~=2.11" },
     { name = "pyperclip", specifier = "~=1.9" },
     { name = "rich", marker = "extra == 'demo'", specifier = "~=14.0" },
-    { name = "snick", specifier = "~=2.1" },
+    { name = "snick", specifier = "~=2.2" },
     { name = "typer", specifier = "~=0.15" },
     { name = "typer-repyt", specifier = "~=0.8.0" },
 ]

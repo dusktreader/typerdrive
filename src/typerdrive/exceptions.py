@@ -66,3 +66,10 @@ class BuildCommandError(TyperdriveError):
     Indicates that there was a problem building a command with `typer-repyt`.
     """
     exit_code: ExitCode = ExitCode.INTERNAL_ERROR
+
+
+class DisplayError(TyperdriveError):
+    """
+    Indicates that there was a problem displaying data to the user.
+    """
+    exit_code: ExitCode = ExitCode.INTERNAL_ERROR

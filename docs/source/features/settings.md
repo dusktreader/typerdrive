@@ -50,16 +50,22 @@ First, we will just show the config
 ```
 $ python examples/settings/commands.py settings show
 
-╭─ Current settings ──────────────────────────────────────────────────────────────────────────╮
-│                                                                                             │
-│   is-humanoid -> True                                                                       │
-│     alignment -> neutral                                                                    │
-│                                                                                             │
-│   Configuration is invalid:                                                                 │
-│          name -> Field required                                                             │
-│        planet -> Field required                                                             │
-│                                                                                             │
-╰─────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Current settings ───────────────────────────────────────────────────────────╮
+│                                                                              │
+│ Settings Values                                                              │
+│                                                                              │
+│         name  str   ->  <UNSET>                                              │
+│       planet  str   ->  <UNSET>                                              │
+│  is-humanoid  bool  ->  True                                                 │
+│    alignment  str   ->  neutral                                              │
+│                                                                              │
+│                                                                              │
+│ Invalid Values                                                               │
+│                                                                              │
+│    name  ->  Field required                                                  │
+│  planet  ->  Field required                                                  │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 As you can see, our settings initially just matches the defaults provided in the settings model.  The fields that still
@@ -68,14 +74,18 @@ need to be defined are clearly identified and the settings are shown to be inval
 Next, let's make the settings valid by setting the missing values with `bind`:
 
 ```
-╭─ Current settings ──────────────────────────────────────────────────────────────────────────╮
-│                                                                                             │
-│          name -> jawa                                                                       │
-│        planet -> tatooine                                                                   │
-│   is-humanoid -> True                                                                       │
-│     alignment -> neutral                                                                    │
-│                                                                                             │
-╰─ saved to /home/dusktreader/.local/share/commands.py/settings.json ─────────────────────────╯
+$ python examples/settings/commands.py settings bind --name=jawa --planet=tatooine
+
+╭─ Current settings ───────────────────────────────────────────────────────────╮
+│                                                                              │
+│ Settings Values                                                              │
+│                                                                              │
+│         name  str   ->  jawa                                                 │
+│       planet  str   ->  tatooine                                             │
+│  is-humanoid  bool  ->  True                                                 │
+│    alignment  str   ->  neutral                                              │
+│                                                                              │
+╰─ saved to /home/dusktreader/.local/share/settings-commands-example/settin...─╯
 ```
 
 Now, the settings are valid. You can also see that the settings were saved to disk for your app to use in future
@@ -86,14 +96,16 @@ Let's make an adjustment to the settings using the `update` command:
 ```
 $ python examples/settings/commands.py settings update --name=hutt --no-is-humanoid
 
-╭─ Current settings ──────────────────────────────────────────────────────────────────────────╮
-│                                                                                             │
-│          name -> hutt                                                                       │
-│        planet -> tatooine                                                                   │
-│   is-humanoid -> False                                                                      │
-│     alignment -> neutral                                                                    │
-│                                                                                             │
-╰─ saved to /home/dusktreader/.local/share/commands.py/settings.json ─────────────────────────╯
+╭─ Current settings ───────────────────────────────────────────────────────────╮
+│                                                                              │
+│ Settings Values                                                              │
+│                                                                              │
+│         name  str   ->  hutt                                                 │
+│       planet  str   ->  tatooine                                             │
+│  is-humanoid  bool  ->  False                                                │
+│    alignment  str   ->  neutral                                              │
+│                                                                              │
+╰─ saved to /home/dusktreader/.local/share/settings-commands-example/settin...─╯
 ```
 
 Notice that the `update` command only changed the values specified and left the others alone.
@@ -110,17 +122,25 @@ Great! Our app is able to use the settings in any command!
 Finally, let's clear out the settings with `reset`:
 
 ```
+$ python examples/settings/commands.py settings reset
+Are you sure you want to reset your settings? [y/N]: y
 
-╭─ Current settings ──────────────────────────────────────────────────────────────────────────╮
-│                                                                                             │
-│   is-humanoid -> True                                                                       │
-│     alignment -> neutral                                                                    │
-│                                                                                             │
-│   Configuration is invalid:                                                                 │
-│          name -> Field required                                                             │
-│        planet -> Field required                                                             │
-│                                                                                             │
-╰─ saved to /home/dusktreader/.local/share/commands.py/settings.json ─────────────────────────╯
+╭─ Current settings ───────────────────────────────────────────────────────────╮
+│                                                                              │
+│ Settings Values                                                              │
+│                                                                              │
+│         name  str   ->  <UNSET>                                              │
+│       planet  str   ->  <UNSET>                                              │
+│  is-humanoid  bool  ->  True                                                 │
+│    alignment  str   ->  neutral                                              │
+│                                                                              │
+│                                                                              │
+│ Invalid Values                                                               │
+│                                                                              │
+│    name  ->  Field required                                                  │
+│  planet  ->  Field required                                                  │
+│                                                                              │
+╰─ saved to /home/dusktreader/.local/share/settings-commands-example/settin...─╯
 ```
 
 Now, all the settings are returned to their initial values. Those that have no default values are now invalid.
@@ -253,18 +273,32 @@ Consider this example:
 With such a settings configuration, you would bind your settings with a command like:
 
 ```
-$ python examples/settings/nested.py settings bind --name=jawa --planet=tatooine --coloration='{"eyes": "yellow", "hair": "black"}'
+$ python examples/settings/nested.py settings bind \
+  --name=jawa \
+  --planet='{"name": "tatooine", "climate": "desert"}' \
+  --coloration='{"eyes": "yellow", "hair": "black"}'
 
-╭─ Current settings ─────────────────────────────────────────────────────────────────────────╮
-│                                                                                            │
-│          name -> jawa                                                                      │
-│        planet -> tatooine                                                                  │
-│    coloration -> eyes='yellow' hair='black'                                                │
-│   is-humanoid -> True                                                                      │
-│     alignment -> neutral                                                                   │
-│                                                                                            │
-╰─ saved to /home/dusktreader/.local/share/settings-nested-example/settings.json ────────────╯
+╭─ Current settings ───────────────────────────────────────────────────────────╮
+│                                                                              │
+│ Settings Values                                                              │
+│                                                                              │
+│         name  str          ->  jawa                                          │
+│       planet  Planet*      ->  name='tatooine' climate='desert'              │
+│   coloration  Coloration*  ->  eyes='yellow' hair='black'                    │
+│  is-humanoid  bool         ->  True                                          │
+│    alignment  str          ->  neutral                                       │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ *Nested Model Types                                                          │
+│                                                                              │
+│  Planet(name=str climate=str)                                                │
+│  Coloration(eyes=str hair=str)                                               │
+│                                                                              │
+╰─ saved to /home/dusktreader/.local/share/settings-nested-example/settings...─╯
 ```
+
+You can see that the nested model types are noted at the bottom including the expected types for each field.
 
 
 ## The `get_settings()` functions

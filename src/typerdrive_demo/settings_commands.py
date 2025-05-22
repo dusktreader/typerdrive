@@ -131,7 +131,7 @@ def demo_06__unset():
         is_humanoid: bool = True
         alignment: str = "neutral"
 
-    settings_path = Path.home() / ".local/share/demo_6__unset/settings.json"
+    settings_path = Path.home() / ".local/share/demo_06__unset/settings.json"
     settings_path.write_text(
         json.dumps(
             dict(
@@ -203,7 +203,7 @@ def demo_09__reset():
         is_humanoid: bool = True
         alignment: str = "neutral"
 
-    settings_path = Path.home() / ".local/share/demo_9__reset/settings.json"
+    settings_path = Path.home() / ".local/share/demo_09__reset/settings.json"
     settings_path.write_text(
         json.dumps(
             dict(
@@ -233,13 +233,23 @@ def demo_10__bind__nested():
         eyes: str
         hair: str
 
+    class Planet(BaseModel):
+        name: str
+        climate: str
+
     class ExampleSettings(BaseModel):
         name: str
-        planet: str
+        planet: Planet
         coloration: ColorModel
         is_humanoid: bool = True
         alignment: str = "neutral"
 
     cli = typer.Typer()
     add_settings_subcommand(cli, ExampleSettings)
-    cli(["settings", "bind", "--name=jawa", "--planet=tatooine", """--coloration={"eyes": "yellow", "hair": "black"}"""])
+    cli([
+        "settings",
+        "bind",
+        "--name=jawa",
+        """--coloration={"eyes": "yellow", "hair": "black"}""",
+        """--planet={"name": "tatooine", "climate": "desert"}""",
+    ])

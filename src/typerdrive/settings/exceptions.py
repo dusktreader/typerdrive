@@ -41,3 +41,9 @@ class SettingsSaveError(SettingsError):
     """
     Indicates that there was a problem saving the settings to disk.
     """
+
+
+class SettingsDisplayError(SettingsError):
+    """
+    Indicates that there was a problem showing the settings.
+    """

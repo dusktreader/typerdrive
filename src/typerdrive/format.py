@@ -7,6 +7,8 @@ from typing import Any, Literal
 import pyperclip
 import snick
 from loguru import logger
+from pydantic import BaseModel
+from pydantic.fields import FieldInfo
 from rich import box
 from rich.console import Console, RenderableType
 from rich.markdown import Markdown
@@ -14,6 +16,7 @@ from rich.panel import Panel
 from rich.text import Text
 
 from typerdrive.config import get_typerdrive_config
+from typerdrive.exceptions import DisplayError
 
 
 def _to_clipboard(text: str | RenderableType) -> bool:
@@ -141,3 +144,24 @@ def strip_rich_style(text: str | Text) -> str:
     if isinstance(text, str):
         text = Text.from_markup(text)
     return text.plain
+
+
+def pretty_model(model_class: type[BaseModel]) -> str:
+    """
+    Format a pydantic model class.
+    """
+    parts: list[str] = [
+        f"{fn}={pretty_field_info(fi)}" for (fn, fi) in model_class.model_fields.items()
+    ]
+    return f"{model_class.__name__}({' '.join(parts)})"
+
+
+def pretty_field_info(field_info: FieldInfo) -> str:
+    """
+    Format a pydantic FieldInfo.
+    """
+    annotation = DisplayError.enforce_defined(field_info.annotation, f"The field info annotation for {field_info} was not defined!")
+    if issubclass(annotation, BaseModel):
+        return pretty_model(annotation)
+    else:
+        return annotation.__name__

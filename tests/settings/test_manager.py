@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Annotated
 
 import pytest
+from rich.console import Console
 import snick
 from pydantic import AfterValidator, BaseModel, ValidationError
 from pytest_mock import MockerFixture
@@ -242,20 +243,26 @@ class TestSettingsManager:
     def test_pretty__provides_string_reflecting_settings_instance(self):
         manager = SettingsManager(RequiredFieldsModel)
         manager.update(name="pyke", alignment="negative")
-        computed = manager.pretty()
+        console = Console()
+        with console.capture() as snag:
+            console.print(manager.pretty())
+        computed = snick.strip_trailing_whitespace(snag.get())
         expected = snick.dedent(
             """
-            [bold]       name[/bold] -> pyke
-            [bold]     planet[/bold] -> [red]<UNSET>[/red]
-            [bold]is-humanoid[/bold] -> True
-            [bold]  alignment[/bold] -> [red]negative[/red]
+            Settings Values
 
-            [red]Settings are invalid:[/red]
-            [bold]     planet[/bold] -> Field required
-            [bold]  alignment[/bold] -> Value error, negative is an invalid alignment
+                    name  str   ->  pyke
+                  planet  str   ->  <UNSET>
+             is-humanoid  bool  ->  True
+               alignment  str   ->  negative
+
+
+            Invalid Values
+
+                planet  ->  Field required
+             alignment  ->  Value error, negative is an invalid alignment
             """
         ).strip()
-        print(expected)
         assert expected == computed
 
 
@@ -268,46 +275,29 @@ class TestSettingsManager:
             alignment: Annotated[str, AfterValidator(valid_alignment)]
 
         manager = SettingsManager(NoDefaultsModel)
-        computed = manager.pretty()
+        console = Console()
+        with console.capture() as snag:
+            console.print(manager.pretty())
+        computed = snick.strip_trailing_whitespace(snag.get())
         expected = snick.dedent(
             """
-            [bold]       name[/bold] -> [red]<UNSET>[/red]
-            [bold]     planet[/bold] -> [red]<UNSET>[/red]
-            [bold]is-humanoid[/bold] -> [red]<UNSET>[/red]
-            [bold]  alignment[/bold] -> [red]<UNSET>[/red]
+            Settings Values
 
-            [red]Settings are invalid:[/red]
-            [bold]       name[/bold] -> Field required
-            [bold]     planet[/bold] -> Field required
-            [bold]is-humanoid[/bold] -> Field required
-            [bold]  alignment[/bold] -> Field required
+                    name  str   ->  <UNSET>
+                  planet  str   ->  <UNSET>
+             is-humanoid  bool  ->  <UNSET>
+               alignment  str   ->  <UNSET>
+
+
+            Invalid Values
+
+                    name  ->  Field required
+                  planet  ->  Field required
+             is-humanoid  ->  Field required
+               alignment  ->  Field required
             """
         ).strip()
-        print(expected)
-        assert expected == computed
-
-    def test_pretty__without_style(self):
-        manager = SettingsManager(RequiredFieldsModel)
-        manager.update(name="pyke", alignment="negative")
-        computed = manager.pretty(with_style=False)
-        print(computed)
-        expected = (
-            "       "
-            + snick.dedent(
-                """
-                   name -> pyke
-                 planet -> <UNSET>
-            is-humanoid -> True
-              alignment -> negative
-
-            Settings are invalid:
-                 planet -> Field required
-              alignment -> Value error, negative is an invalid alignment
-            """
-            ).strip()
-        )
-        print(expected)
-        assert expected == computed
+        assert expected == computed, f"Values didn't match\n\ncomputed:\n{computed}\n\nexpected:\n{expected}"
 
     def test_save__writes_settings_to_disk(self, fake_settings_path: Path):
         manager = SettingsManager(DefaultSettingsModel)

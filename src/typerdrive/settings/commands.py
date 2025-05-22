@@ -2,7 +2,6 @@
 Provide commands that can be added to a `typer` app to manage settings.
 """
 
-import json
 from typing import Any
 
 import typer
@@ -13,11 +12,11 @@ from typer_repyt.constants import Sentinel
 
 from typerdrive.constants import Validation
 from typerdrive.handle_errors import handle_errors
+from typerdrive.model_parser import make_parser
 from typerdrive.settings.attach import attach_settings, get_settings_manager
 from typerdrive.settings.exceptions import SettingsError
+from typerdrive.format import pretty_model
 from typerdrive.settings.manager import SettingsManager
-
-
 
 
 def bind(ctx: typer.Context):
@@ -49,14 +48,8 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
         )
         if issubclass(param_type, BaseModel):
             model_type = param_type
-            def model_parser(val: str):
-                """
-                Provide a parser that converts a string into an instance of the nested model.
-
-                This is needed for the settings commands to be able to use nested pydantic models.
-                """
-                return model_type(**json.loads(val))
-            opt_kwargs["parser"] = model_parser
+            opt_kwargs["parser"] = make_parser(model_type)
+            opt_kwargs["metavar"] = pretty_model(model_type)
 
         opt_defs.append(
             OptDef(**opt_kwargs)
@@ -116,14 +109,8 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
             default = field_info.default
         elif issubclass(param_type, BaseModel):
             model_type = param_type
-            def model_parser(val: str):
-                """
-                Provide a parser that converts a string into an instance of the nested model.
-
-                This is needed for the settings commands to be able to use nested pydantic models.
-                """
-                return model_type(**json.loads(val))
-            opt_kwargs["parser"] = model_parser
+            opt_kwargs["parser"] = make_parser(model_type)
+            opt_kwargs["metavar"] = pretty_model(model_type)
 
         opt_defs.append(OptDef(**opt_kwargs))
     build_command(

@@ -147,7 +147,7 @@ class SettingsManager:
             if field_name in self.invalid_warnings:
                 field_string = f"{red_}{field_string}{_red}"
             annotation = SettingsDisplayError.enforce_defined(field_info.annotation, f"The field info annotation for {field_info} was not defined!")
-            field_type: str = annotation.__name__
+            field_type: str = f"{italic_}{annotation.__name__}{_italic}"
             if issubclass(annotation, BaseModel):
                 field_type = f"{blue_}{field_type}*{_blue}"
                 nested.append(pretty_field_info(field_info))

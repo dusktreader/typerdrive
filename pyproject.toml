@@ -20,6 +20,7 @@ dependencies = [
     "snick~=2.2",
     "typer~=0.15",
     "typer-repyt>=0.8.1,<0.9",
+    "xdg-base-dirs>=6.0.2",
 ]
 
 

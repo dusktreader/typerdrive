@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, computed_field
+from xdg_base_dirs import xdg_state_home, xdg_cache_home
 
 from typerdrive.exceptions import TyperdriveError
 from typerdrive.types import FileRetentionSpec, FileRotationSpec, FileCompressionSpec
@@ -66,24 +67,30 @@ class TyperdriveConfig(BaseModel):
     def log_dir(self) -> Path:
         """
         Retrieve the directory where logs will be stored.
+
+        Uses XDG_STATE_HOME (defaults to ~/.local/state) per XDG Base Directory specification.
         """
-        return Path.home() / ".local/share" / self.app_name / "logs"
+        return xdg_state_home() / self.app_name / "logs"
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def settings_path(self) -> Path:
         """
         Retrieve the file where settings will be stored.
+
+        Uses XDG_STATE_HOME (defaults to ~/.local/state) per XDG Base Directory specification.
         """
-        return Path.home() / ".local/share" / self.app_name / "settings.json"
+        return xdg_state_home() / self.app_name / "settings.json"
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def cache_dir(self) -> Path:
         """
         Retrieve the directory where the cache data will be stored.
+
+        Uses XDG_CACHE_HOME (defaults to ~/.cache) per XDG Base Directory specification.
         """
-        return Path.home() / ".cache" / self.app_name
+        return xdg_cache_home() / self.app_name
 
 
 _typerdrive_config: TyperdriveConfig = TyperdriveConfig.model_construct()

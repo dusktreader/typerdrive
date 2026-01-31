@@ -24,6 +24,10 @@ from typerdrive.types import FileRetentionSpec, FileRotationSpec, FileCompressio
 class TyperdriveConfig(BaseModel):
     """
     Define the configurable attributes of `typerdrive`.
+
+    This class uses the XDG Base Directory specification for storing application data:
+    - Logs and settings use XDG_STATE_HOME (defaults to ~/.local/state)
+    - Cache data uses XDG_CACHE_HOME (defaults to ~/.cache)
     """
 
     app_name: str = sys.argv[0].split("/")[-1]
@@ -67,8 +71,6 @@ class TyperdriveConfig(BaseModel):
     def log_dir(self) -> Path:
         """
         Retrieve the directory where logs will be stored.
-
-        Uses XDG_STATE_HOME (defaults to ~/.local/state) per XDG Base Directory specification.
         """
         return xdg_state_home() / self.app_name / "logs"
 
@@ -77,8 +79,6 @@ class TyperdriveConfig(BaseModel):
     def settings_path(self) -> Path:
         """
         Retrieve the file where settings will be stored.
-
-        Uses XDG_STATE_HOME (defaults to ~/.local/state) per XDG Base Directory specification.
         """
         return xdg_state_home() / self.app_name / "settings.json"
 
@@ -87,8 +87,6 @@ class TyperdriveConfig(BaseModel):
     def cache_dir(self) -> Path:
         """
         Retrieve the directory where the cache data will be stored.
-
-        Uses XDG_CACHE_HOME (defaults to ~/.cache) per XDG Base Directory specification.
         """
         return xdg_cache_home() / self.app_name
 

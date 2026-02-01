@@ -20,7 +20,7 @@ _Boost your command-line workflows to lightspeed_
 
 ## Super-quick Start
 
-Requires: Python 3.12 to 3.13
+Requires: Python 3.12 to 3.14
 
 Install through pip:
 

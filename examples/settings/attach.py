@@ -25,7 +25,7 @@ set_typerdrive_config(app_name="settings-attach-example")
 
 @cli.command()
 @attach_settings(SettingsModel)
-def report(ctx: typer.Context, cfg: SettingsModel):  # pyright: ignore[reportUnusedParameter]
+def report(ctx: typer.Context, cfg: SettingsModel):
     print(
         unwrap(
             f"""

@@ -31,6 +31,7 @@ To see all available options, run:
 typerdrive-demo --help
 ```
 
+
 ## Running the demo in an isolated environment with uv
 
 If you want to run the demo but not include its dependencies in your system python

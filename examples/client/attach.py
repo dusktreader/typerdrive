@@ -41,7 +41,7 @@ set_typerdrive_config(app_name="cache-commands-example")
 @attach_settings(SettingsModel)
 @attach_client(people="people_url", planets="planets_url")
 def report(
-    ctx: typer.Context,  # pyright: ignore[reportUnusedParameter]
+    ctx: typer.Context,
     people: TyperdriveClient,
     planets: TyperdriveClient,
     person_id: Annotated[int, typer.Option(help="The ID of the person to look up")] = 1,

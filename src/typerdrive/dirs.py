@@ -116,11 +116,17 @@ def show_directory(path: Path, subject: str | None = None):
 def is_child(path: Path, parent: Path) -> bool:
     """
     Return true if the given path is a child of the given parent.
+
+    Both paths are resolved to handle symlinks before comparison.
     """
-    root_path = Path(path.parts[0])
-    temp_path = path
+    # Resolve both paths to handle symlinks (e.g., /var -> /private/var on macOS)
+    resolved_path = path.resolve()
+    resolved_parent = parent.resolve()
+
+    root_path = Path(resolved_path.parts[0])
+    temp_path = resolved_path
     while temp_path != root_path:
-        if temp_path == parent:
+        if temp_path == resolved_parent:
             return True
         temp_path = temp_path.parent
     return False

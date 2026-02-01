@@ -19,7 +19,7 @@ class TestAttachClient:
 
         @cli.command()
         @attach_client()
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             manager = get_client_manager(ctx)
             assert isinstance(manager, ClientManager)
             assert manager.clients == {}
@@ -32,7 +32,7 @@ class TestAttachClient:
 
         @cli.command()
         @attach_client(jedi="https://the.force.io")
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             manager = get_client_manager(ctx)
             assert len(manager.clients) == 1
             client = manager.clients.get("jedi")
@@ -48,7 +48,7 @@ class TestAttachClient:
         @cli.command()
         @attach_settings(ClientSettings)
         @attach_client(jedi="url_base")
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             manager = get_client_manager(ctx)
             assert len(manager.clients) == 1
             client = manager.clients.get("jedi")
@@ -64,7 +64,7 @@ class TestAttachClient:
         @cli.command()
         @attach_settings(ClientSettings)
         @attach_client(jedi="not-a-url")
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             get_client_manager(ctx)
             print("We should never get here")
 
@@ -83,7 +83,7 @@ class TestAttachClient:
         @cli.command()
         @attach_settings(ClientSettings)
         @attach_client(sith="https://the.dark.side", jedi="url_base")
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             manager = get_client_manager(ctx)
             assert len(manager.clients) == 2
 
@@ -105,7 +105,7 @@ class TestWithParameters:
 
         @cli.command()
         @attach_client()
-        def noop(ctx: typer.Context, mgr: ClientManager):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context, mgr: ClientManager):
             assert isinstance(mgr, ClientManager)
             assert mgr.clients == {}
             print("Passed!")
@@ -118,7 +118,7 @@ class TestWithParameters:
         @cli.command()
         @attach_settings(ClientSettings)
         @attach_client(sith="https://the.dark.side", jedi="url_base")
-        def noop(ctx: typer.Context, jedi: TyperdriveClient, sith: TyperdriveClient):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context, jedi: TyperdriveClient, sith: TyperdriveClient):
             assert sith is not None
             assert sith.base_url == "https://the.dark.side"
 
@@ -135,7 +135,7 @@ class TestGetManager:
 
         @cli.command()
         @attach_client()
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             manager = get_client_manager(ctx)
             assert isinstance(manager, ClientManager)
             assert manager.clients == {}
@@ -147,7 +147,7 @@ class TestGetManager:
         cli = typer.Typer()
 
         @cli.command()
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             get_client_manager(ctx)
             print("Passed!")
 
@@ -165,7 +165,7 @@ class TestGetManager:
 
         @cli.command()
         @attach_client()
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             ctx.obj.client_manager = "Not a manager!"
             get_client_manager(ctx)
             print("Passed!")

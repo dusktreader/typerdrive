@@ -1,4 +1,4 @@
-from collections.abc import Callable
+import types
 from enum import StrEnum, auto
 from typing import Annotated
 
@@ -17,6 +17,8 @@ class Feature(StrEnum):
     settings_commands = auto()
     attach_cache = auto()
     cache_commands = auto()
+    attach_files = auto()
+    files_commands = auto()
     handle_errors = auto()
     attach_client = auto()
     typerdrive_client = auto()
@@ -41,9 +43,9 @@ def start(
     else:
         features = [feature]
 
-    feature_map: dict[Feature, list[Callable[..., None]]] = {}
+    feature_map: dict[Feature, list[types.FunctionType]] = {}
     for feature in features:
-        feature_map[feature] = get_demo_functions(feature)
+        feature_map[feature] = get_demo_functions(feature)  # type: ignore[assignment]
 
     override_label_map: dict[Feature, str] = {}
 

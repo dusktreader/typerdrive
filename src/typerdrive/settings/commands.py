@@ -51,9 +51,7 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
             opt_kwargs["parser"] = make_parser(model_type)
             opt_kwargs["metavar"] = pretty_model(model_type)
 
-        opt_defs.append(
-            OptDef(**opt_kwargs)
-        )
+        opt_defs.append(OptDef(**opt_kwargs))
     build_command(
         cli,
         bind,
@@ -191,7 +189,7 @@ def add_unset(cli: typer.Typer, settings_model: type[BaseModel]):
     )
 
 
-def show(ctx: typer.Context):  # pyright: ignore[reportUnusedParameter]
+def show(ctx: typer.Context):
     """
     Show the current app's settings.
     """

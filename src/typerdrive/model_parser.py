@@ -35,6 +35,6 @@ def make_parser(model_type: type[BaseModel]) -> Callable[[str], dict[str, Any]]:
     parser = partial(_validating_parser, model_type)
 
     # This works fine, but pyright/basedpyright does not like it!
-    parser.__name__ = f"parse_{model_type.__name__}"  # type: ignore[attr-defined]  # pyright: ignore[reportAttributeAccessIssue]
+    parser.__name__ = f"parse_{model_type.__name__}"  # type: ignore[attr-defined]
 
     return parser

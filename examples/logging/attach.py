@@ -10,7 +10,7 @@ set_typerdrive_config(app_name="logging-attach-example")
 
 @cli.command()
 @attach_logging(verbose=True)
-def report(ctx: typer.Context, manager: LoggingManager, clear: bool = False, count: int = 10):  # pyright: ignore[reportUnusedParameter]
+def report(ctx: typer.Context, manager: LoggingManager, clear: bool = False, count: int = 10):
     logger.info("Starting report")
     for i in range(count):
         logger.info(f"Logging message {i + 1}")

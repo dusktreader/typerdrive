@@ -35,7 +35,7 @@ def demo_1__attach_client__use_base_url_from_settings():
     @cli.command()
     @attach_settings(SettingsModel)
     @attach_client(swapi="base_url")
-    def report(ctx: typer.Context, swapi: TyperdriveClient):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+    def report(ctx: typer.Context, swapi: TyperdriveClient):
         person_id = randint(1, 10)
         print(f"Person {person_id} ->", swapi.get_x(f"{person_id}", response_model=ResponseModel))
 
@@ -59,7 +59,7 @@ def demo_2__attach_client__use_explicit_base_url():
 
     @cli.command()
     @attach_client(swapi="https://swapi.info/api/people")
-    def report(ctx: typer.Context, swapi: TyperdriveClient):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+    def report(ctx: typer.Context, swapi: TyperdriveClient):
         person_id = randint(1, 10)
         print(f"Person {person_id} ->", swapi.get_x(f"{person_id}", response_model=ResponseModel))
 
@@ -98,7 +98,7 @@ def demo_3__attach_client__multiple_clients():
         people="people_url",
         planets="planets_url",
     )
-    def report(ctx: typer.Context, people: TyperdriveClient, planets: TyperdriveClient, id: int = 1):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+    def report(ctx: typer.Context, people: TyperdriveClient, planets: TyperdriveClient, id: int = 1):
         person_id = randint(1, 10)
         planet_id = randint(1, 10)
 

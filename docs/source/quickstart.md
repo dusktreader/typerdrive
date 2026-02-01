@@ -1,11 +1,13 @@
 # Quickstart
 
+
 ## Requirements
 
 * Python 3.12 to 3.13
 
 
 ## Installation
+
 
 ### Install from pypi:
 

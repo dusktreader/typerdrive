@@ -26,7 +26,7 @@ def demo_1__attach_settings__basic():
 
     @cli.command()
     @attach_settings(ExampleSettings)
-    def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+    def report(ctx: typer.Context, cfg: ExampleSettings):
         print(f"Look at this {cfg.name} from {cfg.planet}. It's soooo {cfg.alignment}!")
 
     cli()
@@ -48,7 +48,7 @@ def demo_2__attach_settings__enforce_validation():
 
     @cli.command()
     @attach_settings(ExampleSettings)
-    def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+    def report(ctx: typer.Context, cfg: ExampleSettings):
         print("We will never got to this line")
 
     cli()
@@ -74,7 +74,7 @@ def demo_3__attach_settings__allow_invalid():
 
     @cli.command()
     @attach_settings(ExampleSettings, validation=Validation.NEVER)
-    def report(ctx: typer.Context, cfg: ExampleSettings):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+    def report(ctx: typer.Context, cfg: ExampleSettings):
         print(f"Here are the settings that are missing a required field: {cfg}")
 
     cli()
@@ -96,7 +96,7 @@ def demo_4__attach_settings__access_through_context():
 
     @cli.command()
     @attach_settings(ExampleSettings)
-    def report(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+    def report(ctx: typer.Context):
         cfg = get_settings(ctx, ExampleSettings)
         print(f"Look at this {cfg.name} from {cfg.planet}. It's soooo {cfg.alignment}!")
 

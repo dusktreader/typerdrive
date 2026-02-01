@@ -2,16 +2,14 @@
 This set of demos shows the use of the `attach_cache` decorator.
 """
 
-import json
+from datetime import timedelta
 
 import typer
 from rich import print
 from typerdrive import (
     CacheManager,
-    TyperdriveConfig,
     attach_cache,
     get_cache_manager,
-    get_typerdrive_config,
     set_typerdrive_config,
 )
 
@@ -21,28 +19,35 @@ set_typerdrive_config(app_name="attach-cache-demo")
 def demo_1__attach_cache__storing_data():
     """
     This function demonstrates how to use the `attach_cache` decorator
-    to store data to the cache. The decorator gives you to access the
+    to store data to the cache. The decorator gives you access to the
     `CacheManager` within a typer command by adding a parameter with
     `CacheManager` type. Note that the manager argument name can be
-    anything you like. The `CacheManager` can store bytes, text, or
-    JSON data in the cache. In order to use this decorator, your
-    command must take a `typer.Context` object as the first argument.
+    anything you like. The `CacheManager` can store any picklable Python
+    object including bytes, strings, dicts, lists, and Pydantic models.
+    In order to use this decorator, your command must take a
+    `typer.Context` object as the first argument.
     """
 
     cli = typer.Typer()
 
     @cli.command()
     @attach_cache(show=True)
-    def report(ctx: typer.Context, manager: CacheManager):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
-        manager.store_text("Utinni!", "jawa.txt")
-        manager.store_bytes(b"Yub Nub!", "ewok")
-        manager.store_json(
+    def report(ctx: typer.Context, manager: CacheManager):
+        # Store simple string
+        manager.set("jawa", "Utinni!")
+
+        # Store bytes
+        manager.set("ewok", b"Yub Nub!")
+
+        # Store dict with group
+        manager.set(
+            "hutt/jabba",
             dict(
                 full_name="Jabba Desilijic Tiure",
                 age=604,
                 quote="beeska chata wnow kong bantha poodoo!",
             ),
-            "hutt/jabba.json",
+            group="characters",
         )
 
     cli()
@@ -51,26 +56,20 @@ def demo_1__attach_cache__storing_data():
 def demo_2__attach_cache__loading_data():
     """
     This function demonstrates how to use the `attach_cache` decorator
-    to load data from the cache. Because the demos use a temporary
-    directory, the cache from the previous command is no longer
-    available, so this function pre-seeds the data.
+    to load data from the cache. First we pre-populate the cache with
+    some data, then load it back.
     """
-    config: TyperdriveConfig = get_typerdrive_config()
-    jawa_path = config.cache_dir / "jawa.txt"
-    jawa_path.parent.mkdir(parents=True, exist_ok=True)
-    jawa_path.write_text("Utinni!")
-    ewok_path = config.cache_dir / "ewok"
-    ewok_path.parent.mkdir(parents=True, exist_ok=True)
-    ewok_path.write_bytes(b"Yub Nub!")
-    jabba_path = config.cache_dir / "hutt/jabba.json"
-    jabba_path.parent.mkdir(parents=True, exist_ok=True)
-    jabba_path.write_text(
-        json.dumps(
-            dict(
-                full_name="Jabba Desilijic Tiure",
-                age=604,
-                quote="beeska chata wnow kong bantha poodoo!",
-            ),
+
+    # Pre-populate the cache
+    manager = CacheManager()
+    manager.set("jawa", "Utinni!")
+    manager.set("ewok", b"Yub Nub!")
+    manager.set(
+        "hutt/jabba",
+        dict(
+            full_name="Jabba Desilijic Tiure",
+            age=604,
+            quote="beeska chata wnow kong bantha poodoo!",
         ),
     )
 
@@ -78,10 +77,14 @@ def demo_2__attach_cache__loading_data():
 
     @cli.command()
     @attach_cache(show=True)
-    def report(ctx: typer.Context, manager: CacheManager):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
-        jawa_quote = manager.load_text("jawa.txt")
-        ewok_quote = manager.load_bytes("ewok").decode("utf-8")
-        jabba_quote = manager.load_json("hutt/jabba.json")["quote"]
+    def report(ctx: typer.Context, manager: CacheManager):
+        jawa_quote = manager.get("jawa")
+        ewok_quote = manager.get("ewok")
+        if isinstance(ewok_quote, bytes):
+            ewok_quote = ewok_quote.decode("utf-8")
+        jabba_data = manager.get("hutt/jabba")
+        jabba_quote = jabba_data["quote"] if jabba_data else "unknown"
+
         print(f"The jawa says: '{jawa_quote}'")
         print(f"The ewok says: '{ewok_quote}'")
         print(f"Jabba the Hutt says: '{jabba_quote}'")
@@ -89,7 +92,35 @@ def demo_2__attach_cache__loading_data():
     cli()
 
 
-def demo_4__attach_settings__access_through_context():
+def demo_3__attach_cache__expiration_and_groups():
+    """
+    This function demonstrates the use of expiration times and groups
+    for organizing cache entries.
+    """
+
+    cli = typer.Typer()
+
+    @cli.command()
+    @attach_cache(show=True)
+    def report(ctx: typer.Context, manager: CacheManager):
+        # Store with 1 hour expiration
+        manager.set(
+            "session_token",
+            "secret-token-12345",
+            expire=timedelta(hours=1),
+        )
+
+        # Store multiple entries with the same group
+        manager.set("user:1", {"name": "Luke"}, group="users")
+        manager.set("user:2", {"name": "Leia"}, group="users")
+        manager.set("user:3", {"name": "Han"}, group="users")
+
+        print("Stored session token and user data")
+
+    cli()
+
+
+def demo_4__attach_cache__access_through_context():
     """
     This function demonstrates how the cache manager can also be accessed
     through the Typer context if you do not want to use a `CacheManager`
@@ -101,17 +132,19 @@ def demo_4__attach_settings__access_through_context():
 
     @cli.command()
     @attach_cache(show=True)
-    def report(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+    def report(ctx: typer.Context):
         manager = get_cache_manager(ctx)
-        manager.store_text("Utinni!", "jawa.txt")
-        manager.store_bytes(b"Yub Nub!", "ewok")
-        manager.store_json(
+
+        # Store data using context-retrieved manager
+        manager.set("jawa", "Utinni!")
+        manager.set("ewok", b"Yub Nub!")
+        manager.set(
+            "hutt/jabba",
             dict(
                 full_name="Jabba Desilijic Tiure",
                 age=604,
                 quote="beeska chata wnow kong bantha poodoo!",
             ),
-            "hutt/jabba.json",
         )
 
     cli()

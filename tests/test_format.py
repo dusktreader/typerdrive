@@ -2,7 +2,7 @@ import pytest
 import snick
 from pytest_mock import MockerFixture
 
-from typerdrive.format import simple_message, terminal_message, _to_clipboard  # pyright: ignore[reportPrivateUsage]
+from typerdrive.format import simple_message, terminal_message, _to_clipboard
 
 
 def compare_capsys_output(capsys: pytest.CaptureFixture[str], expected_text: str, use_stderr: bool = False):

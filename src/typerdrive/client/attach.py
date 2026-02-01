@@ -4,7 +4,7 @@ Provide a decorator that attaches `TyperdriveClient` instances to a `typer` comm
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
 from pydantic import BaseModel
@@ -87,11 +87,12 @@ def attach_client(**client_urls_or_settings_keys: str) -> Callable[[ContextFunct
 
             to_context(ctx, "client_manager", manager)
 
+            kwargs_dict = cast(dict[str, Any], kwargs)
             for key in client_param_keys:
-                kwargs[key] = manager.get_client(key)
+                kwargs_dict[key] = manager.get_client(key)
 
             if manager_param_key:
-                kwargs[manager_param_key] = manager
+                kwargs_dict[manager_param_key] = manager
 
             return func(ctx, *args, **kwargs)
 

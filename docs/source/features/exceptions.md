@@ -81,7 +81,8 @@ print the message. Instead, it raises a `TyperdriveError` which is handled by th
 No stack trace is shown to the user and the message that is displayed has none of the trappings of an exception message.
 Instead, it's clear and simple so the user will understand what is going on.
 
-The great power of this error handling is that a `TyperdriveError` that is raised in any code that is _called_ by the command
+The great power of this error handling is that a `TyperdriveError` that is raised in any code that is _called_ by the
+command
 function will also be caught and presented nicely to the user.
 
 Next, let's try the command with the `--show-logs` option that is available:
@@ -144,7 +145,8 @@ All three of the `do_.*` parameters are useful, but the `do_except` parameter is
 some post-processing on the error any time one is handled.
 
 It's worth pointing out here that this example doesn't tell the `@handle_errors()` decorator what kind of exceptions it
-should handle. By default, `@handle_errors()` will only handle instances of `TyperdriveError` or one of its descendants. If
+should handle. By default, `@handle_errors()` will only handle instances of `TyperdriveError` or one of its descendants.
+If
 you want to handle a different exception type (or any of its descendants), you can provide it in the `handle_exc_class`
 keyword argument. If, for instance, you wanted the handler to catch any and all errors that might be raised in the
 command function, you could pass `handle_exc_class=Exception` to the decorator.
@@ -158,7 +160,8 @@ Now, let's dive a little deeper into the details of the `@handle_errors()` decor
 ### `base_message`
 
 This is the `base_message` that will be included with the final message that is passed in the `DoExceptParams` that are
-passed to the `do_except` function. This base message can be overridden by setting the `subject` on a `TyperdriveError` (or
+passed to the `do_except` function. This base message can be overridden by setting the `subject` on a `TyperdriveError`
+(or
 exception class derived from it. When the error message is displayed for the user, the `base_message` is the text that
 is used for the "subject" (also known as "title") of the panel that the exception's message will be displayed inside of.
 This parameter is required.
@@ -172,7 +175,8 @@ This parameter is an analog of the
 
 This keyword argument identifies the exception type that will be handled by the `@handle_errors()` decorator. Any
 exception that is an instance of this type or an instance of any class that inherits from it will be handled. By
-default, this kwarg is set to `TyperdriveError` exception class. It is also possible to provide a `tuple` of exception types
+default, this kwarg is set to `TyperdriveError` exception class. It is also possible to provide a `tuple` of exception
+types
 that should be handled by the decorator.
 
 This parameter is an analog of the

@@ -18,7 +18,7 @@ def demo_1__handle_errors__no_handler():
     cli = typer.Typer()
 
     @cli.command()
-    def report():  # pyright: ignore[reportUnusedFunction]
+    def report():
         raise TyperdriveError("Boring conversation anyway")
 
     cli()
@@ -36,7 +36,7 @@ def demo_2__handle_errors__basic():
 
     @cli.command()
     @handle_errors("What happened?")
-    def report():  # pyright: ignore[reportUnusedFunction]
+    def report():
         raise TyperdriveError("Boring conversation anyway")
 
     cli()
@@ -56,7 +56,7 @@ def demo_3__handle_errors__handle_specific_errors():
 
     @cli.command()
     @handle_errors("What happened?", handle_exc_class=RuntimeError)
-    def report():  # pyright: ignore[reportUnusedFunction]
+    def report():
         raise RuntimeError("Boring conversation anyway")
 
     cli()
@@ -84,7 +84,7 @@ def demo_4__handle_errors__ignore_specific_errors():
         handle_exc_class=RuntimeError,
         ignore_exc_class=BlasterRuntimeError,
     )
-    def report():  # pyright: ignore[reportUnusedFunction]
+    def report():
         raise BlasterRuntimeError("Boring conversation anyway")
 
     cli()
@@ -108,7 +108,7 @@ def demo_5__handle_errors__perform_task_on_error():
 
     @cli.command()
     @handle_errors("What happened?", do_except=fake_logger)
-    def report():  # pyright: ignore[reportUnusedFunction]
+    def report():
         raise TyperdriveError("Boring conversation anyway")
 
     cli()
@@ -131,7 +131,7 @@ def demo_6__handle_errors__perform_task_with_no_error():
 
     @cli.command()
     @handle_errors("What happened?", do_else=fake_logger)
-    def report():  # pyright: ignore[reportUnusedFunction]
+    def report():
         print("We're all fine here now, thank you. How are you?")
 
     cli()
@@ -154,7 +154,7 @@ def demo_7__handle_errors__always_perform_task():
 
     @cli.command()
     @handle_errors("What happened?", do_finally=fake_logger)
-    def report():  # pyright: ignore[reportUnusedFunction]
+    def report():
         raise RuntimeError("Boring conversation anyway")
 
     cli()
@@ -171,7 +171,7 @@ def demo_8__handle_errors__set_a_subject_and_footer():
 
     @cli.command()
     @handle_errors("What happened?")
-    def report():  # pyright: ignore[reportUnusedFunction]
+    def report():
         raise TyperdriveError(
             "Boring conversation anyway",
             subject="slight weapons malfunction",

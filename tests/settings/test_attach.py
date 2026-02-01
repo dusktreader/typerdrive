@@ -36,7 +36,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(RequiredFieldsModel)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             pass
 
         result = runner.invoke(cli, [], prog_name="test")
@@ -62,7 +62,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(RequiredFieldsModel, validation=Validation.BEFORE)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             print("in function body")
 
         expected_pattern = [
@@ -82,7 +82,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(RequiredFieldsModel, validation=Validation.AFTER)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             print("in function body")
 
         expected_pattern = [
@@ -184,7 +184,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel, show=True)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             pass
 
         expected_pattern = [
@@ -204,7 +204,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel, persist=True, show=True)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             pass
 
         expected_pattern = [

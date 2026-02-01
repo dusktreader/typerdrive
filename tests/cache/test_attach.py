@@ -27,21 +27,21 @@ class TestAttachCache:
         @attach_cache(show=True)
         def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
             manager = get_cache_manager(ctx)
-            manager.store_bytes(b"jawa", "jawa")
-            manager.store_bytes(b"ewok", "ewok")
-            manager.store_bytes(b"hutt & pyke", "hutt/pyke")
+            manager.set("jawa", b"jawa")
+            manager.set("ewok", b"ewok")
+            manager.set("hutt/pyke", b"hutt & pyke")
 
-        expected_pattern = f"""
-            📂 {fake_cache_path}
-            ├── 📂 hutt
-            │   └── 📄pyke (11 Bytes)
-            ├── 📄ewok (4 Bytes)
-            └── 📄jawa (4 Bytes)
-        """
+        expected_pattern = [
+            "Cache contains 3 entries",
+            "Key",
+            "Group",
+            "ewok",
+            "hutt/pyke",
+            "jawa",
+        ]
         match_output(
             cli,
             expected_pattern=expected_pattern,
-            escape_parens=True,
             prog_name="test",
         )
 
@@ -52,22 +52,22 @@ class TestWithParameters:
 
         @cli.command()
         @attach_cache(show=True)
-        def noop(ctx: typer.Context, mgr: CacheManager):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
-            mgr.store_bytes(b"jawa", "jawa")
-            mgr.store_bytes(b"ewok", "ewok")
-            mgr.store_bytes(b"hutt & pyke", "hutt/pyke")
+        def noop(ctx: typer.Context, mgr: CacheManager):  # pyright: ignore[reportUnusedFunction]
+            mgr.set("jawa", b"jawa")
+            mgr.set("ewok", b"ewok")
+            mgr.set("hutt/pyke", b"hutt & pyke")
 
-        expected_pattern = f"""
-            📂 {fake_cache_path}
-            ├── 📂 hutt
-            │   └── 📄pyke (11 Bytes)
-            ├── 📄ewok (4 Bytes)
-            └── 📄jawa (4 Bytes)
-        """
+        expected_pattern = [
+            "Cache contains 3 entries",
+            "Key",
+            "Group",
+            "ewok",
+            "hutt/pyke",
+            "jawa",
+        ]
         match_output(
             cli,
             expected_pattern=expected_pattern,
-            escape_parens=True,
             prog_name="test",
         )
 

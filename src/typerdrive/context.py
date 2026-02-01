@@ -12,10 +12,11 @@ from buzz import require_condition
 from typerdrive.cache.manager import CacheManager
 from typerdrive.client.manager import ClientManager
 from typerdrive.exceptions import ContextError
+from typerdrive.files.manager import FilesManager
 from typerdrive.logging.manager import LoggingManager
 from typerdrive.settings.manager import SettingsManager
 
-type TyperdriveManager = SettingsManager | CacheManager | ClientManager | LoggingManager
+type TyperdriveManager = SettingsManager | CacheManager | ClientManager | LoggingManager | FilesManager
 
 
 @dataclass
@@ -23,10 +24,12 @@ class TyperdriveContext:
     """
     Define the `typerdrive` context that is attached to the `Typer.Context` as `obj`.
     """
+
     settings_manager: SettingsManager | None = None
     cache_manager: CacheManager | None = None
     client_manager: ClientManager | None = None
     logging_manager: LoggingManager | None = None
+    files_manager: FilesManager | None = None
 
 
 def get_user_context(ctx: typer.Context):

@@ -51,9 +51,7 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
             opt_kwargs["parser"] = make_parser(model_type)
             opt_kwargs["metavar"] = pretty_model(model_type)
 
-        opt_defs.append(
-            OptDef(**opt_kwargs)
-        )
+        opt_defs.append(OptDef(**opt_kwargs))
     build_command(
         cli,
         bind,

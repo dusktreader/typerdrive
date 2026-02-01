@@ -6,9 +6,6 @@ theme:
   name: material
   features:
     - navigation.expand
-    - content.code.copy
-  features:
-    - navigation.expand
     - navigation.footer
     - navigation.tracking
     - content.code.copy
@@ -34,6 +31,7 @@ nav:
   - Features:
     - Settings: features/settings.md
     - Cache: features/cache.md
+    - Files: features/files.md
     - Logging: features/logging.md
     - Error Handling: features/exceptions.md
     - API Clients: features/client.md
@@ -41,6 +39,7 @@ nav:
   - Reference:
     - Base Modules: reference/base_modules.md
     - Cache: reference/cache.md
+    - Files: reference/files.md
     - Client: reference/client.md
     - Logging: reference/logging.md
     - Settings: reference/settings.md

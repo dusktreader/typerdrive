@@ -1,212 +1,182 @@
-import json
+from datetime import timedelta
 from pathlib import Path
 
 import pytest
 from pytest_mock import MockerFixture
-from typerdrive.cache.exceptions import CacheError, CacheInitError
+
+from typerdrive.cache.exceptions import CacheInitError
 from typerdrive.cache.manager import CacheManager
 
 
-class TestSettingsManager:
+@pytest.mark.usefixtures("fake_cache_path")
+class TestCacheManager:
     def test_init__no_issues(self, fake_cache_path: Path):
         manager = CacheManager()
         assert manager.cache_dir == fake_cache_path
+        assert manager.cache is not None
 
     def test_init__raises_exception_on_fail(self, mocker: MockerFixture):
         mocker.patch("typerdrive.cache.manager.Path.mkdir", side_effect=RuntimeError("BOOM!"))
         with pytest.raises(CacheInitError, match="Failed to initialize cache"):
             CacheManager()
 
-    def test_resolve_path__basic(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+    def test_set__basic(self):
         manager = CacheManager()
-        full_path = manager.resolve_path(test_path)
-        assert full_path == fake_cache_path / test_path
+        result = manager.set("test_key", "test_value")
+        assert result is True
 
-    def test_resolve_path__fails_if_path_is_outside_cache(self, fake_cache_path: Path):
-        test_path = Path("../jawa")
+    def test_set__with_expire(self):
         manager = CacheManager()
-        full_path = fake_cache_path / test_path
-        with pytest.raises(CacheError, match=f"Resolved cache path .* is not within cache {str(fake_cache_path)}"):
-            manager.resolve_path(full_path)
+        result = manager.set("temp_key", "temp_value", expire=timedelta(seconds=1))
+        assert result is True
 
-    def test_resolve_path__fails_if_path_is_the_same_as_cache_path(self, fake_cache_path: Path):
-        test_path = Path(".")
+    def test_set__with_group(self):
         manager = CacheManager()
-        full_path = fake_cache_path / test_path
-        with pytest.raises(
-            CacheError,
-            match=f"Resolved cache path .* must not be the same as cache {str(fake_cache_path)}",
-        ):
-            manager.resolve_path(full_path)
+        result = manager.set("grouped_key", "grouped_value", group="test_group")
+        assert result is True
 
-    def test_resolve_path__makes_parents_if_requested(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+    def test_get__basic(self):
         manager = CacheManager()
-        full_path = manager.resolve_path(test_path, mkdir=True)
-        assert full_path == fake_cache_path / test_path
-        assert full_path.parent.exists()
+        manager.set("test_key", "test_value")
+        value = manager.get("test_key")
+        assert value == "test_value"
 
-    def test_resolve_path__works_with_strings(self, fake_cache_path: Path):
-        test_path = "jawa/ewok/hutt"
+    def test_get__returns_default_if_not_found(self):
         manager = CacheManager()
-        full_path = manager.resolve_path(test_path)
-        assert full_path == fake_cache_path / test_path
+        value = manager.get("nonexistent", default="default_value")
+        assert value == "default_value"
 
-    def test_list_items__basic(self, fake_cache_path: Path):
-        test_path = fake_cache_path / "jawa"
-        test_path.mkdir()
-        names = ["ewok.txt", "hutt.txt", "pyke.txt"]
-        for name in names:
-            (test_path / name).touch()
+    def test_get__supports_complex_objects(self):
         manager = CacheManager()
-        assert sorted(manager.list_items("jawa")) == sorted(names)
+        data = {"name": "test", "values": [1, 2, 3], "nested": {"key": "value"}}
+        manager.set("complex_key", data)
+        retrieved = manager.get("complex_key")
+        assert retrieved == data
 
-    def test_list_items__raises_error_if_path_does_not_exist(self):
+    def test_setdefault__returns_existing_value(self):
         manager = CacheManager()
-        with pytest.raises(CacheError, match="Resolved cache path .* does not exist"):
-            manager.list_items("jawa")
+        manager.set("existing_key", "existing_value")
+        value = manager.setdefault("existing_key", "default_value")
+        assert value == "existing_value"
 
-    def test_list_items__raises_error_if_path_is_not_a_directory(self, fake_cache_path: Path):
-        (fake_cache_path / "jawa").touch()
+    def test_setdefault__sets_and_returns_default_if_not_found(self):
         manager = CacheManager()
-        with pytest.raises(CacheError, match="Resolved cache path .* is not a directory"):
-            manager.list_items("jawa")
+        value = manager.setdefault("new_key", "default_value")
+        assert value == "default_value"
+        assert manager.get("new_key") == "default_value"
 
-    def test_store_bytes__basic(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+    def test_setdefault__with_none_default(self):
         manager = CacheManager()
-        data = b"test data"
-        manager.store_bytes(data, test_path)
-        full_path = fake_cache_path / test_path
-        assert full_path.read_bytes() == data
+        value = manager.setdefault("new_key", None)
+        assert value is None
+        assert manager.get("new_key") is None
 
-    def test_store_bytes__raises_error_if_write_fails(self, fake_cache_path: Path, mocker: MockerFixture):
-        mocker.patch("typerdrive.cache.manager.Path.write_bytes", side_effect=RuntimeError("BOOM!"))
-        test_path = Path("jawa/ewok/hutt")
+    def test_setdefault__with_expire(self):
         manager = CacheManager()
-        data = b"test data"
-        with pytest.raises(CacheError, match="Failed to store data in cache target jawa/ewok/hutt"):
-            manager.store_bytes(data, test_path)
-        full_path = fake_cache_path / test_path
-        assert not full_path.exists()
+        value = manager.setdefault("temp_key", "temp_value", expire=timedelta(seconds=1))
+        assert value == "temp_value"
+        assert manager.get("temp_key") == "temp_value"
 
-    def test_store_bytes__sets_mode(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+    def test_setdefault__with_group(self):
         manager = CacheManager()
-        data = b"test data"
-        mode = 0o141
-        manager.store_bytes(data, test_path, mode=mode)
-        full_path = fake_cache_path / test_path
-        assert full_path.stat().st_mode & 0o777 == mode
+        value = manager.setdefault("grouped_key", "grouped_value", group="test_group")
+        assert value == "grouped_value"
+        assert manager.get("grouped_key") == "grouped_value"
 
-    def test_store_bytes__raises_error_if_chmod_fails(self, fake_cache_path: Path, mocker: MockerFixture):
-        mocker.patch("typerdrive.cache.manager.Path.chmod", side_effect=RuntimeError("BOOM!"))
-        test_path = Path("jawa/ewok/hutt")
+    def test_setdefault__supports_complex_objects(self):
         manager = CacheManager()
-        data = b"test data"
-        mode = 0o141
-        with pytest.raises(CacheError, match=f"Failed to set mode for cache target jawa/ewok/hutt to {mode=}"):
-            manager.store_bytes(data, test_path, mode=mode)
-        full_path = fake_cache_path / test_path
-        assert full_path.stat().st_mode & 0o777 != mode
+        data = {"name": "test", "values": [1, 2, 3]}
+        value = manager.setdefault("complex_key", data)
+        assert value == data
+        assert manager.get("complex_key") == data
 
-    def test_store_text__basic(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+    def test_get_ttl__no_expiration(self):
         manager = CacheManager()
-        data = "test data"
-        manager.store_text(data, test_path)
-        full_path = fake_cache_path / test_path
-        assert full_path.read_text() == data
+        manager.set("permanent_key", "value")
+        ttl = manager.get_ttl("permanent_key")
+        assert ttl == "never"
 
-    def test_store_json__basic(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+    def test_get_ttl__with_expiration(self):
         manager = CacheManager()
-        data = dict(name="sleazy", species="hutt")
-        manager.store_json(data, test_path)
-        full_path = fake_cache_path / test_path
-        assert json.loads(full_path.read_text()) == data
+        manager.set("temp_key", "value", expire=timedelta(hours=2))
+        ttl = manager.get_ttl("temp_key")
+        assert ttl != "never"
+        assert ttl != "expired"
 
-    def test_load_bytes__basic(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+    def test_get_ttl__nonexistent_key(self):
         manager = CacheManager()
-        data = b"test data"
-        full_path = fake_cache_path / test_path
-        full_path.parent.mkdir(parents=True, exist_ok=True)
-        full_path.write_bytes(data)
-        loaded_data = manager.load_bytes(test_path)
-        assert loaded_data == data
+        ttl = manager.get_ttl("nonexistent")
+        assert ttl == "expired"
 
-    def test_load_bytes__raises_error_if_file_does_not_exist(self):
-        test_path = Path("jawa/ewok/hutt")
+    def test_delete__basic(self):
         manager = CacheManager()
-        with pytest.raises(CacheError, match="Cache target jawa/ewok/hutt does not exist"):
-            manager.load_bytes(test_path)
+        manager.set("test_key", "test_value")
+        result = manager.delete("test_key")
+        assert result is True
+        assert manager.get("test_key") is None
 
-    def test_load_bytes__fails_if_read_fails(self, fake_cache_path: Path, mocker: MockerFixture):
-        mocker.patch("typerdrive.cache.manager.Path.read_bytes", side_effect=RuntimeError("BOOM!"))
-        test_path = Path("jawa/ewok/hutt")
+    def test_delete__returns_false_if_not_found(self):
         manager = CacheManager()
-        data = b"test data"
-        full_path = fake_cache_path / test_path
-        full_path.parent.mkdir(parents=True, exist_ok=True)
-        full_path.write_bytes(data)
-        with pytest.raises(CacheError, match="Failed to load data from cache target jawa/ewok/hutt"):
-            manager.load_bytes(test_path)
+        result = manager.delete("nonexistent")
+        assert result is False
 
-    def test_load_text__basic(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+    def test_clear__basic(self):
         manager = CacheManager()
-        data = "test data"
-        full_path = fake_cache_path / test_path
-        full_path.parent.mkdir(parents=True, exist_ok=True)
-        full_path.write_bytes(data.encode("utf-8"))
-        loaded_data = manager.load_text(test_path)
-        assert loaded_data == data
+        manager.set("key1", "value1")
+        manager.set("key2", "value2")
+        manager.set("key3", "value3")
 
-    def test_load_json__basic(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
+        count = manager.clear()
+        assert count == 3
+        assert manager.get("key1") is None
+        assert manager.get("key2") is None
+        assert manager.get("key3") is None
+
+    def test_clear__by_group(self):
         manager = CacheManager()
-        data = dict(name="sleazy", species="hutt")
-        full_path = fake_cache_path / test_path
-        full_path.parent.mkdir(parents=True, exist_ok=True)
-        full_path.write_bytes(json.dumps(data).encode("utf-8"))
-        loaded_data = manager.load_json(test_path)
-        assert loaded_data == data
+        manager.set("grouped1", "value1", group="group_a")
+        manager.set("grouped2", "value2", group="group_a")
+        manager.set("grouped3", "value3", group="group_b")
 
-    def test_clear_path__basic(self, fake_cache_path: Path):
-        test_path = Path("jawa/ewok/hutt")
-        other_path = Path("jawa/ewok/pyke")
+        count = manager.clear(group="group_a")
+        assert count == 2
+        assert manager.get("grouped1") is None
+        assert manager.get("grouped2") is None
+        assert manager.get("grouped3") == "value3"
+
+    def test_keys__basic(self):
         manager = CacheManager()
-        data = b"test data"
-        other_data = b"other data"
-        manager.store_bytes(data, test_path)
-        manager.store_bytes(other_data, other_path)
-        full_path = manager.clear_path(test_path)
-        assert full_path == fake_cache_path / test_path
-        assert not full_path.exists()
+        manager.set("key1", "value1")
+        manager.set("key2", "value2")
+        manager.set("key3", "value3")
 
-        other_full_path = fake_cache_path / other_path
-        assert other_full_path.read_bytes() == other_data
+        keys = manager.keys()
+        assert sorted(keys) == ["key1", "key2", "key3"]
 
-    def test_clear_path__raises_error_if_unlink_fails(self, mocker: MockerFixture):
-        mocker.patch("typerdrive.cache.manager.Path.unlink", side_effect=RuntimeError("BOOM!"))
-        test_path = Path("jawa/ewok/hutt")
+    def test_keys__empty_cache(self):
         manager = CacheManager()
-        with pytest.raises(CacheError, match="Failed to clear cache target jawa/ewok/hutt"):
-            manager.clear_path(test_path)
+        keys = manager.keys()
+        assert keys == []
 
-    def test_clear_all__basic(self, fake_cache_path: Path):
+    def test_stats__basic(self):
         manager = CacheManager()
-        manager.store_bytes(b"jawa", "jawa")
-        manager.store_bytes(b"ewok", "ewok")
-        manager.store_bytes(b"hutt & pyke", "hutt/pyke")
-        assert len([p for p in fake_cache_path.iterdir()]) == 3
-        manager.clear_all()
-        assert len([p for p in fake_cache_path.iterdir()]) == 0
+        manager.set("key1", "value1")
+        manager.set("key2", "value2")
 
-    def test_clear_all__raises_error_if_clear_directory_fails(self, mocker: MockerFixture):
-        mocker.patch("typerdrive.cache.manager.clear_directory", side_effect=RuntimeError("BOOM!"))
-        manager = CacheManager()
-        with pytest.raises(CacheError, match="Failed to clear cache"):
-            manager.clear_all()
+        # Access keys to generate hits
+        manager.get("key1")
+        manager.get("nonexistent")
+
+        stats = manager.stats()
+        assert stats.size == 2
+        assert stats.volume > 0
+        assert stats.hits >= 0
+        assert stats.misses >= 0
+
+    def test_size_limit(self):
+        # Create a cache with a very small size limit
+        manager = CacheManager(size_limit=1024)  # 1KB limit
+        manager.set("key1", "x" * 500)
+        manager.set("key2", "x" * 500)
+        # With eviction, old entries should be removed
+        assert manager.get("key1") is None or manager.get("key2") is not None

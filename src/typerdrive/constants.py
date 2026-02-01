@@ -2,7 +2,7 @@
 Provide some constants for the project.
 """
 
-from enum import Flag, IntEnum, auto
+from enum import Flag, IntEnum, StrEnum, auto
 
 
 class Validation(Flag):
@@ -25,3 +25,13 @@ class ExitCode(IntEnum):
     GENERAL_ERROR = 1
     CANNOT_EXECUTE = 126
     INTERNAL_ERROR = 128
+
+
+class EvictionPolicy(StrEnum):
+    """
+    Cache eviction policies for managing cache size limits.
+    """
+
+    LEAST_RECENTLY_USED = "least-recently-used"
+    LEAST_FREQUENTLY_USED = "least-frequently-used"
+    NONE = "none"

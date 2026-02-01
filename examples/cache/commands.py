@@ -4,7 +4,7 @@ import typer
 from rich import print
 from rich.panel import Panel
 from snick import unwrap
-from typerdrive import CacheError, CacheManager, add_cache_subcommand, attach_cache, set_typerdrive_config
+from typerdrive import CacheManager, add_cache_subcommand, attach_cache, set_typerdrive_config
 from typerdrive.env import tweak_env
 
 cli = typer.Typer()
@@ -44,24 +44,26 @@ speeches = dict(
 @attach_cache()
 def report(ctx: typer.Context, manager: CacheManager):  # pyright: ignore[reportUnusedParameter]
     speaker = choice(list(speeches.keys()))
-    path = f"{speaker}/speech.txt"
+    key = f"{speaker}/speech"
     used_cache = False
-    text: str
-    try:
-        text = manager.load_text(path)
-    except CacheError:
+    text: str | None
+
+    # Try to get from cache
+    text = manager.get(key)
+
+    if text is None:
         print(f"[red]Cache miss![/red] Loading text for {speaker}")
         text = speeches[speaker]
     else:
-        print(f"[green]Cache hit![/green] Loaded text from cache target [yellow]{path}[/yellow]")
+        print(f"[green]Cache hit![/green] Loaded text from cache key [yellow]{key}[/yellow]")
         used_cache = True
 
     with tweak_env(COLUMNS="80"):
         print(Panel(text))
 
     if not used_cache:
-        manager.store_text(text, path)
-        print(f"Stored text at cache target [yellow]{path}[/yellow]")
+        manager.set(key, text)
+        print(f"Stored text at cache key [yellow]{key}[/yellow]")
 
 
 if __name__ == "__main__":

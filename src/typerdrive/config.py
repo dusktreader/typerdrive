@@ -90,6 +90,14 @@ class TyperdriveConfig(BaseModel):
         """
         return xdg_cache_home() / self.app_name
 
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def files_dir(self) -> Path:
+        """
+        Retrieve the directory where files will be stored.
+        """
+        return xdg_state_home() / self.app_name / "files"
+
 
 _typerdrive_config: TyperdriveConfig = TyperdriveConfig.model_construct()
 

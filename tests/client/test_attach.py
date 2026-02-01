@@ -105,7 +105,7 @@ class TestWithParameters:
 
         @cli.command()
         @attach_client()
-        def noop(ctx: typer.Context, mgr: ClientManager):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context, mgr: ClientManager):  # pyright: ignore[reportUnusedFunction]
             assert isinstance(mgr, ClientManager)
             assert mgr.clients == {}
             print("Passed!")
@@ -118,7 +118,7 @@ class TestWithParameters:
         @cli.command()
         @attach_settings(ClientSettings)
         @attach_client(sith="https://the.dark.side", jedi="url_base")
-        def noop(ctx: typer.Context, jedi: TyperdriveClient, sith: TyperdriveClient):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context, jedi: TyperdriveClient, sith: TyperdriveClient):  # pyright: ignore[reportUnusedFunction]
             assert sith is not None
             assert sith.base_url == "https://the.dark.side"
 

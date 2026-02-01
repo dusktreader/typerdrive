@@ -12,7 +12,6 @@ from typerdrive.cache.exceptions import CacheError
 from typerdrive.cache.manager import CacheManager
 from typerdrive.cloaked import CloakingDevice
 from typerdrive.context import from_context, to_context
-from typerdrive.dirs import show_directory
 
 
 def get_cache_manager(ctx: typer.Context) -> CacheManager:
@@ -40,6 +39,7 @@ def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
     Parameters:
         show: If set, show the cache after the function runs.
     """
+
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         for key in func.__annotations__.keys():
@@ -58,7 +58,7 @@ def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
             ret_val = func(ctx, *args, **kwargs)
 
             if show:
-                show_directory(manager.cache_dir, subject="Current cache")
+                manager.show(include_stats=False)
 
             return ret_val
 

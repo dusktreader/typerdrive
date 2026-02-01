@@ -9,33 +9,34 @@ import typer
 from typerdrive.cache.attach import attach_cache, get_cache_manager
 from typerdrive.cache.exceptions import CacheError
 from typerdrive.cache.manager import CacheManager
-from typerdrive.handle_errors import handle_errors
 from typerdrive.format import terminal_message
+from typerdrive.handle_errors import handle_errors
 
 
 @handle_errors("Failed to clear cache", handle_exc_class=CacheError)
 @attach_cache()
 def clear(
     ctx: typer.Context,
-    path: Annotated[
+    group: Annotated[
         str | None,
-        typer.Option(help="Clear only the entry matching this path. If not provided, clear the entire cache"),
+        typer.Option(help="Clear only entries with this group. If not provided, clear entire cache"),
     ] = None,
 ):
     """
-    Remove data from the cache.
+    Remove multiple entries from the cache.
 
     Parameters:
-        path: If provided, only remove the data at the given cache key. Otherwise, clear the entire cache.
+        group: If provided, only remove entries with this group. Otherwise, clear entire cache.
     """
     manager: CacheManager = get_cache_manager(ctx)
-    if path:
-        manager.clear_path(path)
-        terminal_message(f"Cleared entry at cache target {str(path)}")
+
+    if group:
+        count = manager.clear(group=group)
+        terminal_message(f"Cleared {count} entries with group '{group}'")
     else:
         typer.confirm("Are you sure you want to clear the entire cache?", abort=True)
-        count = manager.clear_all()
-        terminal_message(f"Cleared all {count} files from cache")
+        count = manager.clear()
+        terminal_message(f"Cleared {count} entries from cache")
 
 
 def add_clear(cli: typer.Typer):
@@ -46,12 +47,27 @@ def add_clear(cli: typer.Typer):
 
 
 @handle_errors("Failed to show cache", handle_exc_class=CacheError)
-@attach_cache(show=True)
-def show(ctx: typer.Context):  # pyright: ignore[reportUnusedParameter]
+@attach_cache()
+def show(
+    ctx: typer.Context,
+    group: Annotated[
+        str | None,
+        typer.Option(help="Filter entries by group"),
+    ] = None,
+    stats: Annotated[
+        bool,
+        typer.Option(help="Show cache statistics instead of entries"),
+    ] = False,
+):
     """
-    Show the current cache directory.
+    Show cache contents or statistics.
+
+    Parameters:
+        group: Optional group to filter entries
+        stats: If True, show statistics instead of entries
     """
-    pass
+    manager: CacheManager = get_cache_manager(ctx)
+    manager.show(group=group, show_stats=stats)
 
 
 def add_show(cli: typer.Typer):

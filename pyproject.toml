@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.7.2"
+version = "0.8.0"
 description = "Develop API-Connected Typer Apps at Lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -10,6 +10,7 @@ license-files = ["LICENSE.md"]
 
 requires-python = ">=3.12, <3.15"
 dependencies = [
+    "diskcache~=5.6",
     "httpx~=0.28",
     "humanize~=4.12",
     "inflection~=0.5",
@@ -94,6 +95,7 @@ files = ["src/typerdrive", "tests"]
 [[tool.mypy.overrides]]
 module = [
     "pyperclip",
+    "diskcache",
 ]
 ignore_missing_imports = true
 
@@ -108,13 +110,7 @@ reportUnusedCallResult = false
 extend-ignore-identifiers-re = []
 
 
-[tool.hatch.build.targets.wheel]
-packages = [
-    "src/typerdrive",
-    "src/typerdrive_demo",
-]
-
-
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv-build>=0.1.0"]
+build-backend = "uv_build"
+

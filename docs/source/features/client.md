@@ -73,7 +73,8 @@ $ python examples/client/attach.py --person-id=9000
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
-In this case, we attempted to fetch a person that doesn't exist on `SWAPI`, consequently, the server returned a `404: Not
+In this case, we attempted to fetch a person that doesn't exist on `SWAPI`, consequently, the server returned a `404:
+Not
 Found` response. Since our request specified that a 200 was to be expected, an error was raised. That error was neatly
 handled by the `@handle_errors()` decorator and presented nicely to the user.
 

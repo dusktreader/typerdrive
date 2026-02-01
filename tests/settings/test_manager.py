@@ -36,7 +36,7 @@ class RequiredFieldsModel(BaseModel):
 
 @pytest.fixture
 def fake_settings_path(tmp_path: Path) -> Generator[Path, None, None]:
-    fake_settings_dir = tmp_path / ".local/share/test"
+    fake_settings_dir = tmp_path / ".local/state/test"
     fake_settings_dir.mkdir(parents=True)
     settings_path = fake_settings_dir / "settings.json"
 
@@ -265,9 +265,7 @@ class TestSettingsManager:
         ).strip()
         assert expected == computed
 
-
     def test_pretty__does_not_error_with_no_default_fields(self):
-
         class NoDefaultsModel(BaseModel):
             name: str
             planet: str

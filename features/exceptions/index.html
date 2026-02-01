@@ -390,6 +390,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Files
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../logging/" class="md-nav__link">
         
   
@@ -704,6 +727,29 @@
   
   <span class="md-ellipsis">
     Cache
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Files
     
   </span>
   
@@ -1132,7 +1178,8 @@ match the user's guess. This provides a nice way to see how the error handling w
 print the message. Instead, it raises a <code>TyperdriveError</code> which is handled by the <code>@handle_errors()</code> decorator instead.</p>
 <p>No stack trace is shown to the user and the message that is displayed has none of the trappings of an exception message.
 Instead, it's clear and simple so the user will understand what is going on.</p>
-<p>The great power of this error handling is that a <code>TyperdriveError</code> that is raised in any code that is <em>called</em> by the command
+<p>The great power of this error handling is that a <code>TyperdriveError</code> that is raised in any code that is <em>called</em> by the
+command
 function will also be caught and presented nicely to the user.</p>
 <p>Next, let's try the command with the <code>--show-logs</code> option that is available:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ python examples/exceptions/handle_errors.py tails --show-logs
@@ -1184,7 +1231,8 @@ param to show a traceback of the handled error in the logs.</p>
 <p>All three of the <code>do_.*</code> parameters are useful, but the <code>do_except</code> parameter is the most powerful because you can do
 some post-processing on the error any time one is handled.</p>
 <p>It's worth pointing out here that this example doesn't tell the <code>@handle_errors()</code> decorator what kind of exceptions it
-should handle. By default, <code>@handle_errors()</code> will only handle instances of <code>TyperdriveError</code> or one of its descendants. If
+should handle. By default, <code>@handle_errors()</code> will only handle instances of <code>TyperdriveError</code> or one of its descendants.
+If
 you want to handle a different exception type (or any of its descendants), you can provide it in the <code>handle_exc_class</code>
 keyword argument. If, for instance, you wanted the handler to catch any and all errors that might be raised in the
 command function, you could pass <code>handle_exc_class=Exception</code> to the decorator.</p>
@@ -1192,7 +1240,8 @@ command function, you could pass <code>handle_exc_class=Exception</code> to the 
 <p>Now, let's dive a little deeper into the details of the <code>@handle_errors()</code> decorator.</p>
 <h3 id="base_message"><code>base_message</code></h3>
 <p>This is the <code>base_message</code> that will be included with the final message that is passed in the <code>DoExceptParams</code> that are
-passed to the <code>do_except</code> function. This base message can be overridden by setting the <code>subject</code> on a <code>TyperdriveError</code> (or
+passed to the <code>do_except</code> function. This base message can be overridden by setting the <code>subject</code> on a <code>TyperdriveError</code>
+(or
 exception class derived from it. When the error message is displayed for the user, the <code>base_message</code> is the text that
 is used for the "subject" (also known as "title") of the panel that the exception's message will be displayed inside of.
 This parameter is required.</p>
@@ -1202,7 +1251,8 @@ This parameter is required.</p>
 <h3 id="handle_exc_class"><code>handle_exc_class</code></h3>
 <p>This keyword argument identifies the exception type that will be handled by the <code>@handle_errors()</code> decorator. Any
 exception that is an instance of this type or an instance of any class that inherits from it will be handled. By
-default, this kwarg is set to <code>TyperdriveError</code> exception class. It is also possible to provide a <code>tuple</code> of exception types
+default, this kwarg is set to <code>TyperdriveError</code> exception class. It is also possible to provide a <code>tuple</code> of exception
+types
 that should be handled by the decorator.</p>
 <p>This parameter is an analog of the
 <a href="https://dusktreader.github.io/py-buzz/reference/#buzz.tools.handle_errors"><code>handle_exc_class</code></a> parameter used in the

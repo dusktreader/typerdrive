@@ -14,7 +14,7 @@
         <link rel="prev" href="../settings/">
       
       
-        <link rel="next" href="../logging/">
+        <link rel="next" href="../files/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -432,6 +432,66 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-cache-commands-to-your-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding Cache Commands to Your CLI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#viewing-the-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      Viewing the cache
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtering-by-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering by group
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#viewing-cache-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Viewing cache statistics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clearing-by-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clearing by group
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clearing-the-entire-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clearing the entire cache
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -497,90 +557,90 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cachemanagerresolve_path" class="md-nav__link">
+  <a href="#cachemanager__init__" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.resolve_path()
+      CacheManager.__init__()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerlist_items" class="md-nav__link">
+  <a href="#cachemanagerset" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.list_items()
+      CacheManager.set()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerstore_bytes" class="md-nav__link">
+  <a href="#cachemanagerget" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.store_bytes()
+      CacheManager.get()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerstore_text" class="md-nav__link">
+  <a href="#cachemanagersetdefault" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.store_text()
+      CacheManager.setdefault()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerstore_json" class="md-nav__link">
+  <a href="#cachemanagerdelete" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.store_json()
+      CacheManager.delete()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerload_bytes" class="md-nav__link">
+  <a href="#cachemanagerclear" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.load_bytes()
+      CacheManager.clear()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerload_text" class="md-nav__link">
+  <a href="#cachemanagerkeys" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.load_text()
+      CacheManager.keys()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerload_json" class="md-nav__link">
+  <a href="#cachemanagerget_ttl" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.load_json()
+      CacheManager.get_ttl()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerclear_path" class="md-nav__link">
+  <a href="#cachemanagerstats" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.clear_path()
+      CacheManager.stats()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerclear_all" class="md-nav__link">
+  <a href="#cachemanagershow" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.clear_all()
+      CacheManager.show()
     </span>
   </a>
   
@@ -593,6 +653,126 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Use Cases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authentication-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication Tokens
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-response-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Response Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Session Data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rate Limiting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#computation-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Computation Results
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#working-with-expiring-entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Working with expiring entries
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-groups-for-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using groups for organization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache-size-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cache size management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caching-complex-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Caching complex objects
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differences-from-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Differences from Files
+    </span>
+  </a>
   
 </li>
       
@@ -600,6 +780,29 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Files
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -796,6 +999,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Files
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/client/" class="md-nav__link">
         
   
@@ -907,6 +1133,66 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-cache-commands-to-your-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding Cache Commands to Your CLI
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#viewing-the-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      Viewing the cache
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filtering-by-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering by group
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#viewing-cache-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Viewing cache statistics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clearing-by-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clearing by group
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clearing-the-entire-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clearing the entire cache
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -972,90 +1258,90 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cachemanagerresolve_path" class="md-nav__link">
+  <a href="#cachemanager__init__" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.resolve_path()
+      CacheManager.__init__()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerlist_items" class="md-nav__link">
+  <a href="#cachemanagerset" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.list_items()
+      CacheManager.set()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerstore_bytes" class="md-nav__link">
+  <a href="#cachemanagerget" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.store_bytes()
+      CacheManager.get()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerstore_text" class="md-nav__link">
+  <a href="#cachemanagersetdefault" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.store_text()
+      CacheManager.setdefault()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerstore_json" class="md-nav__link">
+  <a href="#cachemanagerdelete" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.store_json()
+      CacheManager.delete()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerload_bytes" class="md-nav__link">
+  <a href="#cachemanagerclear" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.load_bytes()
+      CacheManager.clear()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerload_text" class="md-nav__link">
+  <a href="#cachemanagerkeys" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.load_text()
+      CacheManager.keys()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerload_json" class="md-nav__link">
+  <a href="#cachemanagerget_ttl" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.load_json()
+      CacheManager.get_ttl()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerclear_path" class="md-nav__link">
+  <a href="#cachemanagerstats" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.clear_path()
+      CacheManager.stats()
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#cachemanagerclear_all" class="md-nav__link">
+  <a href="#cachemanagershow" class="md-nav__link">
     <span class="md-ellipsis">
-      CacheManager.clear_all()
+      CacheManager.show()
     </span>
   </a>
   
@@ -1068,6 +1354,126 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Use Cases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authentication-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authentication Tokens
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api-response-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      API Response Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Session Data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rate Limiting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#computation-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Computation Results
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#working-with-expiring-entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Working with expiring entries
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-groups-for-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using groups for organization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache-size-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cache size management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caching-complex-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Caching complex objects
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#differences-from-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Differences from Files
+    </span>
+  </a>
   
 </li>
       
@@ -1100,19 +1506,23 @@ they fit well with the ephemeral nature of a cache.</p>
 <p>To provide this functionality, <code>typerdrive</code> provides a cache manager and the <code>cache</code> subcommand to manage your app's
 cache.</p>
 <h2 id="overview">Overview</h2>
-<p>The <code>typerdrive</code> package provides the functionality to store, retrieve, and clear three types of data:</p>
+<p>The <code>typerdrive</code> package provides a high-performance, disk-based cache using the <code>diskcache</code> library. The cache can
+store any Python object that can be pickled, including:</p>
 <ul>
 <li>binary data</li>
 <li>text data</li>
-<li>json data</li>
+<li>dictionaries and lists</li>
+<li>Pydantic models</li>
+<li>custom Python objects</li>
 </ul>
 <p>To gain access to your cache, you can retrieve the <code>CacheManager</code> that is bound to the user context through the use of
 the <code>@attach_cache</code> decorator by providing an argument to your command with the <code>CacheManager</code> type.</p>
 <div class="admonition note">
 <p class="admonition-title">The type is important!</p>
-<p>The type for you "manager" argument must be <code>CacehManager</code>, or Typer will throw an error!</p>
+<p>The type for your "manager" argument must be <code>CacheManager</code>, or Typer will throw an error!</p>
 </div>
-<p>You can also view your cache at any time and clear one or all of the data in it through <code>cache</code> subcommands.</p>
+<p>You can also view your cache at any time, delete specific entries, or clear groups of entries through <code>cache</code>
+subcommands.</p>
 <h2 id="usage">Usage</h2>
 <p>It's useful to start with a code example to see the cache in action:</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
@@ -1143,260 +1553,558 @@ the <code>@attach_cache</code> decorator by providing an argument to your comman
 <span class="normal"><a href="#__codelineno-0-26">26</a></span>
 <span class="normal"><a href="#__codelineno-0-27">27</a></span>
 <span class="normal"><a href="#__codelineno-0-28">28</a></span>
-<span class="normal"><a href="#__codelineno-0-29">29</a></span>
-<span class="normal"><a href="#__codelineno-0-30">30</a></span>
-<span class="normal"><a href="#__codelineno-0-31">31</a></span>
-<span class="normal"><a href="#__codelineno-0-32">32</a></span>
-<span class="normal"><a href="#__codelineno-0-33">33</a></span>
-<span class="normal"><a href="#__codelineno-0-34">34</a></span>
-<span class="normal"><a href="#__codelineno-0-35">35</a></span>
-<span class="normal"><a href="#__codelineno-0-36">36</a></span>
-<span class="normal"><a href="#__codelineno-0-37">37</a></span>
-<span class="normal"><a href="#__codelineno-0-38">38</a></span>
-<span class="normal"><a href="#__codelineno-0-39">39</a></span>
-<span class="normal"><a href="#__codelineno-0-40">40</a></span>
-<span class="normal"><a href="#__codelineno-0-41">41</a></span>
-<span class="normal"><a href="#__codelineno-0-42">42</a></span>
-<span class="normal"><a href="#__codelineno-0-43">43</a></span>
-<span class="normal"><a href="#__codelineno-0-44">44</a></span>
-<span class="normal"><a href="#__codelineno-0-45">45</a></span>
-<span class="normal"><a href="#__codelineno-0-46">46</a></span>
-<span class="normal"><a href="#__codelineno-0-47">47</a></span>
-<span class="normal"><a href="#__codelineno-0-48">48</a></span>
-<span class="normal"><a href="#__codelineno-0-49">49</a></span>
-<span class="normal"><a href="#__codelineno-0-50">50</a></span>
-<span class="normal"><a href="#__codelineno-0-51">51</a></span>
-<span class="normal"><a href="#__codelineno-0-52">52</a></span>
-<span class="normal"><a href="#__codelineno-0-53">53</a></span>
-<span class="normal"><a href="#__codelineno-0-54">54</a></span>
-<span class="normal"><a href="#__codelineno-0-55">55</a></span>
-<span class="normal"><a href="#__codelineno-0-56">56</a></span>
-<span class="normal"><a href="#__codelineno-0-57">57</a></span>
-<span class="normal"><a href="#__codelineno-0-58">58</a></span>
-<span class="normal"><a href="#__codelineno-0-59">59</a></span>
-<span class="normal"><a href="#__codelineno-0-60">60</a></span>
-<span class="normal"><a href="#__codelineno-0-61">61</a></span>
-<span class="normal"><a href="#__codelineno-0-62">62</a></span>
-<span class="normal"><a href="#__codelineno-0-63">63</a></span>
-<span class="normal"><a href="#__codelineno-0-64">64</a></span>
-<span class="normal"><a href="#__codelineno-0-65">65</a></span>
-<span class="normal"><a href="#__codelineno-0-66">66</a></span>
-<span class="normal"><a href="#__codelineno-0-67">67</a></span>
-<span class="normal"><a href="#__codelineno-0-68">68</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">choice</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich</span><span class="w"> </span><span class="kn">import</span> <span class="nb">print</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">rich.panel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Panel</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">snick</span><span class="w"> </span><span class="kn">import</span> <span class="n">unwrap</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">CacheError</span><span class="p">,</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">add_cache_subcommand</span><span class="p">,</span> <span class="n">attach_cache</span><span class="p">,</span> <span class="n">set_typerdrive_config</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.env</span><span class="w"> </span><span class="kn">import</span> <span class="n">tweak_env</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="n">cli</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="n">add_cache_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="n">set_typerdrive_config</span><span class="p">(</span><span class="n">app_name</span><span class="o">=</span><span class="s2">&quot;cache-commands-example&quot;</span><span class="p">)</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="n">speeches</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>    <span class="n">yoda</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="sd">        Size matters not. Look at me. Judge me by my size, do you? Hmm? Hmm. And well you should not. For my ally is the</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="sd">        Force, and a powerful ally it is. Life creates it, makes it grow. Its energy surrounds us and binds us. Luminous</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="sd">        beings are we, not this crude matter. You must feel the Force around you; here, between you, me, the tree, the</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="sd">        rock, everywhere, yes. Even between the land and the ship.</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a>    <span class="p">),</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a>    <span class="n">leia</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="sd">        General Kenobi. Years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="sd">        against the Empire. I regret that I am unable to present my father&#39;s request to you in person, but my ship has</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="sd">        fallen under attack, and now I&#39;m afraid my mission to bring you to Alderaan has failed.  I have placed</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="sd">        information vital of the survival of the Rebellion into the memory systems of this R2 unit.My father will know</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="sd">        how to retrieve it. You must see this droid safely delivered to him on Alderaan. This is our most desperate</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="sd">        hour. Help me, Obi-Wan Kenobi. You&#39;re my only hope.</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>    <span class="p">),</span>
-</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>    <span class="n">han</span><span class="o">=</span><span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="sd">        Kid, I&#39;ve flown from one side of this galaxy to the other; I&#39;ve seen a lot of strange stuff. But I&#39;ve never seen</span>
-</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="sd">        anything to make me believe that there&#39;s one all-powerful Force controlling everything. There&#39;s no mystical</span>
-</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="sd">        energy field that controls my destiny. Anyway, it&#39;s all a lot of simple tricks and nonsense.</span>
-</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="p">),</span>
-</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="p">)</span>
-</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="nd">@attach_cache</span><span class="p">()</span>
-</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>  <span class="c1"># pyright: ignore[reportUnusedParameter]</span>
-</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="n">speaker</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">speeches</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>    <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">speaker</span><span class="si">}</span><span class="s2">/speech.txt&quot;</span>
-</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>    <span class="n">used_cache</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a>    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>    <span class="k">try</span><span class="p">:</span>
-</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">load_text</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="k">except</span> <span class="n">CacheError</span><span class="p">:</span>
-</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Cache miss![/red] Loading text for </span><span class="si">{</span><span class="n">speaker</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a>        <span class="n">text</span> <span class="o">=</span> <span class="n">speeches</span><span class="p">[</span><span class="n">speaker</span><span class="p">]</span>
-</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>    <span class="k">else</span><span class="p">:</span>
-</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Cache hit![/green] Loaded text from cache target [yellow]</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
-</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="n">used_cache</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>
-</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="k">with</span> <span class="n">tweak_env</span><span class="p">(</span><span class="n">COLUMNS</span><span class="o">=</span><span class="s2">&quot;80&quot;</span><span class="p">):</span>
-</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">Panel</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
-</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>
-</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">used_cache</span><span class="p">:</span>
-</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>        <span class="n">manager</span><span class="o">.</span><span class="n">store_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
-</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stored text at cache target [yellow]</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
-</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a>
-</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>
-</span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-</span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a>    <span class="n">cli</span><span class="p">()</span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_cache</span><span class="p">,</span> <span class="n">CacheManager</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="n">cli</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="k">def</span><span class="w"> </span><span class="nf">store_data</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a>    <span class="c1"># Store simple values</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;api_token&quot;</span><span class="p">,</span> <span class="s2">&quot;secret-token-12345&quot;</span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>    <span class="c1"># Store with expiration (1 hour)</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;jedi_master&quot;</span><span class="p">},</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>    <span class="c1"># Store with groups for organizing related entries</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;user:123:profile&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Yoda&quot;</span><span class="p">},</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;user_data&quot;</span><span class="p">)</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;user:456:profile&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Obi-Wan&quot;</span><span class="p">},</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;user_data&quot;</span><span class="p">)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data stored in cache!&quot;</span><span class="p">)</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>    <span class="n">token</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_token&quot;</span><span class="p">)</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="n">session</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">{})</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Token: </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Session: </span><span class="si">{</span><span class="n">session</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<p>In this toy example, some text is stored in the cache to be used for future executions of the <code>report</code> command.</p>
-<p>If the data isn't in the cache yet, it's "loaded". The data is printed and then stored in the cache for future use:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>$ python examples/cache/commands.py report
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Cache miss! Loading text...
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>╭──────────────────────────────────────────────────────────────────────────────╮
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│ Size matters not. Look at me. Judge me by my size, do you? Hmm? Hmm. And     │
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│ well you should not. For my ally is the Force, and a powerful ally it is.    │
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│ Life creates it, makes it grow. Its energy surrounds us and binds us.        │
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│ Luminous beings are we, not this crude matter. You must feel the Force       │
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│ around you; here, between you, me, the tree, the rock, everywhere, yes. Even │
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│ between the land and the ship.                                               │
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>╰──────────────────────────────────────────────────────────────────────────────╯
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>Stored text at cache target yoda/speech.txt
+<h3 id="adding-cache-commands-to-your-cli">Adding Cache Commands to Your CLI</h3>
+<p>To add the cache subcommand to your CLI:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_cache_subcommand</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">cli</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">add_cache_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Now your CLI has:</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># - cache show [--group] [--stats]</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># - cache clear [--group]</span>
 </span></code></pre></div>
-<p>When you run the command again, the data is retrieved from the cache instead:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$ python examples/cache/commands.py report
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Cache hit! Loaded text from cache target yoda/speech.txt
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>╭──────────────────────────────────────────────────────────────────────────────╮
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│ Size matters not. Look at me. Judge me by my size, do you? Hmm? Hmm. And     │
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│ well you should not. For my ally is the Force, and a powerful ally it is.    │
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│ Life creates it, makes it grow. Its energy surrounds us and binds us.        │
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│ Luminous beings are we, not this crude matter. You must feel the Force       │
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│ around you; here, between you, me, the tree, the rock, everywhere, yes. Even │
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│ between the land and the ship.                                               │
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>╰──────────────────────────────────────────────────────────────────────────────╯
+<h3 id="viewing-the-cache">Viewing the cache</h3>
+<p>You can view the current cache contents using the <code>cache show</code> command:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$ python my_app.py cache show
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>Cache contains 4 entries:
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  Key                Group       TTL        
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a> ───────────────────────────────────────── 
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  api_token                      never      
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  session                        58 minutes 
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>  user:123:profile   user_data   never      
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  user:456:profile   user_data   never      
 </span></code></pre></div>
-<p>This time, the data was found in the cache so it was loaded from there.</p>
-<p>Running the command a few more times will eventually store all the speeches in the cache. Now, you can view the cache if
-to see what has been saved in it:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ python examples/cache/commands.py cache show
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>╭─ Current cache ──────────────────────────────────────────────────────────────╮
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│                                                                              │
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│ 📂 /home/dusktreader/.cache/commands.py                                      │
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│ ├── 📂 han                                                                   │
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│ │   └── 📄 speech.txt (313 Bytes)                                            │
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│ ├── 📂 leia                                                                  │
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>│ │   └── 📄 speech.txt (594 Bytes)                                            │
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>│ └── 📂 yoda                                                                  │
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>│     └── 📄 speech.txt (395 Bytes)                                            │
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>│                                                                              │
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>╰─ Storing 1.3 kB in 3 files ──────────────────────────────────────────────────╯
+<p>The TTL (Time To Live) column shows when each entry will expire in human-readable format:
+- <code>never</code> - No expiration set
+- <code>2 hours</code>, <code>30 minutes</code>, etc. - Time remaining until expiration
+- <code>expired</code> - Entry no longer exists or has expired</p>
+<h3 id="filtering-by-group">Filtering by group</h3>
+<p>You can filter the cache view by group to see related entries:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>$ python my_app.py cache show --group=user_data
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Cache contains 2 entries (group=user_data):
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  Key                Group       TTL   
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a> ──────────────────────────────────── 
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  user:123:profile   user_data   never 
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  user:456:profile   user_data   never 
 </span></code></pre></div>
-<p>Let's say that we only want to remove a single item from the cache. We can do that using the <code>clear</code> command with a path
-for the cache item. In this case, let's remove yoda's speech:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ python examples/cache/commands.py cache clear --path=yoda/speech.txt
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>╭──────────────────────────────────────────────────────────────────────────────╮
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│                                                                              │
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│   Cleared entry at cache target yoda/speech.txt                              │
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>│                                                                              │
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>╰──────────────────────────────────────────────────────────────────────────────╯
+<h3 id="viewing-cache-statistics">Viewing cache statistics</h3>
+<p>You can view cache statistics using the <code>--stats</code> flag:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>$ python my_app.py cache show --stats
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Cache Statistics:
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  Metric           Value 
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a> ─────────────────────── 
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>  Size (entries)   4     
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  Volume (bytes)   1024  
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  Hits             12    
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>  Misses           3     
 </span></code></pre></div>
-<p>Let's view the cache again to verify that the file was removed:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ python examples/cache/commands.py cache show
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>╭─ Current cache ──────────────────────────────────────────────────────────────╮
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>│                                                                              │
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>│ 📂 /home/dusktreader/.cache/commands.py                                      │
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>│ ├── 📂 han                                                                   │
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>│ │   └── 📄 speech.txt (313 Bytes)                                            │
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>│ └── 📂 leia                                                                  │
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>│     └── 📄 speech.txt (594 Bytes)                                            │
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>│                                                                              │
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>╰─ Storing 907 Bytes in 2 files ───────────────────────────────────────────────╯
+<h3 id="clearing-by-group">Clearing by group</h3>
+<p>To remove all entries with a specific group, use the <code>cache clear</code> command with the <code>--group</code> option:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>$ python my_app.py cache clear --group=user_data
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Cleared 2 entries with group &#39;user_data&#39;
 </span></code></pre></div>
-<p>Great! Now, we could go through and clean the remaining files up one at a time. But, the <code>clear</code> command will empty the
-whole cache out if you run it without a specific path:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ python examples/cache/commands.py cache clear
+<h3 id="clearing-the-entire-cache">Clearing the entire cache</h3>
+<p>To clear all cache entries, run <code>cache clear</code> without any options. You'll be asked to confirm:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>$ python my_app.py cache clear
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Are you sure you want to clear the entire cache? [y/N]: y
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>╭──────────────────────────────────────────────────────────────────────────────╮
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│                                                                              │
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>│   Cleared all 2 files from cache                                             │
-</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>│                                                                              │
-</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>╰──────────────────────────────────────────────────────────────────────────────╯
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Cleared 4 entries from cache
 </span></code></pre></div>
-<p>Note that you have to confirm whenever you request to clear the entire cache to prevent accidental deletion.</p>
 <h2 id="details">Details</h2>
 <p>Let's take a closer look at the details of each <code>cache</code> subcommand and the methods of the <code>CacheManager</code>:</p>
 <h3 id="cache-sub-commands"><code>cache</code> sub-commands</h3>
 <p>The <code>cache</code> command provides two sub-commands to manage the cache.</p>
 <h4 id="clear"><code>clear</code></h4>
-<p>The <code>clear</code> command gives you the ability to remove items from the cache. You can target a specific entry in the cache
-by passing it a specific path using the <code>--path</code> option. If the item is not found in the cache at that location, an
-error will be raised. If it is found, the item will be deleted.</p>
-<p>If no path is provided to the <code>clear</code> command, then the entire cache will be cleared out. You are required to confirm
-your action to make sure that mistakes are not made.</p>
+<p>The <code>clear</code> command removes multiple entries from the cache. You can use it in two ways:</p>
+<ol>
+<li><strong>Clear by group</strong>: Remove all entries with a specific group using <code>--group</code></li>
+<li><strong>Clear all</strong>: Remove all cache entries (requires confirmation)</li>
+</ol>
 <p>The help text from the <code>clear</code> command looks like this:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$ python examples/cache/commands.py cache clear --help
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>$ python my_app.py cache clear --help
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a> Usage: commands.py cache clear [OPTIONS]
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a> Usage: my_app.py cache clear [OPTIONS]
 </span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>╭─ Options ────────────────────────────────────────────────────────────────────╮
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>│ --path        TEXT  Clear only the entry matching this path. If not provided,│
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>│                     clear the entire cache [default: None]                   │
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>│ --help              Show this message and exit.                              │
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>╰──────────────────────────────────────────────────────────────────────────────╯
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a> Remove multiple entries from the cache.
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>╭─ Options ───────────────────────────────────────────────────────────────────────╮
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>│ --group        TEXT  Clear only entries with this group. If not provided, clear │
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>│                      entire cache                                               │
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>│ --help               Show this message and exit.                                │
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>╰─────────────────────────────────────────────────────────────────────────────────╯
 </span></code></pre></div>
 <h4 id="show"><code>show</code></h4>
-<p>The <code>show</code> command just shows the current state of the cache. It will show the entire tree structure of the data stored
-in the cache and a report about how big the cache is and how many files are stored in it.</p>
+<p>The <code>show</code> command displays cache contents or statistics. It supports filtering by group:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>$ python my_app.py cache show --help
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a> Usage: my_app.py cache show [OPTIONS]
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a> Show cache contents or statistics.
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>╭─ Options ────────────────────────────────────────────────────────────────────╮
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>│ --group        TEXT  Filter entries by group                                 │
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>│ --stats              Show cache statistics instead of entries                │
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>│ --help               Show this message and exit.                             │
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>╰──────────────────────────────────────────────────────────────────────────────╯
+</span></code></pre></div>
 <h3 id="the-get_cache_manager-function">The <code>get_cache_manager()</code> function</h3>
 <p>The <code>attach</code> submodule of <code>typerdrive.cache</code> provides a <code>get_cache_manager()</code> function. If you want to avoid the magic
 of using a parameter to your command with the <code>CacheManager</code> type, you can get access to the <code>CacheManager</code> instance
 from the <code>typer.Context</code> using the <code>get_cache_manager()</code> function instead.</p>
 <h3 id="cachemanager-methods"><code>CacheManager</code> methods</h3>
 <p>The <code>CacheManager</code> provides several methods for interacting with the cache.</p>
-<h4 id="cachemanagerresolve_path"><code>CacheManager.resolve_path()</code></h4>
-<p>This method converts a cache target path like <code>yoda/speech.txt</code> into the absolute path to the file where the data is
-stored. It does several checks to make sure that the file exists and that the resolved path is actually within the cache
-directory (to prevent sneaky use of <code>..</code>).</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.resolve_path">Method Reference</a></p>
-<h4 id="cachemanagerlist_items"><code>CacheManager.list_items()</code></h4>
-<p>This method shows all the items stored in a path within the cache. It will only list files, not directories. If the
-target path does not exist or is not a directory, an exception will be raised.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.list_items">Method Reference</a></p>
-<h4 id="cachemanagerstore_bytes"><code>CacheManager.store_bytes()</code></h4>
-<p>This method stores binary data in a cache target. An optional <code>mode</code> keyword argument can be provided to control the
-permissions of the cache entry. So, for example, if you want only your user to be able to read and write to the entry,
-you might use a <code>mode</code> of <code>0o600</code>.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.store_bytes">Method Reference</a></p>
-<h4 id="cachemanagerstore_text"><code>CacheManager.store_text()</code></h4>
-<p>This method stores text data in a cache target. It can also be given a <code>mode</code> parameter.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.store_text">Method Reference</a></p>
-<h4 id="cachemanagerstore_json"><code>CacheManager.store_json()</code></h4>
-<p>This method stores a dictionary of data in a cache target. The dictionary must be JSON serializable or an error will be
-thrown. The JSON written to the file is formatted to be human readable. This method can also be provided a <code>mode</code>
-parameter.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.store_json">Method Reference</a></p>
-<h4 id="cachemanagerload_bytes"><code>CacheManager.load_bytes()</code></h4>
-<p>This method loads binary data from a cache target. If the cache target does not exist, an error will be thrown.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.load_bytes">Method Reference</a></p>
-<h4 id="cachemanagerload_text"><code>CacheManager.load_text()</code></h4>
-<p>This method loads text data from a cache target. If the cache target does not exist, an error will be thrown.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.load_text">Method Reference</a></p>
-<h4 id="cachemanagerload_json"><code>CacheManager.load_json()</code></h4>
-<p>This method loads a JSON serialized dictionary from a cache target. If the cache target does not exist, an error will be
-thrown. If the data at the cache target cannot be serialized, an error will be thrown.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.load_json">Method Reference</a></p>
-<h4 id="cachemanagerclear_path"><code>CacheManager.clear_path()</code></h4>
-<p>This method removes an entry from the cache at the provided target. If the target does not exist, an error will be
-thrown. If the parent directory of the entry is empty after it is removed, the parent directory will be removed as well.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.clear_path">Method Reference</a></p>
-<h4 id="cachemanagerclear_all"><code>CacheManager.clear_all()</code></h4>
-<p>This method will remove all items from the cache.</p>
-<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.clear_all">Method Reference</a></p>
+<h4 id="cachemanager__init__"><code>CacheManager.__init__()</code></h4>
+<p>Initialize the cache manager with optional configuration:</p>
+<ul>
+<li><code>size_limit</code>: Maximum size of cache in bytes (default: 1GB)</li>
+<li><code>eviction_policy</code>: Policy for removing entries when size limit is reached (default:
+  <code>EvictionPolicy.LEAST_RECENTLY_USED</code>)</li>
+</ul>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">EvictionPolicy</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">manager</span> <span class="o">=</span> <span class="n">CacheManager</span><span class="p">(</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    <span class="n">size_limit</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">30</span><span class="p">,</span>  <span class="c1"># 1GB</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="n">eviction_policy</span><span class="o">=</span><span class="n">EvictionPolicy</span><span class="o">.</span><span class="n">LEAST_RECENTLY_USED</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Available eviction policies:
+- <code>EvictionPolicy.LEAST_RECENTLY_USED</code>:   Remove least recently accessed items
+- <code>EvictionPolicy.LEAST_FREQUENTLY_USED</code>: Remove least frequently accessed items
+- <code>EvictionPolicy.NONE</code>:                  No automatic eviction (errors when full)</p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.__init__">Method Reference</a></p>
+<h4 id="cachemanagerset"><code>CacheManager.set()</code></h4>
+<p>Store a value in the cache. The value can be any picklable Python object.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Simple value</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># With expiration</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;yoda&quot;</span><span class="p">},</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="c1"># With group for group assignment</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;user:123&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Luke&quot;</span><span class="p">},</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;users&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.set">Method Reference</a></p>
+<h4 id="cachemanagerget"><code>CacheManager.get()</code></h4>
+<p>Retrieve a value from the cache. Returns the default value if the key doesn't exist or has expired.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Get with default</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">value</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;not found&quot;</span><span class="p">)</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Get without default (returns None if not found)</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">value</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.get">Method Reference</a></p>
+<h4 id="cachemanagersetdefault"><code>CacheManager.setdefault()</code></h4>
+<p>Get a value from the cache, or set and return a default value if the key doesn't exist. This is similar to Python's
+<code>dict.setdefault()</code> method.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Get from cache, or set default if not found</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">token</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;api_token&quot;</span><span class="p">,</span> <span class="s2">&quot;default-token&quot;</span><span class="p">)</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># With expiration</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">session</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="s2">&quot;session&quot;</span><span class="p">,</span>
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="p">{</span><span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="s2">&quot;guest&quot;</span><span class="p">},</span>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="p">)</span>
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="c1"># With group</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="n">data</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="p">[],</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;temp_data&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>This is more concise than using <code>get()</code> and <code>set()</code> separately:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Instead of:</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">value</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">)</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>    <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="c1"># Use:</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="n">value</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.setdefault">Method Reference</a></p>
+<h4 id="cachemanagerdelete"><code>CacheManager.delete()</code></h4>
+<p>Remove a specific entry from the cache. Returns <code>True</code> if the key was deleted, <code>False</code> if it didn't exist.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">if</span> <span class="n">manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;old_key&quot;</span><span class="p">):</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Key deleted&quot;</span><span class="p">)</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">else</span><span class="p">:</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Key not found&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.delete">Method Reference</a></p>
+<h4 id="cachemanagerclear"><code>CacheManager.clear()</code></h4>
+<p>Remove multiple entries from the cache. Can clear by group or clear everything.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Clear all entries with a specific group</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">count</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;temp_data&quot;</span><span class="p">)</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> entries&quot;</span><span class="p">)</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="c1"># Clear all entries</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="n">count</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Removed </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> entries&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.clear">Method Reference</a></p>
+<h4 id="cachemanagerkeys"><code>CacheManager.keys()</code></h4>
+<p>Get a list of cache keys, optionally filtered by pattern and/or group.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># All keys</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">all_keys</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Filter by regex pattern</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">user_keys</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;user:\d+&quot;</span><span class="p">)</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Filter by group</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">grouped_keys</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;sessions&quot;</span><span class="p">)</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1"># Combine filters</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">filtered</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;user:.*&quot;</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;active&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.keys">Method Reference</a></p>
+<h4 id="cachemanagerget_ttl"><code>CacheManager.get_ttl()</code></h4>
+<p>Get the time-to-live (TTL) for a cache key in human-readable format.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># Check when an entry will expire</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">ttl</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_ttl</span><span class="p">(</span><span class="s2">&quot;api_token&quot;</span><span class="p">)</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Token expires in: </span><span class="si">{</span><span class="n">ttl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># e.g., &quot;2 hours&quot; or &quot;never&quot;</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="c1"># Check multiple entries</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="n">ttl</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_ttl</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ttl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Returns:
+- <code>"never"</code> - Entry has no expiration
+- <code>"2 hours"</code>, <code>"30 minutes"</code>, etc. - Human-readable time until expiration
+- <code>"expired"</code> - Entry doesn't exist or has already expired</p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.get_ttl">Method Reference</a></p>
+<h4 id="cachemanagerstats"><code>CacheManager.stats()</code></h4>
+<p>Get cache statistics including hits, misses, size, and volume. Returns a <code>CacheStats</code> Pydantic model.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">stats</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cache size: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2"> entries&quot;</span><span class="p">)</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cache volume: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">volume</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cache hits: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">hits</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cache misses: </span><span class="si">{</span><span class="n">stats</span><span class="o">.</span><span class="n">misses</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.stats">Method Reference</a></p>
+<h4 id="cachemanagershow"><code>CacheManager.show()</code></h4>
+<p>Display cache contents or statistics in a formatted table. This is the programmatic equivalent of the <code>cache show</code>
+command.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Show all entries</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">manager</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Show with group filter</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">manager</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;active&quot;</span><span class="p">)</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># Show statistics</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="n">manager</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">show_stats</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Note: The <code>pattern</code> parameter is available for programmatic use but not exposed in the CLI to avoid leaking
+implementation details to end users.</p>
+<p><a href="../../reference/cache/#typerdrive.cache.manager.CacheManager.show">Method Reference</a></p>
+<h2 id="use-cases">Use Cases</h2>
+<h3 id="authentication-tokens">Authentication Tokens</h3>
+<p>Cache authentication tokens to avoid repeated logins:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_cache</span><span class="p">,</span> <span class="n">CacheManager</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">login</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>    <span class="c1"># Authenticate and get token from identity provider</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>    <span class="n">token</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>    <span class="c1"># Cache token for 8 hours</span>
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;auth_token&quot;</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>
+</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Login successful! Token cached.&quot;</span><span class="p">)</span>
+</span><span id="__span-20-14"><a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a>
+</span><span id="__span-20-15"><a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-20-16"><a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-20-17"><a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a><span class="k">def</span><span class="w"> </span><span class="nf">api_request</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-20-18"><a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a>    <span class="n">token</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;auth_token&quot;</span><span class="p">)</span>
+</span><span id="__span-20-19"><a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a>
+</span><span id="__span-20-20"><a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a>    <span class="k">if</span> <span class="n">token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-20-21"><a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not authenticated. Please run &#39;login&#39; first.&quot;</span><span class="p">)</span>
+</span><span id="__span-20-22"><a id="__codelineno-20-22" name="__codelineno-20-22" href="#__codelineno-20-22"></a>        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-20-23"><a id="__codelineno-20-23" name="__codelineno-20-23" href="#__codelineno-20-23"></a>
+</span><span id="__span-20-24"><a id="__codelineno-20-24" name="__codelineno-20-24" href="#__codelineno-20-24"></a>    <span class="c1"># Use token for API request</span>
+</span><span id="__span-20-25"><a id="__codelineno-20-25" name="__codelineno-20-25" href="#__codelineno-20-25"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+</span><span id="__span-20-26"><a id="__codelineno-20-26" name="__codelineno-20-26" href="#__codelineno-20-26"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+</span></code></pre></div>
+<h3 id="api-response-caching">API Response Caching</h3>
+<p>Cache expensive API responses to reduce latency and API usage:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_cache</span><span class="p">,</span> <span class="n">CacheManager</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_data</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>    <span class="c1"># Create cache key from query</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>    <span class="n">cache_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;api_response:</span><span class="si">{</span><span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">16</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>    <span class="c1"># Try to get cached response</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>    <span class="n">cached</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>    <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using cached response&quot;</span><span class="p">)</span>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a>        <span class="k">return</span> <span class="n">cached</span>
+</span><span id="__span-21-17"><a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a>
+</span><span id="__span-21-18"><a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a>    <span class="c1"># Fetch from API</span>
+</span><span id="__span-21-19"><a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fetching from API...&quot;</span><span class="p">)</span>
+</span><span id="__span-21-20"><a id="__codelineno-21-20" name="__codelineno-21-20" href="#__codelineno-21-20"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">expensive_api_call</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</span><span id="__span-21-21"><a id="__codelineno-21-21" name="__codelineno-21-21" href="#__codelineno-21-21"></a>
+</span><span id="__span-21-22"><a id="__codelineno-21-22" name="__codelineno-21-22" href="#__codelineno-21-22"></a>    <span class="c1"># Cache for 15 minutes</span>
+</span><span id="__span-21-23"><a id="__codelineno-21-23" name="__codelineno-21-23" href="#__codelineno-21-23"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cache_key</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;api_cache&quot;</span><span class="p">)</span>
+</span><span id="__span-21-24"><a id="__codelineno-21-24" name="__codelineno-21-24" href="#__codelineno-21-24"></a>    <span class="k">return</span> <span class="n">response</span>
+</span><span id="__span-21-25"><a id="__codelineno-21-25" name="__codelineno-21-25" href="#__codelineno-21-25"></a>
+</span><span id="__span-21-26"><a id="__codelineno-21-26" name="__codelineno-21-26" href="#__codelineno-21-26"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-21-27"><a id="__codelineno-21-27" name="__codelineno-21-27" href="#__codelineno-21-27"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-21-28"><a id="__codelineno-21-28" name="__codelineno-21-28" href="#__codelineno-21-28"></a><span class="k">def</span><span class="w"> </span><span class="nf">clear_cache</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>
+</span><span id="__span-21-29"><a id="__codelineno-21-29" name="__codelineno-21-29" href="#__codelineno-21-29"></a>    <span class="n">count</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;api_cache&quot;</span><span class="p">)</span>
+</span><span id="__span-21-30"><a id="__codelineno-21-30" name="__codelineno-21-30" href="#__codelineno-21-30"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cleared </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> cached API responses&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="session-data">Session Data</h3>
+<p>Store temporary session data across command invocations:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_cache</span><span class="p">,</span> <span class="n">CacheManager</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">start_workflow</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">project_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>    <span class="n">session</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>        <span class="s2">&quot;project_id&quot;</span><span class="p">:</span> <span class="n">project_id</span><span class="p">,</span>
+</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>        <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>        <span class="s2">&quot;started_at&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+</span><span id="__span-22-12"><a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>    <span class="p">}</span>
+</span><span id="__span-22-13"><a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>
+</span><span id="__span-22-14"><a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a>    <span class="c1"># Session expires after 2 hours of inactivity</span>
+</span><span id="__span-22-15"><a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;workflow_session&quot;</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</span><span id="__span-22-16"><a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Started workflow for project </span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-22-17"><a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a>
+</span><span id="__span-22-18"><a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-22-19"><a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-22-20"><a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a><span class="k">def</span><span class="w"> </span><span class="nf">continue_workflow</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>
+</span><span id="__span-22-21"><a id="__codelineno-22-21" name="__codelineno-22-21" href="#__codelineno-22-21"></a>    <span class="n">session</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;workflow_session&quot;</span><span class="p">)</span>
+</span><span id="__span-22-22"><a id="__codelineno-22-22" name="__codelineno-22-22" href="#__codelineno-22-22"></a>
+</span><span id="__span-22-23"><a id="__codelineno-22-23" name="__codelineno-22-23" href="#__codelineno-22-23"></a>    <span class="k">if</span> <span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-22-24"><a id="__codelineno-22-24" name="__codelineno-22-24" href="#__codelineno-22-24"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No active workflow session. Run &#39;start_workflow&#39; first.&quot;</span><span class="p">)</span>
+</span><span id="__span-22-25"><a id="__codelineno-22-25" name="__codelineno-22-25" href="#__codelineno-22-25"></a>        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-22-26"><a id="__codelineno-22-26" name="__codelineno-22-26" href="#__codelineno-22-26"></a>
+</span><span id="__span-22-27"><a id="__codelineno-22-27" name="__codelineno-22-27" href="#__codelineno-22-27"></a>    <span class="c1"># Update session</span>
+</span><span id="__span-22-28"><a id="__codelineno-22-28" name="__codelineno-22-28" href="#__codelineno-22-28"></a>    <span class="n">session</span><span class="p">[</span><span class="s2">&quot;step&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="__span-22-29"><a id="__codelineno-22-29" name="__codelineno-22-29" href="#__codelineno-22-29"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;workflow_session&quot;</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</span><span id="__span-22-30"><a id="__codelineno-22-30" name="__codelineno-22-30" href="#__codelineno-22-30"></a>
+</span><span id="__span-22-31"><a id="__codelineno-22-31" name="__codelineno-22-31" href="#__codelineno-22-31"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Continuing workflow (step </span><span class="si">{</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</span><span id="__span-22-32"><a id="__codelineno-22-32" name="__codelineno-22-32" href="#__codelineno-22-32"></a>
+</span><span id="__span-22-33"><a id="__codelineno-22-33" name="__codelineno-22-33" href="#__codelineno-22-33"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-22-34"><a id="__codelineno-22-34" name="__codelineno-22-34" href="#__codelineno-22-34"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-22-35"><a id="__codelineno-22-35" name="__codelineno-22-35" href="#__codelineno-22-35"></a><span class="k">def</span><span class="w"> </span><span class="nf">end_workflow</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>
+</span><span id="__span-22-36"><a id="__codelineno-22-36" name="__codelineno-22-36" href="#__codelineno-22-36"></a>    <span class="k">if</span> <span class="n">manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;workflow_session&quot;</span><span class="p">):</span>
+</span><span id="__span-22-37"><a id="__codelineno-22-37" name="__codelineno-22-37" href="#__codelineno-22-37"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workflow session ended&quot;</span><span class="p">)</span>
+</span><span id="__span-22-38"><a id="__codelineno-22-38" name="__codelineno-22-38" href="#__codelineno-22-38"></a>    <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-22-39"><a id="__codelineno-22-39" name="__codelineno-22-39" href="#__codelineno-22-39"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No active workflow session&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="rate-limiting">Rate Limiting</h3>
+<p>Track API usage to enforce rate limits:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">datetime</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_cache</span><span class="p">,</span> <span class="n">CacheManager</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-23-7"><a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">call_api</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-23-8"><a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a>    <span class="c1"># Track API calls in cache</span>
+</span><span id="__span-23-9"><a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a>    <span class="n">rate_limit_key</span> <span class="o">=</span> <span class="s2">&quot;api_calls_count&quot;</span>
+</span><span id="__span-23-10"><a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a>
+</span><span id="__span-23-11"><a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a>    <span class="c1"># Get current count (starts at 0)</span>
+</span><span id="__span-23-12"><a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a>    <span class="n">count</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">rate_limit_key</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-23-13"><a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a>
+</span><span id="__span-23-14"><a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a>    <span class="c1"># Check rate limit (100 calls per hour)</span>
+</span><span id="__span-23-15"><a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a>    <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
+</span><span id="__span-23-16"><a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a>        <span class="n">ttl</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_ttl</span><span class="p">(</span><span class="n">rate_limit_key</span><span class="p">)</span>
+</span><span id="__span-23-17"><a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rate limit exceeded. Resets in </span><span class="si">{</span><span class="n">ttl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-23-18"><a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a>        <span class="k">raise</span> <span class="n">typer</span><span class="o">.</span><span class="n">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-23-19"><a id="__codelineno-23-19" name="__codelineno-23-19" href="#__codelineno-23-19"></a>
+</span><span id="__span-23-20"><a id="__codelineno-23-20" name="__codelineno-23-20" href="#__codelineno-23-20"></a>    <span class="c1"># Increment count</span>
+</span><span id="__span-23-21"><a id="__codelineno-23-21" name="__codelineno-23-21" href="#__codelineno-23-21"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">rate_limit_key</span><span class="p">,</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-23-22"><a id="__codelineno-23-22" name="__codelineno-23-22" href="#__codelineno-23-22"></a>
+</span><span id="__span-23-23"><a id="__codelineno-23-23" name="__codelineno-23-23" href="#__codelineno-23-23"></a>    <span class="c1"># Make API call</span>
+</span><span id="__span-23-24"><a id="__codelineno-23-24" name="__codelineno-23-24" href="#__codelineno-23-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API call successful (</span><span class="si">{</span><span class="n">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/100)&quot;</span><span class="p">)</span>
+</span><span id="__span-23-25"><a id="__codelineno-23-25" name="__codelineno-23-25" href="#__codelineno-23-25"></a>    <span class="c1"># ... actual API call logic ...</span>
+</span><span id="__span-23-26"><a id="__codelineno-23-26" name="__codelineno-23-26" href="#__codelineno-23-26"></a>
+</span><span id="__span-23-27"><a id="__codelineno-23-27" name="__codelineno-23-27" href="#__codelineno-23-27"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-23-28"><a id="__codelineno-23-28" name="__codelineno-23-28" href="#__codelineno-23-28"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-23-29"><a id="__codelineno-23-29" name="__codelineno-23-29" href="#__codelineno-23-29"></a><span class="k">def</span><span class="w"> </span><span class="nf">check_limit</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>
+</span><span id="__span-23-30"><a id="__codelineno-23-30" name="__codelineno-23-30" href="#__codelineno-23-30"></a>    <span class="n">count</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;api_calls_count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-23-31"><a id="__codelineno-23-31" name="__codelineno-23-31" href="#__codelineno-23-31"></a>    <span class="n">ttl</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_ttl</span><span class="p">(</span><span class="s2">&quot;api_calls_count&quot;</span><span class="p">)</span>
+</span><span id="__span-23-32"><a id="__codelineno-23-32" name="__codelineno-23-32" href="#__codelineno-23-32"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;API calls: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">/100&quot;</span><span class="p">)</span>
+</span><span id="__span-23-33"><a id="__codelineno-23-33" name="__codelineno-23-33" href="#__codelineno-23-33"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Limit resets in: </span><span class="si">{</span><span class="n">ttl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="computation-results">Computation Results</h3>
+<p>Cache expensive computation results:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_cache</span><span class="p">,</span> <span class="n">CacheManager</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>    <span class="n">cache_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;analysis:</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>    <span class="c1"># Check cache unless force refresh</span>
+</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span><span class="p">:</span>
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>        <span class="n">cached</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)</span>
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a>        <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using cached analysis results&quot;</span><span class="p">)</span>
+</span><span id="__span-24-15"><a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a>            <span class="n">print_results</span><span class="p">(</span><span class="n">cached</span><span class="p">)</span>
+</span><span id="__span-24-16"><a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a>            <span class="k">return</span>
+</span><span id="__span-24-17"><a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a>
+</span><span id="__span-24-18"><a id="__codelineno-24-18" name="__codelineno-24-18" href="#__codelineno-24-18"></a>    <span class="c1"># Perform expensive analysis</span>
+</span><span id="__span-24-19"><a id="__codelineno-24-19" name="__codelineno-24-19" href="#__codelineno-24-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running analysis (this may take a while)...&quot;</span><span class="p">)</span>
+</span><span id="__span-24-20"><a id="__codelineno-24-20" name="__codelineno-24-20" href="#__codelineno-24-20"></a>    <span class="n">results</span> <span class="o">=</span> <span class="n">expensive_analysis</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+</span><span id="__span-24-21"><a id="__codelineno-24-21" name="__codelineno-24-21" href="#__codelineno-24-21"></a>
+</span><span id="__span-24-22"><a id="__codelineno-24-22" name="__codelineno-24-22" href="#__codelineno-24-22"></a>    <span class="c1"># Cache for 24 hours</span>
+</span><span id="__span-24-23"><a id="__codelineno-24-23" name="__codelineno-24-23" href="#__codelineno-24-23"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cache_key</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;analysis&quot;</span><span class="p">)</span>
+</span><span id="__span-24-24"><a id="__codelineno-24-24" name="__codelineno-24-24" href="#__codelineno-24-24"></a>    <span class="n">print_results</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</span><span id="__span-24-25"><a id="__codelineno-24-25" name="__codelineno-24-25" href="#__codelineno-24-25"></a>
+</span><span id="__span-24-26"><a id="__codelineno-24-26" name="__codelineno-24-26" href="#__codelineno-24-26"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-24-27"><a id="__codelineno-24-27" name="__codelineno-24-27" href="#__codelineno-24-27"></a><span class="nd">@attach_cache</span><span class="p">()</span>
+</span><span id="__span-24-28"><a id="__codelineno-24-28" name="__codelineno-24-28" href="#__codelineno-24-28"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_analyses</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">CacheManager</span><span class="p">):</span>
+</span><span id="__span-24-29"><a id="__codelineno-24-29" name="__codelineno-24-29" href="#__codelineno-24-29"></a>    <span class="c1"># Find all cached analyses</span>
+</span><span id="__span-24-30"><a id="__codelineno-24-30" name="__codelineno-24-30" href="#__codelineno-24-30"></a>    <span class="n">keys</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;analysis:.*&quot;</span><span class="p">)</span>
+</span><span id="__span-24-31"><a id="__codelineno-24-31" name="__codelineno-24-31" href="#__codelineno-24-31"></a>
+</span><span id="__span-24-32"><a id="__codelineno-24-32" name="__codelineno-24-32" href="#__codelineno-24-32"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cached analyses (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span><span class="si">}</span><span class="s2">):&quot;</span><span class="p">)</span>
+</span><span id="__span-24-33"><a id="__codelineno-24-33" name="__codelineno-24-33" href="#__codelineno-24-33"></a>    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+</span><span id="__span-24-34"><a id="__codelineno-24-34" name="__codelineno-24-34" href="#__codelineno-24-34"></a>        <span class="n">dataset</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="__span-24-35"><a id="__codelineno-24-35" name="__codelineno-24-35" href="#__codelineno-24-35"></a>        <span class="n">ttl</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get_ttl</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span id="__span-24-36"><a id="__codelineno-24-36" name="__codelineno-24-36" href="#__codelineno-24-36"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2"> (expires in </span><span class="si">{</span><span class="n">ttl</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h2 id="advanced-usage">Advanced Usage</h2>
+<h3 id="working-with-expiring-entries">Working with expiring entries</h3>
+<p>You can set expiration times on cache entries using <code>timedelta</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="c1"># Expire after 1 hour</span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;api_token&quot;</span><span class="p">,</span> <span class="s2">&quot;secret&quot;</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="c1"># Expire after 30 seconds</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;temp_data&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">},</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span>
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="c1"># Expire after 7 days</span>
+</span><span id="__span-25-10"><a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;weekly_cache&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">expire</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">7</span><span class="p">))</span>
+</span></code></pre></div>
+<h3 id="using-groups-for-organization">Using groups for organization</h3>
+<p>Groups allow you to group related cache entries and manage them together:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># Store multiple entries with the same group</span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;user:1:profile&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Luke&quot;</span><span class="p">},</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;user_profiles&quot;</span><span class="p">)</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;user:2:profile&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Leia&quot;</span><span class="p">},</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;user_profiles&quot;</span><span class="p">)</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;user:3:profile&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Han&quot;</span><span class="p">},</span> <span class="n">group</span><span class="o">=</span><span class="s2">&quot;user_profiles&quot;</span><span class="p">)</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="c1"># Clear all user profiles at once</span>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="n">manager</span><span class="o">.</span><span class="n">clear</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="s2">&quot;user_profiles&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="cache-size-management">Cache size management</h3>
+<p>The cache automatically manages its size based on the configured eviction policy:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">CacheManager</span><span class="p">,</span> <span class="n">EvictionPolicy</span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="c1"># Create cache with 100MB limit</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="n">manager</span> <span class="o">=</span> <span class="n">CacheManager</span><span class="p">(</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>    <span class="n">size_limit</span><span class="o">=</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">,</span>  <span class="c1"># 100MB</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>    <span class="n">eviction_policy</span><span class="o">=</span><span class="n">EvictionPolicy</span><span class="o">.</span><span class="n">LEAST_RECENTLY_USED</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="p">)</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="c1"># Cache will automatically evict old entries when limit is reached</span>
+</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;value_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="caching-complex-objects">Caching complex objects</h3>
+<p>The cache can store any picklable Python object:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="c1"># Store Pydantic model</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Yoda&quot;</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">900</span><span class="p">)</span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="n">manager</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;user:yoda&quot;</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a>
+</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="c1"># Retrieve it</span>
+</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="n">cached_user</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user:yoda&quot;</span><span class="p">)</span>
+</span><span id="__span-28-13"><a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="nb">print</span><span class="p">(</span><span class="n">cached_user</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># &quot;Yoda&quot;</span>
+</span></code></pre></div>
+<h2 id="differences-from-files">Differences from Files</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Cache</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Temporary storage</td>
+<td>Persistent storage</td>
+</tr>
+<tr>
+<td><strong>Durability</strong></td>
+<td>Data may expire or be evicted</td>
+<td>Data persists indefinitely</td>
+</tr>
+<tr>
+<td><strong>Structure</strong></td>
+<td>Database (opaque)</td>
+<td>File-based (can inspect manually)</td>
+</tr>
+<tr>
+<td><strong>Size limits</strong></td>
+<td>Configurable size limits</td>
+<td>No automatic limits</td>
+</tr>
+<tr>
+<td><strong>Eviction</strong></td>
+<td>Automatic eviction policies</td>
+<td>Manual deletion only</td>
+</tr>
+<tr>
+<td><strong>Use for</strong></td>
+<td>Tokens, sessions, API responses</td>
+<td>Settings, templates, assets</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -1443,13 +2151,13 @@ thrown. If the parent directory of the entry is empty after it is removed, the p
         
         
           
-          <a href="../logging/" class="md-footer__link md-footer__link--next" aria-label="Next: Logging">
+          <a href="../files/" class="md-footer__link md-footer__link--next" aria-label="Next: Files">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Logging
+                Files
               </div>
             </div>
             <div class="md-footer__button md-icon">

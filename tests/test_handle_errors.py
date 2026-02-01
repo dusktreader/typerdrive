@@ -74,12 +74,12 @@ class TestHandleErrors:
 
         @cli.command()
         @handle_errors("What happened?", handle_exc_class=RuntimeError)
-        def han():  # pyright: ignore[reportUnusedFunction]
+        def han():
             raise RuntimeError("Boring conversation anyway")
 
         @cli.command()
         @handle_errors("Let me see your identification.", handle_exc_class=RuntimeError)
-        def ben():  # pyright: ignore[reportUnusedFunction]
+        def ben():
             raise ValueError("These aren't the droids you're looking for")
 
         check_output(
@@ -112,12 +112,12 @@ class TestHandleErrors:
 
         @cli.command()
         @handle_errors("What happened?", handle_exc_class=(RuntimeError, ValueError))
-        def han():  # pyright: ignore[reportUnusedFunction]
+        def han():
             raise RuntimeError("Boring conversation anyway")
 
         @cli.command()
         @handle_errors("Let me see your identification.", handle_exc_class=(RuntimeError, ValueError))
-        def ben():  # pyright: ignore[reportUnusedFunction]
+        def ben():
             raise ValueError("These aren't the droids you're looking for")
 
         check_output(
@@ -158,7 +158,7 @@ class TestHandleErrors:
             handle_exc_class=RuntimeError,
             ignore_exc_class=BlasterRuntimeError,
         )
-        def han():  # pyright: ignore[reportUnusedFunction]
+        def han():
             raise BlasterRuntimeError("Boring conversation anyway")
 
         @cli.command()
@@ -167,7 +167,7 @@ class TestHandleErrors:
             handle_exc_class=RuntimeError,
             ignore_exc_class=BlasterRuntimeError,
         )
-        def ben():  # pyright: ignore[reportUnusedFunction]
+        def ben():
             raise LightSaberRuntimeError("These aren't the droids you're looking for")
 
         check_output(
@@ -209,7 +209,7 @@ class TestHandleErrors:
             handle_exc_class=RuntimeError,
             ignore_exc_class=(BlasterRuntimeError, LightSaberRuntimeError),
         )
-        def han():  # pyright: ignore[reportUnusedFunction]
+        def han():
             raise BlasterRuntimeError("Boring conversation anyway")
 
         @cli.command()
@@ -218,7 +218,7 @@ class TestHandleErrors:
             handle_exc_class=RuntimeError,
             ignore_exc_class=(BlasterRuntimeError, LightSaberRuntimeError),
         )
-        def ben():  # pyright: ignore[reportUnusedFunction]
+        def ben():
             raise LightSaberRuntimeError("These aren't the droids you're looking for")
 
         check_output(

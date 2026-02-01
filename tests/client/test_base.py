@@ -75,7 +75,7 @@ class TestRequestX:
 
         mock_route = respx_mock.get("https://the.force.io/the-dark-side").mock()
         with pytest.raises(ClientError, match="Param data could not be deserialized"):
-            client.request_x("GET", "the-dark-side", param_obj="not a pydantic model instance")  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
+            client.request_x("GET", "the-dark-side", param_obj="not a pydantic model instance")  # type: ignore[arg-type]
 
         assert not mock_route.called
 
@@ -125,7 +125,7 @@ class TestRequestX:
             client.request_x(
                 "POST",
                 "the-dark-side",
-                body_obj="not a pydantic model instance",  # type: ignore[arg-type]  # pyright: ignore[reportArgumentType]
+                body_obj="not a pydantic model instance",  # type: ignore[arg-type]
             )
 
         assert not mock_route.called

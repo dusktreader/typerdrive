@@ -12,7 +12,7 @@ from typerdrive.logging.manager import LoggingManager
 
 @handle_errors("Failed to show log", handle_exc_class=LoggingError)
 @attach_logging()
-def show(ctx: typer.Context, manager: LoggingManager):  # pyright: ignore[reportUnusedParameter]
+def show(ctx: typer.Context, manager: LoggingManager):
     """
     Show the current log.
     """
@@ -28,7 +28,7 @@ def add_show(cli: typer.Typer):
 
 @handle_errors("Failed to audit log dir", handle_exc_class=LoggingError)
 @attach_logging()
-def audit(ctx: typer.Context, manager: LoggingManager):  # pyright: ignore[reportUnusedParameter]
+def audit(ctx: typer.Context, manager: LoggingManager):
     """
     Show the log files retained for the app.
     """
@@ -44,7 +44,7 @@ def add_audit(cli: typer.Typer):
 
 @handle_errors("Failed to clear log dir", handle_exc_class=LoggingError)
 @attach_logging()
-def clear(ctx: typer.Context, manager: LoggingManager):  # pyright: ignore[reportUnusedParameter]
+def clear(ctx: typer.Context, manager: LoggingManager):
     """
     Clear all the log files.
     """

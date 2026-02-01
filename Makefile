@@ -36,8 +36,7 @@ qa/test:  ## Run the tests
 
 .PHONY: qa/types
 qa/types:  ## Run static type checks
-	uv run mypy ${PACKAGE_TARGET} tests src/typerdrive_demo --pretty
-	uv run basedpyright ${PACKAGE_TARGET} tests src/typerdrive_demo
+	uv run ty check ${PACKAGE_TARGET} tests src/typerdrive_demo
 
 .PHONY: qa/lint
 qa/lint:  ## Run linters

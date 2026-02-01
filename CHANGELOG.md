@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.8.0 - 2025-02-01
+- BREAKING CHANGE: Refactored cache from file-based to diskcache for improved performance
+- Added support for caching any picklable Python object (Pydantic models, custom classes, etc.)
+- Added cache features: TTL/expiration, groups, eviction policies, statistics
+- Added new `FilesManager` for persistent file storage (binary, text, JSON)
+- Added `files` subcommand for viewing file storage
+- Updated cache commands: `show` now displays entries with TTL, `clear` supports group filtering
+- Replaced mypy and basedpyright with ty
+- Comprehensive documentation updates for cache and files features
+
+
 ## v0.7.2 - 2025-05-22
 - Pinned typer-repyt version to make sure metavar is available
 

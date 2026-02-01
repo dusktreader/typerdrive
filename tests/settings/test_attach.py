@@ -21,7 +21,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             settings = get_settings(ctx, DefaultSettingsModel)
             assert settings.name == "jawa"
             assert settings.planet == "tatooine"
@@ -36,7 +36,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(RequiredFieldsModel)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):
             pass
 
         result = runner.invoke(cli, [], prog_name="test")
@@ -47,7 +47,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(RequiredFieldsModel, validation=Validation.NEVER)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             settings = get_settings(ctx, RequiredFieldsModel)
             assert not hasattr(settings, "name")
             assert not hasattr(settings, "planet")
@@ -62,7 +62,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(RequiredFieldsModel, validation=Validation.BEFORE)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):
             print("in function body")
 
         expected_pattern = [
@@ -82,7 +82,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(RequiredFieldsModel, validation=Validation.AFTER)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):
             print("in function body")
 
         expected_pattern = [
@@ -113,7 +113,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(model, validation=Validation.BOTH)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             print("in function body")
             settings = get_settings(ctx, model)
             setattr(settings, "alignment", "invalid-alignment")
@@ -131,7 +131,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel, persist=True)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             settings = get_settings(ctx, DefaultSettingsModel)
             settings.name = "hutt"
             settings.planet = "nal hutta"
@@ -169,7 +169,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(RequiredFieldsModel)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             settings = get_settings(ctx, RequiredFieldsModel)
             assert settings.name == "jawa"
             assert settings.planet == "tatooine"
@@ -184,7 +184,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel, show=True)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):
             pass
 
         expected_pattern = [
@@ -204,7 +204,7 @@ class TestAttachSettings:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel, persist=True, show=True)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction, reportUnusedParameter]
+        def noop(ctx: typer.Context):
             pass
 
         expected_pattern = [
@@ -227,7 +227,7 @@ class TestWithParameters:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel, show=True)
-        def noop(ctx: typer.Context, stuff: DefaultSettingsModel):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context, stuff: DefaultSettingsModel):
             assert stuff.name == "jawa"
             assert stuff.planet == "tatooine"
             assert stuff.is_humanoid
@@ -254,7 +254,7 @@ class TestWithParameters:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel, show=True)
-        def noop(ctx: typer.Context, mgr: SettingsManager):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context, mgr: SettingsManager):
             settings: DefaultSettingsModel = cast(DefaultSettingsModel, mgr.settings_instance)
             assert settings.name == "jawa"
             assert settings.planet == "tatooine"
@@ -284,7 +284,7 @@ class TestGetSettings:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             settings = get_settings(ctx, DefaultSettingsModel)
             assert isinstance(settings, DefaultSettingsModel)
             assert settings.name == "jawa"
@@ -299,7 +299,7 @@ class TestGetSettings:
         cli = typer.Typer()
 
         @cli.command()
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             get_settings(ctx, DefaultSettingsModel)
 
         match_output(
@@ -321,7 +321,7 @@ class TestGetSettings:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             get_settings(ctx, NoMatchSettings)
 
         match_output(
@@ -339,7 +339,7 @@ class TestGetManager:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             manager = get_settings_manager(ctx)
             assert isinstance(manager, SettingsManager)
             assert manager.settings_model == DefaultSettingsModel
@@ -359,7 +359,7 @@ class TestGetManager:
         cli = typer.Typer()
 
         @cli.command()
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             get_settings_manager(ctx)
             print("Passed!")
 
@@ -376,7 +376,7 @@ class TestGetManager:
 
         @cli.command()
         @attach_settings(DefaultSettingsModel)
-        def noop(ctx: typer.Context):  # pyright: ignore[reportUnusedFunction]
+        def noop(ctx: typer.Context):
             ctx.obj.settings_manager = "Not a manager!"
             get_settings_manager(ctx)
             print("Passed!")

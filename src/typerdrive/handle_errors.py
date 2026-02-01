@@ -2,7 +2,7 @@
 Provide an error handler that can be attached to a command through a decorator.
 """
 
-from typing import ParamSpec, TypeVar
+from typing import ParamSpec, TypeVar, cast
 from collections.abc import Callable
 from functools import wraps
 
@@ -73,7 +73,7 @@ def handle_errors(
                 raise
             except handle_exc_class as err:
                 try:
-                    final_message = reformat_exception(base_message, err)
+                    final_message = reformat_exception(base_message, cast(Exception, err))
                 except Exception as msg_err:
                     raise RuntimeError(f"Failed while formatting message: {repr(msg_err)}")
 
@@ -82,7 +82,7 @@ def handle_errors(
                 if do_except:
                     do_except(
                         DoExceptParams(
-                            err=err,
+                            err=cast(Exception, err),
                             base_message=base_message,
                             final_message=final_message,
                             trace=trace,

@@ -4,11 +4,11 @@ import re
 import sys
 import tempfile
 import textwrap
+import types
 from collections.abc import Callable
 from dataclasses import dataclass
 from importlib import import_module
 from pathlib import Path
-from typing import Any
 
 import snick
 from rich import box
@@ -59,7 +59,7 @@ def get_demo_functions(module_name: str) -> list[Callable[..., None]]:
     return sorted(demo_functions, key=lambda f: f.__name__)
 
 
-def decompose(func: Callable[..., Any]) -> Decomposed:
+def decompose(func: types.FunctionType) -> Decomposed:
     """
     This is really hacky.
 
@@ -91,7 +91,7 @@ def decompose(func: Callable[..., Any]) -> Decomposed:
     return Decomposed(module=module, name=name, docstring=docstring, source=source)
 
 
-def capture(demo: Callable[..., None]) -> Captured:
+def capture(demo: types.FunctionType) -> Captured:
     demo_name = demo.__name__
 
     cap = Captured()
@@ -141,7 +141,7 @@ def capture(demo: Callable[..., None]) -> Captured:
     return cap
 
 
-def run_demo(demo: Callable[..., None], console: Console, override_label: str | None = None) -> bool:
+def run_demo(demo: types.FunctionType, console: Console, override_label: str | None = None) -> bool:
     pseudo_clear(console)
 
     decomposed = decompose(demo)

@@ -178,7 +178,7 @@ def build_exception_type_message(
         Expected exception type doesn't match!
 
         Expected {exception_type}
-        Computed {type[exception]}
+        Computed {type(exception)}
 
         Exception:
         {exception}

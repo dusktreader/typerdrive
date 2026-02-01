@@ -4,13 +4,18 @@ from typerdrive.cache.attach import attach_cache, get_cache_manager
 from typerdrive.cache.commands import add_cache_subcommand
 from typerdrive.cache.exceptions import CacheClearError, CacheError, CacheInitError, CacheLoadError, CacheStoreError
 from typerdrive.cache.manager import CacheManager
+from typerdrive.cache.models import CacheStats
 from typerdrive.client.attach import attach_client, get_client, get_client_manager
 from typerdrive.client.base import TyperdriveClient
 from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config, set_typerdrive_config
-from typerdrive.constants import Validation
+from typerdrive.constants import EvictionPolicy, Validation
 from typerdrive.exceptions import TyperdriveError
+from typerdrive.files.attach import attach_files, get_files_manager
+from typerdrive.files.commands import add_files_subcommand
+from typerdrive.files.exceptions import FilesClearError, FilesError, FilesInitError, FilesLoadError, FilesStoreError
+from typerdrive.files.manager import FilesManager
 from typerdrive.format import simple_message, strip_rich_style, terminal_message
 from typerdrive.handle_errors import handle_errors
 from typerdrive.logging.attach import attach_logging, get_logging_manager
@@ -40,9 +45,16 @@ __all__ = [
     "CacheInitError",
     "CacheLoadError",
     "CacheManager",
+    "CacheStats",
     "CacheStoreError",
     "ClientError",
     "ClientManager",
+    "FilesClearError",
+    "FilesError",
+    "FilesInitError",
+    "FilesLoadError",
+    "FilesManager",
+    "FilesStoreError",
     "LoggingError",
     "LoggingManager",
     "SettingsError",
@@ -55,17 +67,21 @@ __all__ = [
     "TyperdriveClient",
     "TyperdriveConfig",
     "TyperdriveError",
+    "EvictionPolicy",
     "Validation",
     "add_cache_subcommand",
+    "add_files_subcommand",
     "add_logs_subcommand",
     "add_settings_subcommand",
     "attach_cache",
     "attach_client",
+    "attach_files",
     "attach_logging",
     "attach_settings",
     "get_cache_manager",
     "get_client",
     "get_client_manager",
+    "get_files_manager",
     "get_logging_manager",
     "get_settings",
     "get_settings_manager",

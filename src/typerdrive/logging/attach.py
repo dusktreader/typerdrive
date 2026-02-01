@@ -4,7 +4,7 @@ Provide a decorator that attaches logging functionality to a `typer` command fun
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
 from loguru import logger
@@ -40,6 +40,7 @@ def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], C
     Parameters:
         verbose: A `verbose` flag passed along to the `LoggingManager`
     """
+
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         for key in func.__annotations__.keys():
@@ -55,7 +56,8 @@ def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], C
             logger.debug("Logging attached to typer context")
 
             if manager_param_key:
-                kwargs[manager_param_key] = manager
+                kwargs_dict = cast(dict[str, Any], kwargs)
+                kwargs_dict[manager_param_key] = manager
 
             return func(ctx, *args, **kwargs)
 

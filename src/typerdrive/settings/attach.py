@@ -4,7 +4,7 @@ Provide a decorator that attaches the `typerdrive` settings to a `typer` command
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
 from pydantic import BaseModel
@@ -84,12 +84,13 @@ def attach_settings(
         persist:    If set, the settings values will be stored in the settings file
         show:       If set, show the current settings after running the function
     """
+
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         settings_param_key: str | None = None
         for key in func.__annotations__.keys():
             if func.__annotations__[key] is settings_model:
-                func.__annotations__[key] = Annotated[settings_model | None, CloakingDevice]
+                func.__annotations__[key] = Annotated[settings_model | None, CloakingDevice]  # ty: ignore[invalid-type-form]
                 settings_param_key = key
             elif func.__annotations__[key] is SettingsManager:
                 func.__annotations__[key] = Annotated[SettingsManager | None, CloakingDevice]
@@ -107,11 +108,12 @@ def attach_settings(
                 )
             to_context(ctx, "settings_manager", manager)
 
+            kwargs_dict = cast(dict[str, Any], kwargs)
             if settings_param_key:
-                kwargs[settings_param_key] = manager.settings_instance
+                kwargs_dict[settings_param_key] = manager.settings_instance
 
             if manager_param_key:
-                kwargs[manager_param_key] = manager
+                kwargs_dict[manager_param_key] = manager
 
             ret_val = func(ctx, *args, **kwargs)
 

@@ -39,7 +39,7 @@ class SettingsManager:
     invalid_warnings: dict[str, str]
     """ Tracks which fields of the settings instance are invalid """
 
-    settings_instance: BaseModel  # pyright: ignore[reportUninitializedInstanceVariable]
+    settings_instance: BaseModel
     """ An instance of the `settings_model` that holds the app's current settings """
 
     def __init__(self, settings_model: type[BaseModel]):

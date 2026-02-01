@@ -66,7 +66,7 @@ class TyperdriveConfig(BaseModel):
     console_ascii_only: bool = False
     """ If set, only use ascii characters in the console. """
 
-    @computed_field  # type: ignore[prop-decorator]
+    @computed_field
     @property
     def log_dir(self) -> Path:
         """
@@ -74,7 +74,7 @@ class TyperdriveConfig(BaseModel):
         """
         return xdg_state_home() / self.app_name / "logs"
 
-    @computed_field  # type: ignore[prop-decorator]
+    @computed_field
     @property
     def settings_path(self) -> Path:
         """
@@ -82,13 +82,21 @@ class TyperdriveConfig(BaseModel):
         """
         return xdg_state_home() / self.app_name / "settings.json"
 
-    @computed_field  # type: ignore[prop-decorator]
+    @computed_field
     @property
     def cache_dir(self) -> Path:
         """
         Retrieve the directory where the cache data will be stored.
         """
         return xdg_cache_home() / self.app_name
+
+    @computed_field
+    @property
+    def files_dir(self) -> Path:
+        """
+        Retrieve the directory where files will be stored.
+        """
+        return xdg_state_home() / self.app_name / "files"
 
 
 _typerdrive_config: TyperdriveConfig = TyperdriveConfig.model_construct()

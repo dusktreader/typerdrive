@@ -1,12 +1,19 @@
 """
-Provide a class for managing the `typerdrive` cache feature.
+Provide a class for managing the `typerdrive` cache feature using diskcache.
 """
 
-import json
+import re
+import time
+from datetime import timedelta
 from pathlib import Path
 from typing import Any
 
+import humanize
 from loguru import logger
+from rich import box
+from rich.table import Table
+
+from typerdrive.cache.typed_cache import TypedCache
 
 from typerdrive.cache.exceptions import (
     CacheClearError,
@@ -15,185 +22,345 @@ from typerdrive.cache.exceptions import (
     CacheLoadError,
     CacheStoreError,
 )
+from typerdrive.cache.models import CacheStats
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config
-from typerdrive.dirs import clear_directory, is_child
+from typerdrive.constants import EvictionPolicy
+from typerdrive.format import terminal_message
 
 
-# TODO: add a mechanism to cleanup empty directories
-# TODO: add more logging and add tests for logging
-# TODO: maybe add a test for using root paths (/jawa/ewok) for cache keys?
 class CacheManager:
     """
-    Manage the `typerdrive` cache feature.
+    Manage the `typerdrive` cache feature using diskcache library.
+
+    This provides a traditional key-value cache with TTL support, eviction policies,
+    and efficient disk-based storage.
     """
 
     cache_dir: Path
-    """ The directory where the cache is found. """
+    """ The directory where the cache database is stored. """
 
-    def __init__(self):
+    cache: TypedCache
+    """ The underlying TypedCache instance (wrapper around diskcache.Cache). """
+
+    def __init__(
+        self,
+        size_limit: int = 2**30,
+        eviction_policy: EvictionPolicy = EvictionPolicy.LEAST_RECENTLY_USED,
+    ):
+        """
+        Initialize the cache manager.
+
+        Parameters:
+            size_limit: Maximum size of the cache in bytes (default: 1GB)
+            eviction_policy: Eviction policy to use when size limit is reached
+        """
         config: TyperdriveConfig = get_typerdrive_config()
-
         self.cache_dir = config.cache_dir
 
         with CacheInitError.handle_errors("Failed to initialize cache"):
             self.cache_dir.mkdir(parents=True, exist_ok=True)
+            self.cache = TypedCache(
+                directory=str(self.cache_dir),
+                size_limit=size_limit,
+                eviction_policy=eviction_policy.value,
+            )
 
-    def resolve_path(self, path: Path | str, mkdir: bool = False) -> Path:
+    def set(
+        self,
+        key: str,
+        value: Any,
+        expire: timedelta | None = None,
+        group: str | None = None,
+    ) -> bool:
         """
-        Resolve a given cache key path to an absolute path within the cache directory.
-
-        If the resolved path is outside the cache directory, an exception will be raised.
-        If the resolved path is the same as the cache directory, an exception will be raised.
+        Set a value in the cache.
 
         Parameters:
-            path:  The cache key
-            mkdir: If set, create the directory for the cache key if it does not exist.
-        """
-        if isinstance(path, str):
-            path = Path(path)
-        full_path = self.cache_dir / path
-        full_path = full_path.resolve()
-        CacheError.require_condition(
-            is_child(full_path, self.cache_dir),
-            f"Resolved cache path {str(full_path)} is not within cache {str(self.cache_dir)}",
-        )
-        CacheError.require_condition(
-            full_path != self.cache_dir,
-            f"Resolved cache path {str(full_path)} must not be the same as cache {str(self.cache_dir)}",
-        )
-        if mkdir:
-            full_path.parent.mkdir(parents=True, exist_ok=True)
-        return full_path
+            key: The cache key
+            value: The value to store (must be picklable)
+            expire: Time until the key expires (None for no expiration)
+            group: Optional group for organizing related cache entries
 
-    def list_items(self, path: Path | str) -> list[str]:
+        Returns:
+            True if the value was successfully set
         """
-        List items at a given path.
+        logger.debug(f"Setting cache key: {key}")
 
-        Items will be all non-directory entries in the given path.
+        with CacheStoreError.handle_errors(f"Failed to store value for key '{key}'"):
+            # Convert timedelta to seconds for diskcache
+            expire_seconds = expire.total_seconds() if expire else None
+            return self.cache.set(key, value, expire=expire_seconds, tag=group)
 
-        If the path doesn't exist or is not a directory, an exception will be raised.
+    def get(self, key: str, default: Any = None) -> Any:
         """
-        full_path = self.resolve_path(path)
-        CacheError.require_condition(
-            full_path.exists(),
-            f"Resolved cache path {str(full_path)} does not exist",
-        )
-        CacheError.require_condition(
-            full_path.is_dir(),
-            "Resolved cache path {str(full_path)} is not a directory",
-        )
-        items: list[str] = []
-        for path in full_path.iterdir():
-            if path.is_dir():
-                continue
-            items.append(str(path.name))
-        return items
-
-    def store_bytes(self, data: bytes, path: Path | str, mode: int | None = None):
-        """
-        Store data at the given cache key.
+        Get a value from the cache.
 
         Parameters:
-            data: The data to store in the cache
-            path: The cache key where the data should be stored
-            mode: The file mode to use when creating the cache entry
+            key: The cache key
+            default: Value to return if key is not found
+
+        Returns:
+            The cached value or default if not found
         """
-        full_path = self.resolve_path(path, mkdir=True)
+        logger.debug(f"Getting cache key: {key}")
 
-        logger.debug(f"Storing data at {full_path}")
+        with CacheLoadError.handle_errors(f"Failed to load value for key '{key}'"):
+            return self.cache.get(key, default=default)
 
-        with CacheStoreError.handle_errors(f"Failed to store data in cache target {str(path)}"):
-            full_path.write_bytes(data)
-        if mode:
-            with CacheStoreError.handle_errors(f"Failed to set mode for cache target {str(path)} to {mode=}"):
-                full_path.chmod(mode)
-
-    def store_text(self, text: str, path: Path | str, mode: int | None = None):
+    def setdefault(
+        self,
+        key: str,
+        default: Any = None,
+        expire: timedelta | None = None,
+        group: str | None = None,
+    ) -> Any:
         """
-        Store text at the given cache key.
+        Get a value from the cache, setting it to default if not found.
+
+        This mimics dict.setdefault() behavior: if the key exists in the cache,
+        return its value. Otherwise, set the key to the default value and return it.
 
         Parameters:
-            text: The text to store in the cache
-            path: The cache key where the text should be stored
-            mode: The file mode to use when creating the cache entry
-        """
-        self.store_bytes(text.encode("utf-8"), path, mode=mode)
+            key: The cache key
+            default: Value to set and return if key is not found
+            expire: Time until the key expires (None for no expiration)
+            group: Optional group for organizing related cache entries
 
-    def store_json(self, data: dict[str, Any], path: Path | str, mode: int | None = None):
+        Returns:
+            The cached value if it exists, otherwise the default value (which is also stored)
         """
-        Store a dictionary at the given cache key.
+        logger.debug(f"Getting or setting default for cache key: {key}")
 
-        The dictionary must be json serializable.
+        with CacheLoadError.handle_errors(f"Failed to get or set default for key '{key}'"):
+            # Use a sentinel value to detect cache misses
+            sentinel = object()
+            value = self.cache.get(key, default=sentinel)
+
+            if value is not sentinel:
+                return value
+
+            # Key doesn't exist, set the default value
+            expire_seconds = expire.total_seconds() if expire else None
+            self.cache.set(key, default, expire=expire_seconds, tag=group)
+            return default
+
+    def delete(self, key: str) -> bool:
+        """
+        Delete a key from the cache.
 
         Parameters:
-            data: The dict to store in the cache
-            path: The cache key where the dict should be stored
-            mode: The file mode to use when creating the cache entry
-        """
-        self.store_bytes(json.dumps(data, indent=2).encode("utf-8"), path, mode=mode)
+            key: The cache key to delete
 
-    def load_bytes(self, path: Path | str) -> bytes:
+        Returns:
+            True if the key was found and deleted
         """
-        Load data from the cache at the given key.
+        logger.debug(f"Deleting cache key: {key}")
 
-        If there is no data at the given key, an exception will be raised.
-        If there is an error reading the data, an exception will be raised.
+        with CacheClearError.handle_errors(f"Failed to delete key '{key}'"):
+            return self.cache.delete(key)
+
+    def clear(self, group: str | None = None) -> int:
+        """
+        Remove items from the cache.
 
         Parameters:
-            path: The cache key where the data should be loaded from
+            group: If provided, only remove entries with this group. Otherwise, remove all items.
+
+        Returns:
+            The number of items removed
         """
-        full_path = self.resolve_path(path, mkdir=False)
+        if group:
+            logger.debug(f"Evicting cache entries with group: {group}")
+            with CacheClearError.handle_errors(f"Failed to evict group '{group}'"):
+                return self.cache.evict(group)
+        else:
+            logger.debug("Clearing entire cache")
+            with CacheClearError.handle_errors("Failed to clear cache"):
+                count = len(self.cache)
+                self.cache.clear()
+                return count
 
-        logger.debug(f"Loading data from {full_path}")
-
-        CacheLoadError.require_condition(full_path.exists(), f"Cache target {str(path)} does not exist")
-        with CacheLoadError.handle_errors(f"Failed to load data from cache target {str(path)}"):
-            return full_path.read_bytes()
-
-    def load_text(self, path: Path | str) -> str:
+    def keys(self, pattern: str | None = None, group: str | None = None) -> list[str]:
         """
-        Load text from the cache at the given key.
+        Get keys in the cache, optionally filtered by pattern and/or group.
 
         Parameters:
-            path: The cache key where the text should be loaded from
-        """
-        return self.load_bytes(path).decode("utf-8")
+            pattern: Optional regex pattern to filter keys
+            group: Optional group to filter by
 
-    def load_json(self, path: Path | str) -> dict[str, Any]:
+        Returns:
+            List of matching cache keys
         """
-        Load a dictionary from the cache at the given key.
+        with CacheError.handle_errors("Failed to retrieve cache keys"):
+            # Convert keys to strings (diskcache may return bytes)
+            all_keys: list[str] = [k.decode("utf-8") if isinstance(k, bytes) else k for k in self.cache.iterkeys()]
 
-        The data at the given key must be json deserializable.
+            # Filter by pattern if provided
+            if pattern:
+                regex = re.compile(pattern)
+                all_keys = [k for k in all_keys if regex.search(k)]
+
+            # Filter by group if provided
+            # Note: diskcache doesn't provide a way to query keys by group directly,
+            # so we need to check each key's group
+            if group:
+                filtered_keys: list[str] = []
+                for key in all_keys:
+                    try:
+                        # TypedCache.get() with tag=True returns tuple[value, tag_str]
+                        _, key_group = self.cache.get(key, tag=True)
+                        if key_group == group:
+                            filtered_keys.append(key)
+                    except Exception:
+                        pass
+                all_keys = filtered_keys
+
+            return all_keys
+
+    def get_group(self, key: str) -> str | None:
+        """
+        Get the group associated with a key.
 
         Parameters:
-            path: The cache key where the dict should be loaded from
-        """
-        text = self.load_bytes(path).decode("utf-8")
-        with CacheLoadError.handle_errors(f"Failed to unpack JSON data from cache target {str(path)}"):
-            return json.loads(text)
+            key: The cache key
 
-    def clear_path(self, path: Path | str) -> Path:
+        Returns:
+            The group associated with the key, or None if no group or key doesn't exist
         """
-        Removes data from the cache at the given key.
+        with CacheError.handle_errors(f"Failed to get group for key '{key}'"):
+            # Use TypedCache's tag parameter to retrieve the group
+            # When tag=True, get() returns (value, tag) tuple
+            try:
+                _, group = self.cache.get(key, tag=True)
+                return group
+            except KeyError:
+                return None
+
+    def get_ttl(self, key: str) -> str:
+        """
+        Get the time-to-live for a cache key in human-readable format.
 
         Parameters:
-            path: The cache key where the data should be cleared
-        """
-        full_path = self.resolve_path(path)
+            key: The cache key
 
-        logger.debug(f"Clearing data at {full_path}")
-
-        with CacheClearError.handle_errors(f"Failed to clear cache target {str(path)}"):
-            full_path.unlink()
-        if len([p for p in full_path.parent.iterdir()]) == 0:
-            with CacheClearError.handle_errors(f"Failed to remove empty directory {str(full_path.parent)}"):
-                full_path.parent.rmdir()
-        return full_path
-
-    def clear_all(self) -> int:
+        Returns:
+            Human-readable TTL string (e.g., "2 hours", "never"), or "expired" if the key doesn't exist
         """
-        Removes all data from the cache.
+        with CacheError.handle_errors(f"Failed to get TTL for key '{key}'"):
+            # Get expire_time from TypedCache
+            # TypedCache.get() with expire_time=True returns tuple[value, expire_time_float]
+            value, expire_time = self.cache.get(key, default=None, expire_time=True)
+
+            # If value is None, the key doesn't exist
+            if value is None:
+                return "expired"
+
+            # expire_time is None if no expiration set
+            if expire_time is None:
+                return "never"
+
+            # Calculate remaining time
+            current_time = time.time()
+            remaining_seconds = expire_time - current_time
+
+            if remaining_seconds <= 0:
+                return "expired"
+
+            # Use humanize for human-readable format
+            return humanize.naturaldelta(timedelta(seconds=remaining_seconds))
+
+    def stats(self) -> CacheStats:
         """
-        logger.debug("Clearing entire cache")
-        with CacheClearError.handle_errors("Failed to clear cache"):
-            return clear_directory(self.cache_dir)
+        Get cache statistics.
+
+        Returns:
+            CacheStats object with cache statistics
+        """
+        with CacheError.handle_errors("Failed to retrieve cache stats"):
+            # TypedCache.stats() returns tuple[int, int] for (hits, misses)
+            hits, misses = self.cache.stats(enable=True)
+            return CacheStats(
+                hits=hits,
+                misses=misses,
+                size=len(self.cache),
+                volume=self.cache.volume(),
+            )
+
+    def show(
+        self,
+        pattern: str | None = None,
+        group: str | None = None,
+        show_stats: bool = False,
+        include_stats: bool = True,
+    ) -> None:
+        """
+        Display cache contents or statistics.
+
+        Parameters:
+            pattern: Optional regex pattern to filter keys
+            group: Optional group to filter entries
+            show_stats: If True, show statistics instead of entries
+            include_stats: If True and show_stats is False, include stats summary at bottom of entries
+        """
+        from rich.console import Group as RichGroup
+
+        if show_stats:
+            stats_data = self.stats()
+            table = Table(show_header=True, header_style="bold", box=box.SIMPLE)
+            table.add_column("Metric")
+            table.add_column("Value")
+
+            table.add_row("Size (entries)", str(stats_data.size))
+            table.add_row("Volume (bytes)", str(stats_data.volume))
+            table.add_row("Hits", str(stats_data.hits))
+            table.add_row("Misses", str(stats_data.misses))
+
+            terminal_message(table, subject="Cache Statistics")
+        else:
+            keys = self.keys(pattern=pattern, group=group)
+            if not keys:
+                terminal_message("No cache entries found")
+                return
+
+            # Build filter string for title
+            filters: list[str] = []
+            if pattern:
+                filters.append(f"pattern={pattern}")
+            if group:
+                filters.append(f"group={group}")
+            filter_str = f" ({', '.join(filters)})" if filters else ""
+
+            # Build entries table
+            entries_table = Table(show_header=True, header_style="bold", box=box.SIMPLE)
+            entries_table.add_column("Key", style="green")
+            entries_table.add_column("Group", style="yellow")
+            entries_table.add_column("TTL", style="blue")
+
+            for key in sorted(keys):
+                key_group = self.get_group(key) or ""
+                key_ttl = self.get_ttl(key)
+                entries_table.add_row(key, key_group, key_ttl)
+
+            if include_stats:
+                # Get stats
+                stats_data = self.stats()
+
+                # Build stats table
+                stats_table = Table(show_header=True, header_style="bold", box=box.SIMPLE)
+                stats_table.add_column("Entries", justify="right")
+                stats_table.add_column("Volume", justify="right")
+                stats_table.add_column("Hits", justify="right")
+                stats_table.add_column("Misses", justify="right")
+                stats_table.add_row(
+                    str(stats_data.size),
+                    f"{stats_data.volume:,} bytes",
+                    str(stats_data.hits),
+                    str(stats_data.misses),
+                )
+
+                # Combine tables
+                combined = RichGroup(entries_table, "", stats_table)
+                terminal_message(combined, subject=f"Cache contains {len(keys)} entries{filter_str}")
+            else:
+                # Just show entries table
+                terminal_message(entries_table, subject=f"Cache contains {len(keys)} entries{filter_str}")

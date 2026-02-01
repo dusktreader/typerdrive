@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
-import pytest
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config, set_typerdrive_config
 
 

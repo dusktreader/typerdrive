@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.8.1 - 2026-02-11
+- Removed upper bounds on all dependency version specifiers
+- Bumped snick to >=3.0, py-buzz to >=8.0, typer-repyt to >=0.9.0
+- Removed upper bound on requires-python
+- Promoted rich from optional demo extra to a direct runtime dependency
+- Updated Makefile to match project conventions
+
+
 ## v0.8.0 - 2025-02-01
 - BREAKING CHANGE: Refactored cache from file-based to diskcache for improved performance
 - Added support for caching any picklable Python object (Pydantic models, custom classes, etc.)

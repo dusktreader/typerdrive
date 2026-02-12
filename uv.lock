@@ -1,10 +1,6 @@
 version = 1
 revision = 3
-requires-python = ">=3.12, <3.15"
-resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version < '3.13'",
-]
+requires-python = ">=3.12"
 
 [[package]]
 name = "annotated-types"
@@ -637,15 +633,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pprintpp"
-version = "0.4.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/06/1a/7737e7a0774da3c3824d654993cf57adc915cb04660212f03406334d8c0b/pprintpp-0.4.0.tar.gz", hash = "sha256:ea826108e2c7f49dc6d66c752973c3fc9749142a798d6b254e1e301cfdbc6403", size = 17995, upload-time = "2018-07-01T01:42:34.87Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/4e/d1/e4ed95fdd3ef13b78630280d9e9e240aeb65cc7c544ec57106149c3942fb/pprintpp-0.4.0-py2.py3-none-any.whl", hash = "sha256:b6b4dcdd0c0c0d75e4d7b2f21a9e933e5b2ce62b26e1a54537f9651ae5a5c01d", size = 16952, upload-time = "2018-07-01T01:42:36.496Z" },
-]
-
-[[package]]
 name = "prompt-toolkit"
 version = "3.0.51"
 source = { registry = "https://pypi.org/simple" }
@@ -677,11 +664,14 @@ wheels = [
 
 [[package]]
 name = "py-buzz"
-version = "7.3.0"
+version = "8.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c8/eb/4e40dab7e39e13cc7fb6600e991dce5ea3ec35108367139a03b2bafd6549/py_buzz-7.3.0.tar.gz", hash = "sha256:c20def3b3fb0aab42d20732dc8f27ff6c098082d61b3bd7476d87db5fba5bdcf", size = 573682, upload-time = "2025-04-22T03:49:09.297Z" }
+dependencies = [
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/08/b2/b0cc3f35aafa05c3888035e03eece12769141113b099327ff46ccdfe6d66/py_buzz-8.0.0.tar.gz", hash = "sha256:410d0b6e90c5238130c970933e9db0448d6827fbf72b2f9d4ff864dbc4eeef0e", size = 18807, upload-time = "2026-01-28T17:31:38.586Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0f/a1/043828a0f3f938dc0f74e4ab85aacd185c933494c2e7f628bf6b36bbe042/py_buzz-7.3.0-py3-none-any.whl", hash = "sha256:e2f77f45ba7362c34d888747e81bfb4a69a1450a1f9f3d981bd4987ca2228ae4", size = 23346, upload-time = "2025-04-22T03:49:07.839Z" },
+    { url = "https://files.pythonhosted.org/packages/b2/a8/51ec81dce27cbb59f023ae78e38a6592fc92c22f1a6c5e12a661b263324d/py_buzz-8.0.0-py3-none-any.whl", hash = "sha256:314ae1cec1ff59fda7a4485dc62777dfd38fc37ccff66995662763364c4300bd", size = 27379, upload-time = "2026-01-28T17:31:37.683Z" },
 ]
 
 [[package]]
@@ -978,14 +968,11 @@ wheels = [
 
 [[package]]
 name = "snick"
-version = "2.2.0"
+version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pprintpp" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/42/25/4970bb6cf0f0c89294f53f9860ffca2c6f8401f1aac13874454f5218cac8/snick-2.2.0.tar.gz", hash = "sha256:081b2848f124b1b6910c98975e289295e6d8356aba76420979deef724640467b", size = 50737, upload-time = "2025-05-22T22:24:16.537Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a1/7c/9a7ab0b4900160b02634f98f99a9d25517e1de8cb1ad09605d3def9b62a6/snick-3.0.0.tar.gz", hash = "sha256:5141340a50c7e0e08b213df78f6a4770336a36465b22a075ee9afcce408f7793", size = 6203, upload-time = "2026-01-23T03:42:25.066Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8c/64/f436c57bbba05ca0d1ad1abbdcb771729777f3ef77936072afc6a644ff2a/snick-2.2.0-py3-none-any.whl", hash = "sha256:0d96608de3a57f0ae26eb0009f63a7abbe177be7633b82bb6f39b233710e29cf", size = 7719, upload-time = "2025-05-22T22:24:15.299Z" },
+    { url = "https://files.pythonhosted.org/packages/ff/fc/a08ef34f79573379c2535a1000dd3b05cd586a7a9d3b914e726ae1360873/snick-3.0.0-py3-none-any.whl", hash = "sha256:b391afec7979070f909287c95f68b2df119132ca5839e2f120cdd2dcc0bfabc6", size = 7351, upload-time = "2026-01-23T03:42:25.854Z" },
 ]
 
 [[package]]
@@ -1061,7 +1048,7 @@ wheels = [
 
 [[package]]
 name = "typer-repyt"
-version = "0.8.1"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "humanize" },
@@ -1071,14 +1058,14 @@ dependencies = [
     { name = "snick" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/99/98/246ba1a841946f5e63f80ffcad9ded8778ec24274a112949e9423dbb8c4d/typer_repyt-0.8.1.tar.gz", hash = "sha256:666d28ab984e98e90198bfa06fa53a97a2da70db2c1f998c33365802a81ff89a", size = 107303, upload-time = "2025-05-22T16:34:03.801Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/50/f3/a87e68fafa2d5a4e66f21fe0276f8b7e086da6a68c76fb2b432e0ecca5d0/typer_repyt-0.9.0.tar.gz", hash = "sha256:b1f15f796f44222a8eb003c681f4e39b081fbecd19dade3c9e686e75c74c8353", size = 10523, upload-time = "2026-02-12T06:47:14.086Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/f9/137368d7904ca4025a3103343ee04c52c0915c2d5d125af38b84b195a8cf/typer_repyt-0.8.1-py3-none-any.whl", hash = "sha256:d9e2bd7747bbe7b02b33ccc438144b8fce65af5ad7c3bc7998c4a808324a2178", size = 13499, upload-time = "2025-05-22T16:34:02.578Z" },
+    { url = "https://files.pythonhosted.org/packages/cf/45/6b263877e84ea66c185a397ed06aa4ea0a6732b5f0e8549fb11902ead6ec/typer_repyt-0.9.0-py3-none-any.whl", hash = "sha256:992a87748678ab625bb31d38a4b1ff809055de54b1a7f15cc8f964d4c443807d", size = 14092, upload-time = "2026-02-12T06:47:15.166Z" },
 ]
 
 [[package]]
 name = "typerdrive"
-version = "0.8.0"
+version = "0.8.1"
 source = { editable = "." }
 dependencies = [
     { name = "diskcache" },
@@ -1089,15 +1076,11 @@ dependencies = [
     { name = "py-buzz" },
     { name = "pydantic" },
     { name = "pyperclip" },
+    { name = "rich" },
     { name = "snick" },
     { name = "typer" },
     { name = "typer-repyt" },
     { name = "xdg-base-dirs" },
-]
-
-[package.optional-dependencies]
-demo = [
-    { name = "rich" },
 ]
 
 [package.dev-dependencies]
@@ -1121,39 +1104,38 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "diskcache", specifier = "~=5.6" },
-    { name = "httpx", specifier = "~=0.28" },
-    { name = "humanize", specifier = "~=4.12" },
-    { name = "inflection", specifier = "~=0.5" },
-    { name = "loguru", specifier = "~=0.7" },
-    { name = "py-buzz", specifier = "~=7.3" },
-    { name = "pydantic", specifier = "~=2.11" },
-    { name = "pyperclip", specifier = "~=1.9" },
-    { name = "rich", marker = "extra == 'demo'", specifier = "~=14.0" },
-    { name = "snick", specifier = "~=2.2" },
-    { name = "typer", specifier = "~=0.15" },
-    { name = "typer-repyt", specifier = ">=0.8.1,<0.9" },
+    { name = "diskcache", specifier = ">=5.6" },
+    { name = "httpx", specifier = ">=0.28" },
+    { name = "humanize", specifier = ">=4.12" },
+    { name = "inflection", specifier = ">=0.5" },
+    { name = "loguru", specifier = ">=0.7" },
+    { name = "py-buzz", specifier = ">=8.0" },
+    { name = "pydantic", specifier = ">=2.11" },
+    { name = "pyperclip", specifier = ">=1.9" },
+    { name = "rich", specifier = ">=14.0" },
+    { name = "snick", specifier = ">=3.0" },
+    { name = "typer", specifier = ">=0.15" },
+    { name = "typer-repyt", specifier = ">=0.9.0" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
 ]
-provides-extras = ["demo"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "debugpy", specifier = "~=1.8" },
-    { name = "ipython", specifier = "~=8.18" },
-    { name = "mkdocs-material", specifier = "~=9.6" },
-    { name = "mkdocstrings", extras = ["python"], specifier = "~=0.29" },
-    { name = "pyclean", specifier = "~=3.1" },
-    { name = "pygments", specifier = "~=2.19" },
-    { name = "pytest", specifier = "~=8.3" },
-    { name = "pytest-cov", specifier = "~=6.0" },
-    { name = "pytest-mock", specifier = "~=3.14" },
-    { name = "pytest-pretty", specifier = "~=1.2" },
-    { name = "pytest-random-order", specifier = "~=1.1" },
+    { name = "debugpy", specifier = ">=1.8" },
+    { name = "ipython", specifier = ">=8.18" },
+    { name = "mkdocs-material", specifier = ">=9.6" },
+    { name = "mkdocstrings", extras = ["python"], specifier = ">=0.29" },
+    { name = "pyclean", specifier = ">=3.1" },
+    { name = "pygments", specifier = ">=2.19" },
+    { name = "pytest", specifier = ">=8.3" },
+    { name = "pytest-cov", specifier = ">=6.0" },
+    { name = "pytest-mock", specifier = ">=3.14" },
+    { name = "pytest-pretty", specifier = ">=1.2" },
+    { name = "pytest-random-order", specifier = ">=1.1" },
     { name = "respx", specifier = ">=0.22.0" },
-    { name = "ruff", specifier = "~=0.11" },
-    { name = "ty", specifier = "~=0.0" },
-    { name = "typos", specifier = "~=1.31" },
+    { name = "ruff", specifier = ">=0.11" },
+    { name = "ty", specifier = ">=0.0" },
+    { name = "typos", specifier = ">=1.31" },
 ]
 
 [[package]]

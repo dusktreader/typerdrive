@@ -27,8 +27,8 @@ jobs:
     - name: Install python
       run:  uv python install ${{ matrix.python-version }}
 
-    - name: Sync with demo extra
-      run:  uv sync --extra=demo
+    - name: Sync dependencies
+      run:  uv sync
 
     - name: Check Quality
       run: make qa/full

@@ -29,7 +29,7 @@ def add_files_subcommand(cli: typer.Typer):
     """
     Add all `files` subcommands to the given app.
     """
-    files_cli = typer.Typer(help="Manage files for the app")
+    files_cli = typer.Typer(help="Manage files for the app", invoke_without_command=True, no_args_is_help=True)
 
     add_show(files_cli)
 

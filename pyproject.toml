@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.8.1"
+version = "0.9.0"
 description = "Develop API-Connected Typer Apps at Lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -20,7 +20,7 @@ dependencies = [
     "pyperclip>=1.9",
     "snick>=3.0",
     "typer>=0.15",
-    "typer-repyt>=0.9.0",
+    "typer-repyt>=0.9.1",
     "rich>=14.0",
     "xdg-base-dirs>=6.0.2",
 ]
@@ -37,6 +37,7 @@ typerdrive-demo = "typerdrive_demo.main:main[cli]"
 
 [dependency-groups]
 dev = [
+    "auto-name-enum>=4.1.0",
     "debugpy>=1.8",
     "ipython>=8.18",
     "mkdocs-material>=9.6",
@@ -78,7 +79,6 @@ src = ["src/typerdrive", "tests", "src/typerdrive_demo", "examples"]
 
 [tool.ruff.format]
 docstring-code-format = true
-
 
 
 [tool.typos.default]

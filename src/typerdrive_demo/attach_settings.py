@@ -3,7 +3,7 @@ This set of demos shows the use of the `attach_settings` decorator.
 """
 
 import typer
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 from typerdrive import Validation, attach_settings, get_settings
 
 
@@ -98,6 +98,30 @@ def demo_4__attach_settings__access_through_context():
     @attach_settings(ExampleSettings)
     def report(ctx: typer.Context):
         cfg = get_settings(ctx, ExampleSettings)
+        print(f"Look at this {cfg.name} from {cfg.planet}. It's soooo {cfg.alignment}!")
+
+    cli()
+
+
+def demo_5__attach_settings__with_secrets():
+    """
+    This function demonstrates how settings are printed when they contain secrets.
+    By default, all fields in a Pydantic model that are of type `SecretStr` or `SecretBytes`
+    will be redacted when the settings are printed to the console. This is to prevent
+    sensitive information from being accidentally exposed. However, the actual values of
+    the secrets will still be available in the settings object and can be accessed as normal.
+    """
+
+    class ExampleSettings(BaseModel):
+        name: str = "yoda"
+        planet: SecretStr = SecretStr("tatooine")
+        alignment: str = "good"
+
+    cli = typer.Typer()
+
+    @cli.command()
+    @attach_settings(ExampleSettings)
+    def report(ctx: typer.Context, cfg: ExampleSettings):
         print(f"Look at this {cfg.name} from {cfg.planet}. It's soooo {cfg.alignment}!")
 
     cli()

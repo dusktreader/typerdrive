@@ -46,7 +46,7 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
             help=field_info.description,
             show_default=True,
         )
-        if issubclass(param_type, BaseModel):
+        if isinstance(param_type, type) and issubclass(param_type, BaseModel):
             model_type = param_type
             opt_kwargs["parser"] = make_parser(model_type)
             opt_kwargs["metavar"] = pretty_model(model_type)
@@ -105,7 +105,7 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
         )
         if param_type is bool:
             default = field_info.default
-        elif issubclass(param_type, BaseModel):
+        elif isinstance(param_type, type) and issubclass(param_type, BaseModel):
             model_type = param_type
             opt_kwargs["parser"] = make_parser(model_type)
             opt_kwargs["metavar"] = pretty_model(model_type)
@@ -266,7 +266,7 @@ def add_settings_subcommand(cli: typer.Typer, settings_model: type[BaseModel]):
     """
     Add all `settings` commands to the given app.
     """
-    settings_cli = typer.Typer(help="Manage settings for the app")
+    settings_cli = typer.Typer(help="Manage settings for the app", invoke_without_command=True, no_args_is_help=True)
 
     for cmd in [add_bind, add_update, add_unset, add_reset, add_show]:
         cmd(settings_cli, settings_model)

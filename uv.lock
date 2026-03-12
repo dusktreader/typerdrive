@@ -35,6 +35,15 @@ wheels = [
 ]
 
 [[package]]
+name = "auto-name-enum"
+version = "4.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a8/bb/8a39ed4d236a287697313baf2258e4952255cdf71f004b1e811a0f57c30e/auto_name_enum-4.1.0.tar.gz", hash = "sha256:f4e4225506211f80b72f8da951efaf89e9afca7fa21f21c9f50b5b153928d705", size = 5318, upload-time = "2026-03-10T05:10:14.405Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/dc/eb/c05255f38f5fbeba76f3a28a366d1738adc5e1c89638c38a0bdab7eb5ae4/auto_name_enum-4.1.0-py3-none-any.whl", hash = "sha256:c3d77fcb8068dc1d2d3b3d613ce79afb6188f831adc5a484a18b65e0f07a8138", size = 6899, upload-time = "2026-03-10T05:10:13.569Z" },
+]
+
+[[package]]
 name = "babel"
 version = "2.17.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1048,7 +1057,7 @@ wheels = [
 
 [[package]]
 name = "typer-repyt"
-version = "0.9.0"
+version = "0.9.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "humanize" },
@@ -1058,9 +1067,9 @@ dependencies = [
     { name = "snick" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/50/f3/a87e68fafa2d5a4e66f21fe0276f8b7e086da6a68c76fb2b432e0ecca5d0/typer_repyt-0.9.0.tar.gz", hash = "sha256:b1f15f796f44222a8eb003c681f4e39b081fbecd19dade3c9e686e75c74c8353", size = 10523, upload-time = "2026-02-12T06:47:14.086Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/7d/75f1c2c36938db618177ac9b7fde8e4a3ea605e5633180773dba3e959cbf/typer_repyt-0.9.1.tar.gz", hash = "sha256:6daf36e25a7d22bbda7c47c8da5f3335cc6f50942c2fbf4f3b5cc0f897da962f", size = 10572, upload-time = "2026-03-12T22:35:36.753Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cf/45/6b263877e84ea66c185a397ed06aa4ea0a6732b5f0e8549fb11902ead6ec/typer_repyt-0.9.0-py3-none-any.whl", hash = "sha256:992a87748678ab625bb31d38a4b1ff809055de54b1a7f15cc8f964d4c443807d", size = 14092, upload-time = "2026-02-12T06:47:15.166Z" },
+    { url = "https://files.pythonhosted.org/packages/c6/93/279ed69d25a9914f641bb4e5a50ec2caee98763b94519be08aa18a7fd17f/typer_repyt-0.9.1-py3-none-any.whl", hash = "sha256:2b88dd05fed668c5559b603ce3105f7f48a258d506a6a90a8a8cfaa72915c4b4", size = 14125, upload-time = "2026-03-12T22:35:37.684Z" },
 ]
 
 [[package]]
@@ -1085,6 +1094,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "auto-name-enum" },
     { name = "debugpy" },
     { name = "ipython" },
     { name = "mkdocs-material" },
@@ -1115,12 +1125,13 @@ requires-dist = [
     { name = "rich", specifier = ">=14.0" },
     { name = "snick", specifier = ">=3.0" },
     { name = "typer", specifier = ">=0.15" },
-    { name = "typer-repyt", specifier = ">=0.9.0" },
+    { name = "typer-repyt", specifier = ">=0.9.1" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "auto-name-enum", specifier = ">=4.1.0" },
     { name = "debugpy", specifier = ">=1.8" },
     { name = "ipython", specifier = ">=8.18" },
     { name = "mkdocs-material", specifier = ">=9.6" },

@@ -63,7 +63,7 @@ def add_logs_subcommand(cli: typer.Typer):
     """
     Add all `logs` commands to the given app.
     """
-    logs_cli = typer.Typer(help="Manage logs for the app")
+    logs_cli = typer.Typer(help="Manage logs for the app", invoke_without_command=True, no_args_is_help=True)
 
     for cmd in [add_clear, add_show, add_audit]:
         cmd(logs_cli)

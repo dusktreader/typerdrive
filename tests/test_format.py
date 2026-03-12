@@ -2,7 +2,7 @@ import pytest
 import snick
 from pytest_mock import MockerFixture
 
-from typerdrive.format import simple_message, terminal_message, _to_clipboard
+from typerdrive.format import simple_message, status_message, terminal_message, _to_clipboard
 
 
 def compare_capsys_output(capsys: pytest.CaptureFixture[str], expected_text: str, use_stderr: bool = False):
@@ -18,7 +18,6 @@ def compare_capsys_output(capsys: pytest.CaptureFixture[str], expected_text: str
 
 
 class TestToClipboard:
-
     def test__sends_text_to_clipboard(self, mocker: MockerFixture):
         mock_copy = mocker.patch("typerdrive.format.pyperclip.copy")
         message = "Hello, world!"
@@ -35,80 +34,95 @@ class TestToClipboard:
 
 
 class TestTerminalMessage:
-
     def test__formats_basic_message(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
         terminal_message(message)
 
-        compare_capsys_output(capsys, """
+        compare_capsys_output(
+            capsys,
+            """
             ╭──────────────────────────────────────────────────────────────────────────────╮
             │                                                                              │
             │   Hello, world!                                                              │
             │                                                                              │
             ╰──────────────────────────────────────────────────────────────────────────────╯
-        """)
+        """,
+        )
 
     def test__formats_subject__default_alignment(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
         terminal_message(message, subject="Header")
 
-        compare_capsys_output(capsys, """
+        compare_capsys_output(
+            capsys,
+            """
             ╭─ Header ─────────────────────────────────────────────────────────────────────╮
             │                                                                              │
             │   Hello, world!                                                              │
             │                                                                              │
             ╰──────────────────────────────────────────────────────────────────────────────╯
-        """)
+        """,
+        )
 
     def test__formats_subject__other_alignment(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
         terminal_message(message, subject="Header", subject_align="right")
 
-        compare_capsys_output(capsys, """
+        compare_capsys_output(
+            capsys,
+            """
             ╭───────────────────────────────────────────────────────────────────── Header ─╮
             │                                                                              │
             │   Hello, world!                                                              │
             │                                                                              │
             ╰──────────────────────────────────────────────────────────────────────────────╯
-        """)
+        """,
+        )
 
     def test__formats_footer__default_alignment(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
         terminal_message(message, footer="Footer")
 
-        compare_capsys_output(capsys, """
+        compare_capsys_output(
+            capsys,
+            """
             ╭──────────────────────────────────────────────────────────────────────────────╮
             │                                                                              │
             │   Hello, world!                                                              │
             │                                                                              │
             ╰─ Footer ─────────────────────────────────────────────────────────────────────╯
-        """)
-
+        """,
+        )
 
     def test__formats_footer__other_alignment(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
         terminal_message(message, footer="Footer", footer_align="right")
 
-        compare_capsys_output(capsys, """
+        compare_capsys_output(
+            capsys,
+            """
             ╭──────────────────────────────────────────────────────────────────────────────╮
             │                                                                              │
             │   Hello, world!                                                              │
             │                                                                              │
             ╰───────────────────────────────────────────────────────────────────── Footer ─╯
-        """)
-
+        """,
+        )
 
     def test__formats_without_indent(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
         terminal_message(message, indent=False)
 
-        compare_capsys_output(capsys, """
+        compare_capsys_output(
+            capsys,
+            """
             ╭──────────────────────────────────────────────────────────────────────────────╮
             │                                                                              │
             │ Hello, world!                                                                │
             │                                                                              │
             ╰──────────────────────────────────────────────────────────────────────────────╯
-        """)
+        """,
+        )
 
     def test__formats_markdown(self, capsys: pytest.CaptureFixture[str]):
         message = snick.dedent(
@@ -124,7 +138,9 @@ class TestTerminalMessage:
         )
         terminal_message(message, markdown=True)
 
-        compare_capsys_output(capsys, """
+        compare_capsys_output(
+            capsys,
+            """
             ╭──────────────────────────────────────────────────────────────────────────────╮
             │                                                                              │
             │ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ │
@@ -138,7 +154,8 @@ class TestTerminalMessage:
             │  • Item 3                                                                    │
             │                                                                              │
             ╰──────────────────────────────────────────────────────────────────────────────╯
-        """)
+        """,
+        )
 
     def test__prints_to_std_error(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
@@ -166,7 +183,6 @@ class TestTerminalMessage:
 
 
 class TestSimpleMessage:
-
     def test__formats_basic_message(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
         simple_message(message)
@@ -203,7 +219,9 @@ class TestSimpleMessage:
         )
         simple_message(message, markdown=True)
 
-        compare_capsys_output(capsys, """
+        compare_capsys_output(
+            capsys,
+            """
             ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
             ┃                                Hello, world!                                 ┃
             ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
@@ -213,7 +231,8 @@ class TestSimpleMessage:
              • Item 1
              • Item 2
              • Item 3
-        """)
+        """,
+        )
 
     def test__prints_to_std_error(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"
@@ -233,3 +252,42 @@ class TestSimpleMessage:
         simple_message(message, to_clipboard=True)
 
         mock__to_clipboard.assert_called_once_with(message)
+
+    def test__no_padding_when_disabled(self, capsys: pytest.CaptureFixture[str]):
+        message = "Hello, world!"
+        simple_message(message, padding=False)
+
+        assert capsys.readouterr().out == snick.conjoin(
+            message,
+            "",
+        )
+
+
+class TestStatusMessage:
+    def test__prints_pending_then_success(self, capsys: pytest.CaptureFixture[str]):
+        with status_message("Doing stuff"):
+            pass
+
+        out = snick.strip_ansi_escape_sequences(capsys.readouterr().out)
+        lines = [line.rstrip() for line in out.splitlines() if line.strip()]
+        assert lines[0] == "→ Starting Doing stuff..."
+        assert lines[1] == "✓ Completed Doing stuff"
+
+    def test__prints_failure_and_reraises(self, capsys: pytest.CaptureFixture[str]):
+        with pytest.raises(ValueError, match="boom"):
+            with status_message("Doing stuff"):
+                raise ValueError("boom")
+
+        out = snick.strip_ansi_escape_sequences(capsys.readouterr().out)
+        lines = [line.rstrip() for line in out.splitlines() if line.strip()]
+        assert lines[0] == "→ Starting Doing stuff..."
+        assert lines[1] == "✗ Failed Doing stuff"
+
+    def test__prints_to_stderr_when_error_is_true(self, capsys: pytest.CaptureFixture[str]):
+        with status_message("Doing stuff", error=True):
+            pass
+
+        out = snick.strip_ansi_escape_sequences(capsys.readouterr().err)
+        lines = [line.rstrip() for line in out.splitlines() if line.strip()]
+        assert lines[0] == "→ Starting Doing stuff..."
+        assert lines[1] == "✓ Completed Doing stuff"

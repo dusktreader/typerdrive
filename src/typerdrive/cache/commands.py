@@ -81,7 +81,7 @@ def add_cache_subcommand(cli: typer.Typer):
     """
     Add all `cache` subcommands to the given app.
     """
-    cache_cli = typer.Typer(help="Manage cache for the app")
+    cache_cli = typer.Typer(help="Manage cache for the app", invoke_without_command=True, no_args_is_help=True)
 
     for cmd in [add_clear, add_show]:
         cmd(cache_cli)

@@ -481,6 +481,66 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#secret-settings-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Secret settings values
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Secret settings values">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#annotating-a-field-as-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Annotating a field as secret
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#display-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Display masking
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Persistence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accessing-the-value-in-your-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accessing the value in your commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydantic-default-coercion-caveat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pydantic default coercion caveat
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-get_settings-functions" class="md-nav__link">
     <span class="md-ellipsis">
       The get_settings() functions
@@ -1010,6 +1070,66 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#secret-settings-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Secret settings values
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Secret settings values">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#annotating-a-field-as-secret" class="md-nav__link">
+    <span class="md-ellipsis">
+      Annotating a field as secret
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#display-masking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Display masking
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Persistence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accessing-the-value-in-your-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accessing the value in your commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pydantic-default-coercion-caveat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pydantic default coercion caveat
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-get_settings-functions" class="md-nav__link">
     <span class="md-ellipsis">
       The get_settings() functions
@@ -1519,23 +1639,84 @@ model has nested models, the arguments to <code>bind</code> and <code>update</co
 </span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>╰─ saved to /home/dusktreader/.local/share/settings-nested-example/settings...─╯
 </span></code></pre></div>
 <p>You can see that the nested model types are noted at the bottom including the expected types for each field.</p>
+<h2 id="secret-settings-values">Secret settings values</h2>
+<p>Some settings values are sensitive — API tokens, passwords, private keys — and should not be displayed in plain text
+when running <code>settings show</code>. <code>typerdrive</code> supports this through Pydantic's built-in
+<a href="https://docs.pydantic.dev/latest/concepts/types/#secret-types"><code>SecretStr</code></a> type.</p>
+<h3 id="annotating-a-field-as-secret">Annotating a field as secret</h3>
+<p>Simply annotate the field with <code>SecretStr</code> instead of <code>str</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">SecretStr</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">AppSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Your username&quot;</span><span class="p">)</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">api_token</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Your API token&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>That's all that's required. <code>typerdrive</code> takes care of the rest.</p>
+<h3 id="display-masking">Display masking</h3>
+<p>When <code>settings show</code> (or any other settings subcommand) renders the settings table, <code>SecretStr</code> fields are
+automatically masked:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>$ myapp settings show
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>╭─ Current settings ───────────────────────────────────────────────────────────╮
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>│                                                                               │
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>│ Settings Values                                                               │
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>│                                                                               │
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>│    username  str        -&gt;  leia                                              │
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>│   api-token  SecretStr  -&gt;  **********                                        │
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>│                                                                               │
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>╰───────────────────────────────────────────────────────────────────────────────╯
+</span></code></pre></div>
+<h3 id="persistence">Persistence</h3>
+<p><code>SecretStr</code> values are stored in plain text in the settings JSON file on disk. This is intentional — the file is
+local to the user's machine and the value must be recoverable across invocations. Protect the file with appropriate
+filesystem permissions if required.</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leia&quot;</span><span class="p">,</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">&quot;api_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-secret-token&quot;</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">The settings file is not encrypted</p>
+<p><code>typerdrive</code> stores settings in a plain JSON file under <code>~/.local/state/&lt;app-name&gt;/settings.json</code>. Anyone with
+read access to that file can see the raw secret value. If your threat model requires encryption at rest, you
+should manage the secret outside of <code>typerdrive</code> (e.g. via a system keychain or environment variable) and not
+store it in the settings file at all.</p>
+</div>
+<h3 id="accessing-the-value-in-your-commands">Accessing the value in your commands</h3>
+<p>Because the field is a <code>SecretStr</code>, you must call <code>.get_secret_value()</code> to obtain the raw string when using it in
+your application code:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_settings</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">AppSettings</span><span class="p">)</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">call_api</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">AppSettings</span><span class="p">):</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="n">token</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">api_token</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">()</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>    <span class="c1"># use token with your HTTP client ...</span>
+</span></code></pre></div>
+<h3 id="pydantic-default-coercion-caveat">Pydantic default coercion caveat</h3>
+<p>Pydantic does not coerce a bare string <em>default value</em> to <code>SecretStr</code> automatically — it only coerces values that
+pass through model validation (i.e. values supplied to the constructor). This means that if the field is never
+explicitly set, the internal value may be a plain <code>str</code>. <code>typerdrive</code> handles this transparently, so masking and
+persistence always behave correctly regardless. However, in your own code you should always use
+<code>.get_secret_value()</code> rather than treating the attribute as a plain string, to be safe.</p>
 <h2 id="the-get_settings-functions">The <code>get_settings()</code> functions</h2>
 <p>In order for <code>typerdrive</code> to provide the settings through an argument to the command function, we have to tap into a bit
 of Python and Typer's "mystical energy field". If you want to use something more direct, you can access the settings
 object using the <code>get_settings()</code> function to extract it from the <code>typer.Context</code> instead. Rewriting the <code>report()</code>
 command to use the <code>get_settings()</code> function would look like this:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">SettingsModel</span><span class="p">)</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">):</span>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">SettingsModel</span><span class="p">)</span>
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="nb">print</span><span class="p">(</span>
-</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>        <span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="s2">            Look at this </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">alignment</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">planet</span><span class="si">}</span>
-</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="s2">            </span><span class="si">{</span><span class="s1">&#39;walking&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">cfg</span><span class="o">.</span><span class="n">is_humanoid</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;slithering&#39;</span><span class="si">}</span><span class="s2"> by.</span>
-</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="s2">            &quot;&quot;&quot;</span>
-</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>        <span class="p">)</span>
-</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">SettingsModel</span><span class="p">)</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">):</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">SettingsModel</span><span class="p">)</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="nb">print</span><span class="p">(</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>        <span class="n">unwrap</span><span class="p">(</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="s2">            Look at this </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">alignment</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">planet</span><span class="si">}</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="s2">            </span><span class="si">{</span><span class="s1">&#39;walking&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">cfg</span><span class="o">.</span><span class="n">is_humanoid</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;slithering&#39;</span><span class="si">}</span><span class="s2"> by.</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="s2">            &quot;&quot;&quot;</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>        <span class="p">)</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>    <span class="p">)</span>
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">The <code>type_hint</code> argument to <code>get_settings()</code></p>

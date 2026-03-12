@@ -301,6 +301,89 @@ $ python examples/settings/nested.py settings bind \
 You can see that the nested model types are noted at the bottom including the expected types for each field.
 
 
+## Secret settings values
+
+Some settings values are sensitive — API tokens, passwords, private keys — and should not be displayed in plain text
+when running `settings show`. `typerdrive` supports this through Pydantic's built-in
+[`SecretStr`](https://docs.pydantic.dev/latest/concepts/types/#secret-types) type.
+
+### Annotating a field as secret
+
+Simply annotate the field with `SecretStr` instead of `str`:
+
+```python
+from pydantic import BaseModel, Field, SecretStr
+
+class AppSettings(BaseModel):
+    username: str = Field(default="", description="Your username")
+    api_token: SecretStr = Field(default="", description="Your API token")
+```
+
+That's all that's required. `typerdrive` takes care of the rest.
+
+### Display masking
+
+When `settings show` (or any other settings subcommand) renders the settings table, `SecretStr` fields are
+automatically masked:
+
+```
+$ myapp settings show
+
+╭─ Current settings ───────────────────────────────────────────────────────────╮
+│                                                                               │
+│ Settings Values                                                               │
+│                                                                               │
+│    username  str        ->  leia                                              │
+│   api-token  SecretStr  ->  **********                                        │
+│                                                                               │
+╰───────────────────────────────────────────────────────────────────────────────╯
+```
+
+### Persistence
+
+`SecretStr` values are stored in plain text in the settings JSON file on disk. This is intentional — the file is
+local to the user's machine and the value must be recoverable across invocations. Protect the file with appropriate
+filesystem permissions if required.
+
+```json
+{
+  "username": "leia",
+  "api_token": "my-secret-token"
+}
+```
+
+!!!warning "The settings file is not encrypted"
+
+    `typerdrive` stores settings in a plain JSON file under `~/.local/state/<app-name>/settings.json`. Anyone with
+    read access to that file can see the raw secret value. If your threat model requires encryption at rest, you
+    should manage the secret outside of `typerdrive` (e.g. via a system keychain or environment variable) and not
+    store it in the settings file at all.
+
+### Accessing the value in your commands
+
+Because the field is a `SecretStr`, you must call `.get_secret_value()` to obtain the raw string when using it in
+your application code:
+
+```python
+import typer
+from typerdrive.settings import attach_settings
+
+@cli.command()
+@attach_settings(AppSettings)
+def call_api(ctx: typer.Context, settings: AppSettings):
+    token = settings.api_token.get_secret_value()
+    # use token with your HTTP client ...
+```
+
+### Pydantic default coercion caveat
+
+Pydantic does not coerce a bare string _default value_ to `SecretStr` automatically — it only coerces values that
+pass through model validation (i.e. values supplied to the constructor). This means that if the field is never
+explicitly set, the internal value may be a plain `str`. `typerdrive` handles this transparently, so masking and
+persistence always behave correctly regardless. However, in your own code you should always use
+`.get_secret_value()` rather than treating the attribute as a plain string, to be safe.
+
+
 ## The `get_settings()` functions
 
 

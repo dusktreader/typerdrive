@@ -1,12 +1,12 @@
 import json
 from collections.abc import Generator
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, cast
 
 import pytest
 from rich.console import Console
 import snick
-from pydantic import AfterValidator, BaseModel, ValidationError
+from pydantic import AfterValidator, BaseModel, SecretStr, ValidationError
 from pytest_mock import MockerFixture
 from typerdrive.config import get_typerdrive_config
 from typerdrive.env import tweak_env
@@ -310,3 +310,50 @@ class TestSettingsManager:
         mocker.patch.object(manager, "settings_path").write_text.side_effect = RuntimeError("BOOM")
         with pytest.raises(SettingsSaveError, match="Failed to save settings"):
             manager.save()
+
+    def test_secret_str__is_masked_in_display(self):
+        class SecretSettingsModel(BaseModel):
+            username: str = "leia"
+            api_token: SecretStr = SecretStr("s3cr3t")
+
+        manager = SettingsManager(SecretSettingsModel)
+        console = Console()
+        with console.capture() as snag:
+            console.print(manager.pretty())
+        output = snag.get()
+        assert "s3cr3t" not in output
+        assert "**********" in output
+
+    def test_secret_str__is_persisted_as_plaintext_and_reloaded(self, fake_settings_path: Path):
+        class SecretSettingsModel(BaseModel):
+            username: str = "leia"
+            api_token: SecretStr = SecretStr("s3cr3t")
+
+        manager = SettingsManager(SecretSettingsModel)
+        manager.save()
+
+        data = json.loads(fake_settings_path.read_text())
+        assert data == dict(username="leia", api_token="s3cr3t")
+
+        manager2 = SettingsManager(SecretSettingsModel)
+        assert cast(SecretSettingsModel, manager2.settings_instance).api_token.get_secret_value() == "s3cr3t"
+
+    def test_secret_str__survives_update_round_trip(self):
+        class SecretSettingsModel(BaseModel):
+            username: str = "leia"
+            api_token: SecretStr = SecretStr("s3cr3t")
+
+        manager = SettingsManager(SecretSettingsModel)
+        manager.update(username="han")
+        assert cast(SecretSettingsModel, manager.settings_instance).username == "han"
+        assert cast(SecretSettingsModel, manager.settings_instance).api_token.get_secret_value() == "s3cr3t"
+
+    def test_secret_str__survives_unset_round_trip(self):
+        class SecretSettingsModel(BaseModel):
+            username: str = "leia"
+            api_token: SecretStr = SecretStr("s3cr3t")
+
+        manager = SettingsManager(SecretSettingsModel)
+        manager.unset("username")
+        assert cast(SecretSettingsModel, manager.settings_instance).username == "leia"
+        assert cast(SecretSettingsModel, manager.settings_instance).api_token.get_secret_value() == "s3cr3t"

@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.0 - 2026-03-12
+- Added `SecretStr` support in settings: fields annotated with `SecretStr` are automatically masked in normal output
+- Added `_dump()` helper in `SettingsManager` to correctly store `SecretStr` values as plain strings
+- Added `status_message` context manager for bracketed start/success/failure output; exported from top-level package
+- Added `padding` parameter to `simple_message` (default `True`) to allow suppressing blank-line padding
+- Added `invoke_without_command=True, no_args_is_help=True` to all four subcommand groups (settings, cache, files, logs)
+  so invoking a subcommand with no arguments shows help instead of silently exiting
+- Fixed `issubclass` crash in settings `bind` and `update` commands when a field annotation is not a plain type
+  (e.g. `AutoNameEnum`)
+- Bumped `typer-repyt` dependency to `>=0.9.1`
+- Added `auto-name-enum` as a dev dependency for tests
+- Added documentation section for secret settings values
+
+
 ## v0.8.1 - 2026-02-11
 - Removed upper bounds on all dependency version specifiers
 - Bumped snick to >=3.0, py-buzz to >=8.0, typer-repyt to >=0.9.0

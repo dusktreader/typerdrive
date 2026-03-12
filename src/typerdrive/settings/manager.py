@@ -8,7 +8,7 @@ from typing import Any, cast
 
 from inflection import dasherize
 from loguru import logger
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, SecretStr, ValidationError
 from rich.console import Group, RenderableType
 from rich.table import Table
 
@@ -73,6 +73,27 @@ class SettingsManager:
             message = data["msg"]
             self.invalid_warnings[key] = message
 
+    def _dump(self) -> dict[str, Any]:
+        """
+        Dump the settings instance to a plain dict, unwrapping any `SecretStr` values to bare strings
+        so that the data can be round-tripped through JSON and back into pydantic without loss.
+        """
+        result: dict[str, Any] = {}
+        for k, field_info in self.settings_instance.__class__.model_fields.items():
+            try:
+                val = getattr(self.settings_instance, k)
+            except AttributeError:
+                continue
+            if field_info.annotation is SecretStr and isinstance(val, str):
+                val = SecretStr(val)
+            if isinstance(val, SecretStr):
+                result[k] = val.get_secret_value()
+            elif isinstance(val, BaseModel):
+                result[k] = val.model_dump(mode="json")
+            else:
+                result[k] = val
+        return result
+
     def update(self, **settings_values: Any):
         """
         Update the app settings given the provided key/value pairs.
@@ -82,7 +103,7 @@ class SettingsManager:
         logger.debug(f"Updating settings with {settings_values}")
 
         with SettingsUpdateError.handle_errors("Failed to update settings"):
-            combined_settings = {**self.settings_instance.model_dump(mode="json"), **settings_values}
+            combined_settings = {**self._dump(), **settings_values}
             self.construct_instance(**combined_settings)
 
     def unset(self, *unset_keys: str):
@@ -92,7 +113,7 @@ class SettingsManager:
         logger.debug(f"Unsetting keys {unset_keys}")
 
         with SettingsUnsetError.handle_errors("Failed to remove keys"):
-            settings_values = {k: v for (k, v) in self.settings_instance.model_dump(mode="json").items() if k not in unset_keys}
+            settings_values = {k: v for (k, v) in self._dump().items() if k not in unset_keys}
             self.construct_instance(**settings_values)
 
     def reset(self):
@@ -110,7 +131,7 @@ class SettingsManager:
 
         If invalid, `ValidationError` exceptions will be raised
         """
-        self.settings_model(**self.settings_instance.model_dump(mode="json"))
+        self.settings_model(**self._dump())
 
     def pretty(self, with_style: bool = True) -> RenderableType:
         """
@@ -137,26 +158,26 @@ class SettingsManager:
         values_table.add_column(justify="center")
         values_table.add_column(justify="left", no_wrap=True)
 
-        for (field_name, field_info) in self.settings_instance.__class__.model_fields.items():
+        for field_name, field_info in self.settings_instance.__class__.model_fields.items():
             if field_name == "invalid_warning":
                 continue
             try:
-                field_string = str(getattr(self.settings_instance, field_name))
+                val = getattr(self.settings_instance, field_name)
+                if field_info.annotation is SecretStr and isinstance(val, str):
+                    val = SecretStr(val)
+                field_string = str(val)
             except AttributeError:
                 field_string = "<UNSET>"
             if field_name in self.invalid_warnings:
                 field_string = f"{red_}{field_string}{_red}"
-            annotation = SettingsDisplayError.enforce_defined(field_info.annotation, f"The field info annotation for {field_info} was not defined!")
+            annotation = SettingsDisplayError.enforce_defined(
+                field_info.annotation, f"The field info annotation for {field_info} was not defined!"
+            )
             field_type: str = f"{italic_}{annotation.__name__}{_italic}"
             if issubclass(annotation, BaseModel):
                 field_type = f"{blue_}{field_type}*{_blue}"
                 nested.append(pretty_field_info(field_info))
-            values_table.add_row(
-                dasherize(field_name),
-                field_type,
-                "->",
-                field_string
-            )
+            values_table.add_row(dasherize(field_name), field_type, "->", field_string)
 
         items.append(values_table)
 
@@ -173,7 +194,7 @@ class SettingsManager:
             invalid_table.add_column(justify="center")
             invalid_table.add_column(justify="left", no_wrap=True)
 
-            for (field_name, invalid_warning) in self.invalid_warnings.items():
+            for field_name, invalid_warning in self.invalid_warnings.items():
                 invalid_table.add_row(
                     dasherize(field_name),
                     "->",
@@ -181,7 +202,6 @@ class SettingsManager:
                 )
 
             items.append(invalid_table)
-
 
         if nested:
             items.append("")
@@ -201,7 +221,6 @@ class SettingsManager:
 
         return Group(*items)
 
-
     def save(self):
         """
         Write the current settings to disk.
@@ -210,4 +229,4 @@ class SettingsManager:
 
         with SettingsSaveError.handle_errors(f"Failed to save settings to {self.settings_path}"):
             self.settings_path.parent.mkdir(parents=True, exist_ok=True)
-            self.settings_path.write_text(self.settings_instance.model_dump_json(indent=2))
+            self.settings_path.write_text(json.dumps(self._dump(), indent=2))

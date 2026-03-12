@@ -2,7 +2,8 @@
 Provide methods for formatted output for the user.
 """
 
-from typing import Any, Literal
+from contextlib import contextmanager
+from typing import Any, Generator, Literal
 
 import pyperclip
 import snick
@@ -89,12 +90,11 @@ def terminal_message(
         console_kwargs["width"] = config.console_width
 
     if config.console_ascii_only:
-        #console_kwargs["force_terminal"] = False
+        # console_kwargs["force_terminal"] = False
         panel_kwargs["box"] = box.ASCII
 
     console = Console(
         stderr=error,
-
     )
     console.print()
     console.print(Panel(message, **panel_kwargs))
@@ -107,6 +107,7 @@ def simple_message(
     markdown: bool = False,
     error: bool = False,
     to_clipboard: bool = False,
+    padding: bool = True,
 ):
     """
     Show a simple, non-decorated message to the user.
@@ -117,6 +118,7 @@ def simple_message(
         markdown:     If `True`, render the text with `rich.markdown`
         error:        If `True`, print the output to stderr instead of stdout
         to_clipboard: If `True`, attempt to copy the output to the user's clipboard
+        padding:      If `True` (default), print a blank line before and after the message
     """
     text: str = snick.dedent(message)
 
@@ -132,9 +134,46 @@ def simple_message(
         content = Markdown(text)
 
     console = Console(stderr=error)
-    console.print()
+    if padding:
+        console.print()
     console.print(content)
-    console.print()
+    if padding:
+        console.print()
+
+
+@contextmanager
+def status_message(action: str, error: bool = False) -> Generator[None, None, None]:
+    """
+    Context manager that prints status lines bracketing an operation.
+
+    Parameters:
+        action: A short description of the operation being performed (should start with lower-case).
+        error:  If `True`, print all output to stderr instead of stdout.
+
+    Example:
+        with status_message("database migrations"):
+            run_migrations()  # this will succeed
+
+        # → Starting database migrations...
+        # <migration output>
+        # ✓ Completed database migrations
+
+        with status_message("doomed process"):
+            doomed()  # this will fail
+
+        # → Starting doomed process...
+        # <error message>
+        # ✗ Failed doomed process
+    """
+    console = Console(stderr=error)
+    console.print(f"[bold blue]→[/bold blue] Starting {action}...")
+    try:
+        yield
+    except Exception:
+        console.print(f"[bold red]✗[/bold red] Failed {action}")
+        raise
+    else:
+        console.print(f"[bold green]✓[/bold green] Completed {action}")
 
 
 def strip_rich_style(text: str | Text) -> str:
@@ -150,9 +189,7 @@ def pretty_model(model_class: type[BaseModel]) -> str:
     """
     Format a pydantic model class.
     """
-    parts: list[str] = [
-        f"{fn}={pretty_field_info(fi)}" for (fn, fi) in model_class.model_fields.items()
-    ]
+    parts: list[str] = [f"{fn}={pretty_field_info(fi)}" for (fn, fi) in model_class.model_fields.items()]
     return f"{model_class.__name__}({' '.join(parts)})"
 
 
@@ -160,7 +197,9 @@ def pretty_field_info(field_info: FieldInfo) -> str:
     """
     Format a pydantic FieldInfo.
     """
-    annotation = DisplayError.enforce_defined(field_info.annotation, f"The field info annotation for {field_info} was not defined!")
+    annotation = DisplayError.enforce_defined(
+        field_info.annotation, f"The field info annotation for {field_info} was not defined!"
+    )
     if issubclass(annotation, BaseModel):
         return pretty_model(annotation)
     else:

@@ -2,12 +2,19 @@ import json
 from pathlib import Path
 
 import typer
+from auto_name_enum import AutoNameEnum, LowerCaseMixin, auto
 from pydantic import BaseModel
 from typerdrive.constants import ExitCode
 from typerdrive.settings.commands import add_bind, add_reset, add_settings_subcommand, add_show, add_unset, add_update
 
 from tests.helpers import match_help, match_output
 from tests.settings.models import DefaultSettingsModel, RequiredFieldsModel
+
+
+class Faction(AutoNameEnum, LowerCaseMixin):
+    REBEL = auto()
+    EMPIRE = auto()
+    NEUTRAL = auto()
 
 
 class TestBind:
@@ -161,6 +168,30 @@ class TestBind:
                 hair="black",
             ),
         )
+
+    def test_bind__with_auto_name_enum_default(self, fake_settings_path: Path):
+        class Settings(BaseModel):
+            name: str = "jawa"
+            faction: Faction = Faction.NEUTRAL
+
+        cli = typer.Typer()
+        add_bind(cli, Settings)
+
+        match_output(
+            cli,
+            "--name=jawa",
+            "--faction=rebel",
+            expected_pattern=[
+                "name.*jawa",
+                "faction.*rebel",
+                f"saved to {str(fake_settings_path)[:40]}",
+            ],
+            prog_name="test",
+        )
+
+        assert fake_settings_path.exists()
+        data = json.loads(fake_settings_path.read_text())
+        assert data == dict(name="jawa", faction="rebel")
 
 
 class TestUpdate:
@@ -478,6 +509,26 @@ class TestSubcommand:
             cli,
             "settings",
             "--help",
+            exit_code=0,
+            expected_pattern=expected_pattern,
+            prog_name="test",
+        )
+
+    def test_add_settings_subcommand__no_args_shows_help(self):
+        cli = typer.Typer()
+
+        add_settings_subcommand(cli, RequiredFieldsModel)
+
+        expected_pattern = [
+            "bind",
+            "update",
+            "unset",
+            "reset",
+            "show",
+        ]
+        match_output(
+            cli,
+            "settings",
             exit_code=0,
             expected_pattern=expected_pattern,
             prog_name="test",

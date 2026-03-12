@@ -16,7 +16,7 @@ from typerdrive.files.attach import attach_files, get_files_manager
 from typerdrive.files.commands import add_files_subcommand
 from typerdrive.files.exceptions import FilesClearError, FilesError, FilesInitError, FilesLoadError, FilesStoreError
 from typerdrive.files.manager import FilesManager
-from typerdrive.format import simple_message, strip_rich_style, terminal_message
+from typerdrive.format import simple_message, status_message, strip_rich_style, terminal_message
 from typerdrive.handle_errors import handle_errors
 from typerdrive.logging.attach import attach_logging, get_logging_manager
 from typerdrive.logging.commands import add_logs_subcommand
@@ -91,6 +91,7 @@ __all__ = [
     "log_error",
     "set_typerdrive_config",
     "simple_message",
+    "status_message",
     "strip_rich_style",
     "terminal_message",
 ]

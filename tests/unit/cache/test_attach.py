@@ -5,7 +5,7 @@ from typerdrive.cache.attach import attach_cache, get_cache_manager
 from typerdrive.cache.exceptions import CacheError
 from typerdrive.cache.manager import CacheManager
 
-from tests.helpers import check_output, match_output
+from tests.unit.helpers import check_output, match_output
 
 
 class TestAttachCache:

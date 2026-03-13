@@ -11,8 +11,8 @@ from typerdrive.settings.attach import attach_settings, get_settings, get_settin
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
 
-from tests.helpers import match_help, match_output
-from tests.settings.models import DefaultSettingsModel, RequiredFieldsModel
+from tests.unit.helpers import match_help, match_output
+from tests.unit.settings.models import DefaultSettingsModel, RequiredFieldsModel
 
 
 class TestAttachSettings:

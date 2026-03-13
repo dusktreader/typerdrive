@@ -45,6 +45,7 @@ dev = [
     "pyclean>=3.1",
     "pygments>=2.19",
     "pytest>=8.3",
+    "pytest-bdd>=8.0",
     "pytest-cov>=6.0",
     "pytest-mock>=3.14",
     "pytest-pretty>=1.2",

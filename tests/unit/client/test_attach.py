@@ -6,7 +6,7 @@ from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager
 from typerdrive.settings.attach import attach_settings
 
-from tests.helpers import check_output, match_output
+from tests.unit.helpers import check_output, match_output
 
 
 class ClientSettings(BaseModel):

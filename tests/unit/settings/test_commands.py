@@ -7,8 +7,8 @@ from pydantic import BaseModel
 from typerdrive.constants import ExitCode
 from typerdrive.settings.commands import add_bind, add_reset, add_settings_subcommand, add_show, add_unset, add_update
 
-from tests.helpers import match_help, match_output
-from tests.settings.models import DefaultSettingsModel, RequiredFieldsModel, SecretFieldsModel, SecretFieldsModel
+from tests.unit.helpers import match_help, match_output
+from tests.unit.settings.models import DefaultSettingsModel, RequiredFieldsModel, SecretFieldsModel, SecretFieldsModel
 
 
 class Faction(AutoNameEnum, LowerCaseMixin):

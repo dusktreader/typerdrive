@@ -3,7 +3,7 @@ import typer
 from typerdrive.cache.commands import add_cache_subcommand, add_clear, add_show
 from typerdrive.cache.manager import CacheManager
 
-from tests.helpers import match_help, match_output
+from tests.unit.helpers import match_help, match_output
 
 
 class TestClear:

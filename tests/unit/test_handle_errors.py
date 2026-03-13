@@ -8,7 +8,7 @@ from typerdrive.exceptions import TyperdriveError
 from typerdrive.handle_errors import handle_errors
 from typerdrive.settings.attach import attach_settings, get_settings
 
-from tests.helpers import check_output
+from tests.unit.helpers import check_output
 
 
 class TestHandleErrors:

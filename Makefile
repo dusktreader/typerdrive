@@ -7,8 +7,14 @@ default: help
 
 qa: qa/full  ## Shortcut for qa/full
 
-qa/test:  ## Run the tests
-	@uv run pytest
+qa/test: qa/test-unit qa/test-integration  ## Run all tests (with combined coverage)
+	@uv run pytest tests/unit tests/integration
+
+qa/test-unit:  ## Run unit tests only (no coverage enforcement)
+	@uv run pytest tests/unit --no-cov
+
+qa/test-integration:  ## Run integration tests only (no coverage enforcement)
+	@uv run pytest tests/integration --no-cov
 
 qa/types:  ## Run static type checks
 	@uv run ty check ${PACKAGE_TARGET} tests src/typerdrive_demo
@@ -76,7 +82,7 @@ help:  ## Show help message
 
 .ONESHELL:
 SHELL:=/bin/bash
-.PHONY: qa qa/test qa/types qa/lint qa/full qa/format \
+.PHONY: qa qa/test qa/test-unit qa/test-integration qa/types qa/lint qa/full qa/format \
 	docs docs/build docs/serve \
 	demo demo/run demo/debug \
 	publish \

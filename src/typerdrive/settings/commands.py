@@ -5,7 +5,7 @@ Provide commands that can be added to a `typer` app to manage settings.
 from typing import Any
 
 import typer
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 from pydantic_core import PydanticUndefined
 from typer_repyt.build_command import DecDef, OptDef, build_command
 from typer_repyt.constants import Sentinel
@@ -38,15 +38,21 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
         default = field_info.default if field_info.default is not PydanticUndefined else Sentinel.NOT_GIVEN
         param_type: type[Any] = SettingsError.enforce_defined(
             field_info.annotation, "Option type may not be `None`"
-        )  # TODO: Figure out if this can even be triggered
+        )
+
+        # Typer does not support SecretStr; use str with hidden input instead.
+        # SettingsManager handles wrapping bare str values back into SecretStr on update.
+        is_secret = isinstance(param_type, type) and issubclass(param_type, SecretStr)
+
         opt_kwargs: dict[str, Any] = dict(
             name=name,
-            param_type=param_type,
-            default=default,
+            param_type=str if is_secret else param_type,
+            default=default.get_secret_value() if isinstance(default, SecretStr) else default,
             help=field_info.description,
             show_default=True,
+            hide_input=is_secret,
         )
-        if isinstance(param_type, type) and issubclass(param_type, BaseModel):
+        if not is_secret and isinstance(param_type, type) and issubclass(param_type, BaseModel):
             model_type = param_type
             opt_kwargs["parser"] = make_parser(model_type)
             opt_kwargs["metavar"] = pretty_model(model_type)
@@ -96,16 +102,21 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
     for name, field_info in settings_model.model_fields.items():
         param_type: type[Any] = SettingsError.enforce_defined(field_info.annotation, "Option type may not be `None`")
         default: None | bool = None
+        # Typer does not support SecretStr; use str with hidden input instead.
+        # SettingsManager handles wrapping bare str values back into SecretStr on update.
+        is_secret = isinstance(param_type, type) and issubclass(param_type, SecretStr)
+        cli_type = str if is_secret else param_type
         opt_kwargs: dict[str, Any] = dict(
             name=name,
-            param_type=param_type | None,
+            param_type=cli_type | None,
             default=default,
             help=field_info.description,
             show_default=True,
+            hide_input=is_secret,
         )
         if param_type is bool:
             default = field_info.default
-        elif isinstance(param_type, type) and issubclass(param_type, BaseModel):
+        elif not is_secret and isinstance(param_type, type) and issubclass(param_type, BaseModel):
             model_type = param_type
             opt_kwargs["parser"] = make_parser(model_type)
             opt_kwargs["metavar"] = pretty_model(model_type)

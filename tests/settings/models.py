@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from pydantic import AfterValidator, BaseModel
+from pydantic import AfterValidator, BaseModel, SecretStr
 
 
 def valid_alignment(value: str) -> str:
@@ -21,3 +21,9 @@ class RequiredFieldsModel(BaseModel):
     planet: str
     is_humanoid: bool = True
     alignment: Annotated[str, AfterValidator(valid_alignment)] = "neutral"
+
+
+class SecretFieldsModel(BaseModel):
+    name: str
+    api_key: SecretStr
+    token: SecretStr = SecretStr("default-token")

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.1 - 2026-03-12
+- Fixed issue with binding using SecretStr settings
+
+
 ## v0.9.0 - 2026-03-12
 - Added `SecretStr` support in settings: fields annotated with `SecretStr` are automatically masked in normal output
 - Added `_dump()` helper in `SettingsManager` to correctly store `SecretStr` values as plain strings

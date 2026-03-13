@@ -8,7 +8,7 @@ from typerdrive.constants import ExitCode
 from typerdrive.settings.commands import add_bind, add_reset, add_settings_subcommand, add_show, add_unset, add_update
 
 from tests.helpers import match_help, match_output
-from tests.settings.models import DefaultSettingsModel, RequiredFieldsModel
+from tests.settings.models import DefaultSettingsModel, RequiredFieldsModel, SecretFieldsModel, SecretFieldsModel
 
 
 class Faction(AutoNameEnum, LowerCaseMixin):
@@ -531,5 +531,98 @@ class TestSubcommand:
             "settings",
             exit_code=0,
             expected_pattern=expected_pattern,
+            prog_name="test",
+        )
+
+
+class TestSecretFields:
+    """
+    Typer does not support `pydantic.SecretStr` as a CLI parameter type — passing it directly
+    raises `RuntimeError: Type not yet supported`.  The fix in `commands.py` substitutes `str`
+    so Typer can build the command tree, while `SettingsManager` continues to round-trip the
+    values through `SecretStr` when persisting to / loading from disk.
+    """
+
+    def test_bind__does_not_raise_on_registration(self):
+        """add_bind must not crash when the model contains SecretStr fields."""
+        cli = typer.Typer()
+        # Previously raised: RuntimeError: Type not yet supported: <class 'pydantic.types.SecretStr'>
+        add_bind(cli, SecretFieldsModel)
+
+    def test_bind__help_shows_secret_fields_as_text(self):
+        """SecretStr fields must appear as TEXT options in --help output."""
+        cli = typer.Typer()
+        add_bind(cli, SecretFieldsModel)
+
+        match_help(
+            cli,
+            expected_pattern=[
+                r"--name TEXT",
+                r"--api-key TEXT",
+                r"--token TEXT",
+            ],
+            prog_name="test",
+        )
+
+    def test_bind__saves_secret_value_as_plain_text_on_disk(self, fake_settings_path: Path):
+        """Secret values passed via CLI must be persisted as plain strings, not masked."""
+        cli = typer.Typer()
+        add_bind(cli, SecretFieldsModel)
+
+        match_output(
+            cli,
+            "--name=han",
+            "--api-key=s3cr3t",
+            "--token=tok123",
+            expected_pattern=[f"saved to {str(fake_settings_path)[:40]}"],
+            prog_name="test",
+        )
+
+        data = json.loads(fake_settings_path.read_text())
+        assert data == dict(name="han", api_key="s3cr3t", token="tok123")
+
+    def test_bind__secretstr_default_does_not_crash_registration(self):
+        """A SecretStr field with a default value must not crash CLI registration."""
+        cli = typer.Typer()
+        # SecretFieldsModel.token has default=SecretStr("default-token")
+        add_bind(cli, SecretFieldsModel)
+        match_help(cli, expected_pattern=[r"--token TEXT"], prog_name="test")
+
+    def test_update__does_not_raise_on_registration(self):
+        """add_update must not crash when the model contains SecretStr fields."""
+        cli = typer.Typer()
+        add_update(cli, SecretFieldsModel)
+
+    def test_update__saves_updated_secret_as_plain_text_on_disk(self, fake_settings_path: Path):
+        """Updating a single secret field must persist the new plain-text value while leaving others intact."""
+        fake_settings_path.write_text(json.dumps(dict(name="han", api_key="old-key", token="old-tok")))
+
+        cli = typer.Typer()
+        add_update(cli, SecretFieldsModel)
+
+        match_output(
+            cli,
+            "--api-key=new-key",
+            expected_pattern=[f"saved to {str(fake_settings_path)[:40]}"],
+            prog_name="test",
+        )
+
+        data = json.loads(fake_settings_path.read_text())
+        assert data["api_key"] == "new-key"
+        assert data["token"] == "old-tok"  # unchanged
+
+    def test_add_settings_subcommand__does_not_raise_on_registration(self):
+        """add_settings_subcommand must build the full command tree without crashing."""
+        cli = typer.Typer()
+        add_settings_subcommand(cli, SecretFieldsModel)
+
+    def test_add_settings_subcommand__top_level_help_does_not_raise(self):
+        """`--help` at the top level must exit cleanly when settings contain SecretStr fields."""
+        cli = typer.Typer()
+        add_settings_subcommand(cli, SecretFieldsModel)
+
+        match_help(
+            cli,
+            expected_pattern=[r"settings.*Manage settings for the app"],
             prog_name="test",
         )

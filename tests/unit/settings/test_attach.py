@@ -13,6 +13,7 @@ from typerdrive.settings.manager import SettingsManager
 
 from tests.unit.helpers import match_help, match_output
 from tests.unit.settings.models import DefaultSettingsModel, RequiredFieldsModel
+from tests.unit.settings.string_annotation_module import make_string_annotated_cli, make_string_annotated_manager_cli
 
 
 class TestAttachSettings:
@@ -386,5 +387,40 @@ class TestGetManager:
             exception_type=SettingsError,
             exception_pattern="Item in user context at `settings_manager` was not a SettingsManager",
             exit_code=1,
+            prog_name="test",
+        )
+
+
+class TestStringAnnotations:
+    """
+    Verify that `attach_settings` works correctly when the decorated function
+    stores its annotations as strings rather than resolved types.
+
+    This happens in any module that uses `from __future__ import annotations`
+    (all Python versions) and is the default behaviour in Python 3.14+ (PEP 649).
+    Previously, the decorator compared raw `__annotations__` values against type
+    objects using `is`, which always failed for string annotations and could raise
+    a `NameError` when Python's machinery tried to resolve the strings.
+    """
+
+    def test_settings_parameter_injected_with_string_annotations(self):
+        """Settings parameter is injected correctly when annotations are strings."""
+        cli = make_string_annotated_cli()
+
+        match_output(
+            cli,
+            expected_pattern=["Passed"],
+            exit_code=0,
+            prog_name="test",
+        )
+
+    def test_manager_parameter_injected_with_string_annotations(self):
+        """SettingsManager parameter is injected correctly when annotations are strings."""
+        cli = make_string_annotated_manager_cli()
+
+        match_output(
+            cli,
+            expected_pattern=["Passed"],
+            exit_code=0,
             prog_name="test",
         )

@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.2 - 2026-03-19
+- Fixed `attach_settings` crashing with `NameError` when the decorated function
+  uses string annotations (i.e. `from __future__ import annotations` or Python 3.14+)
+- `attach_settings` now resolves annotations with `typing.get_type_hints()` before
+  comparing them against `settings_model` and `SettingsManager`, so string and
+  evaluated annotations are handled identically
+
+
 ## v0.9.1 - 2026-03-12
 - Fixed issue with binding using SecretStr settings
 

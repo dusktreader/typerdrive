@@ -4,7 +4,7 @@ Provide a decorator that attaches the `typerdrive` settings to a `typer` command
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast, get_type_hints
 
 import typer
 from pydantic import BaseModel
@@ -88,11 +88,12 @@ def attach_settings(
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         settings_param_key: str | None = None
+        resolved = get_type_hints(func)
         for key in func.__annotations__.keys():
-            if func.__annotations__[key] is settings_model:
+            if resolved.get(key) is settings_model:
                 func.__annotations__[key] = Annotated[settings_model | None, CloakingDevice]  # ty: ignore[invalid-type-form]
                 settings_param_key = key
-            elif func.__annotations__[key] is SettingsManager:
+            elif resolved.get(key) is SettingsManager:
                 func.__annotations__[key] = Annotated[SettingsManager | None, CloakingDevice]
                 manager_param_key = key
 

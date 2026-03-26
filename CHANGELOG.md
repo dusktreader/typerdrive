@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.3 - 2026-03-26
+- Added startup benchmark suite (`tests/benchmarks/test_startup.py`) measuring import-time and `--help`
+  wall-clock cost across three CLI variants (baseline, settings-only, full)
+- Added `src/typerdrive_benchmarks/` package with fixture CLIs used by the benchmark suite
+- Added `pytest-benchmark>=5.0` dev dependency
+- Added `benchmark` pytest marker; benchmark tests are excluded from normal test runs via `-m "not benchmark"`
+- Added `make qa/benchmark` target
+- Added Developer Guide page to the docs covering setup, quality-check targets, and benchmark usage
+
+
 ## v0.9.2 - 2026-03-19
 - Fixed `attach_settings` crashing with `NameError` when the decorated function
   uses string annotations (i.e. `from __future__ import annotations` or Python 3.14+)

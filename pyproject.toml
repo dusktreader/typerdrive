@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.9.2"
+version = "0.9.3"
 description = "Develop API-Connected Typer Apps at Lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -45,6 +45,7 @@ dev = [
     "pyclean>=3.1",
     "pygments>=2.19",
     "pytest>=8.3",
+    "pytest-benchmark>=5.0",
     "pytest-bdd>=8.0",
     "pytest-cov>=6.0",
     "pytest-mock>=3.14",
@@ -70,12 +71,23 @@ addopts = [
     "--cov-report=xml:.coverage.xml",
     "--junitxml=.junit.xml",
     "--override-ini=junit_family=legacy",
+    "-m", "not benchmark",
 ]
+markers = [
+    "benchmark: startup/performance benchmarks (excluded from normal test runs)",
+]
+
+
+[tool.pytest-benchmark]
+disable_gc = true
+min_rounds = 10
+warmup = true
+warmup_iterations = 2
 
 
 [tool.ruff]
 line-length = 120
-src = ["src/typerdrive", "tests", "src/typerdrive_demo", "examples"]
+src = ["src/typerdrive", "tests", "src/typerdrive_demo", "src/typerdrive_benchmarks", "examples"]
 
 
 [tool.ruff.format]

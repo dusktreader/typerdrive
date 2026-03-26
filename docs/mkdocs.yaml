@@ -36,6 +36,7 @@ nav:
     - Error Handling: features/exceptions.md
     - API Clients: features/client.md
   - Runnable Demo: demo.md
+  - Developer Guide: dev-guide.md
   - Reference:
     - Base Modules: reference/base_modules.md
     - Cache: reference/cache.md

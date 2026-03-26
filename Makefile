@@ -30,6 +30,9 @@ qa/format:  ## Run code formatter
 	@uv run ruff check --select I --fix ${PACKAGE_TARGET} tests src/typerdrive_demo examples
 	@uv run ruff format ${PACKAGE_TARGET} tests src/typerdrive_demo examples
 
+qa/benchmark:  ## Run startup benchmarks
+	@uv run pytest tests/benchmarks/ -m benchmark --no-cov --benchmark-min-rounds=10
+
 
 ## ==== Documentation ==================================================================================================
 
@@ -85,6 +88,7 @@ SHELL:=/bin/bash
 .PHONY: qa qa/test qa/test-unit qa/test-integration qa/types qa/lint qa/full qa/format \
 	docs docs/build docs/serve \
 	demo demo/run demo/debug \
+	qa/benchmark \
 	publish \
 	clean help
 

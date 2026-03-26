@@ -8,26 +8,28 @@
       
       
       
-        <link rel="canonical" href="http://dusktreader.github.io/typerdrive/">
+        <link rel="canonical" href="http://dusktreader.github.io/typerdrive/dev-guide/">
       
       
+        <link rel="prev" href="../demo/">
       
-        <link rel="next" href="quickstart/">
+      
+        <link rel="next" href="../reference/base_modules/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
     
     
       
-        <title>typerdrive documentation</title>
+        <title>Developer Guide - typerdrive documentation</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.2afb09e1.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.2afb09e1.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,11 +48,11 @@
       
     
     
-      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="css/fonts.css">
+      <link rel="stylesheet" href="../css/fonts.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -77,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#typerdrive" class="md-skip">
+        <a href="#developer-guide" class="md-skip">
           Skip to content
         </a>
       
@@ -93,7 +95,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="typerdrive documentation" class="md-header__button md-logo" aria-label="typerdrive documentation" data-md-component="logo">
+    <a href=".." title="typerdrive documentation" class="md-header__button md-logo" aria-label="typerdrive documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -113,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              Developer Guide
             
           </span>
         </div>
@@ -229,7 +231,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="typerdrive documentation" class="md-nav__button md-logo" aria-label="typerdrive documentation" data-md-component="logo">
+    <a href=".." title="typerdrive documentation" class="md-nav__button md-logo" aria-label="typerdrive documentation" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -256,32 +258,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Home
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -292,35 +272,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      Overview
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -332,7 +283,7 @@
   
   
     <li class="md-nav__item">
-      <a href="quickstart/" class="md-nav__link">
+      <a href="../quickstart/" class="md-nav__link">
         
   
   
@@ -394,7 +345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/settings/" class="md-nav__link">
+      <a href="../features/settings/" class="md-nav__link">
         
   
   
@@ -417,7 +368,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/cache/" class="md-nav__link">
+      <a href="../features/cache/" class="md-nav__link">
         
   
   
@@ -440,7 +391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/files/" class="md-nav__link">
+      <a href="../features/files/" class="md-nav__link">
         
   
   
@@ -463,7 +414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/logging/" class="md-nav__link">
+      <a href="../features/logging/" class="md-nav__link">
         
   
   
@@ -486,7 +437,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/exceptions/" class="md-nav__link">
+      <a href="../features/exceptions/" class="md-nav__link">
         
   
   
@@ -509,7 +460,7 @@
   
   
     <li class="md-nav__item">
-      <a href="features/client/" class="md-nav__link">
+      <a href="../features/client/" class="md-nav__link">
         
   
   
@@ -539,7 +490,7 @@
   
   
     <li class="md-nav__item">
-      <a href="demo/" class="md-nav__link">
+      <a href="../demo/" class="md-nav__link">
         
   
   
@@ -558,10 +509,32 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="dev-guide/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Developer Guide
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -572,6 +545,86 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quality-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quality checks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#startup-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Startup benchmarks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Startup benchmarks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running benchmarks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-measured" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is measured
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpreting-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interpreting results
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -623,7 +676,7 @@
   
   
     <li class="md-nav__item">
-      <a href="reference/base_modules/" class="md-nav__link">
+      <a href="../reference/base_modules/" class="md-nav__link">
         
   
   
@@ -646,7 +699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="reference/cache/" class="md-nav__link">
+      <a href="../reference/cache/" class="md-nav__link">
         
   
   
@@ -669,7 +722,7 @@
   
   
     <li class="md-nav__item">
-      <a href="reference/files/" class="md-nav__link">
+      <a href="../reference/files/" class="md-nav__link">
         
   
   
@@ -692,7 +745,7 @@
   
   
     <li class="md-nav__item">
-      <a href="reference/client/" class="md-nav__link">
+      <a href="../reference/client/" class="md-nav__link">
         
   
   
@@ -715,7 +768,7 @@
   
   
     <li class="md-nav__item">
-      <a href="reference/logging/" class="md-nav__link">
+      <a href="../reference/logging/" class="md-nav__link">
         
   
   
@@ -738,7 +791,7 @@
   
   
     <li class="md-nav__item">
-      <a href="reference/settings/" class="md-nav__link">
+      <a href="../reference/settings/" class="md-nav__link">
         
   
   
@@ -788,11 +841,62 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#overview" class="md-nav__link">
+  <a href="#setup" class="md-nav__link">
     <span class="md-ellipsis">
-      Overview
+      Setup
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quality-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quality checks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#startup-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Startup benchmarks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Startup benchmarks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#running-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Running benchmarks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-measured" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is measured
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpreting-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interpreting results
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -815,21 +919,142 @@
   
 
 
-<p><img alt="typerdrive-logo" src="images/logo-light.png#only-light" />
-<img alt="typerdrive-logo" src="images/logo-dark.png#only-dark" /></p>
-<h1 id="typerdrive">typerdrive</h1>
-<p><em>Develop API-Connected Typer Apps at Lightspeed</em></p>
-<h2 id="overview">Overview</h2>
-<p>This Python package adds extended functionality for Typer CLIs.</p>
-<p>Many features are planned, but these are the ones that are available thus far:</p>
-<ul>
-<li><a href="features/settings/">Settings management &amp; commands</a></li>
-<li><a href="features/cache/">Cache management &amp; commands</a></li>
-<li><a href="features/files/">Persistent file storage &amp; commands</a></li>
-<li><a href="features/logging/">Logging management &amp; commands</a></li>
-<li><a href="features/exceptions/">User-friendly error handling</a></li>
-<li><a href="features/client/">Powered Up API clients</a></li>
-</ul>
+<h1 id="developer-guide">Developer Guide</h1>
+<p>This page covers the development workflows for contributors to <code>typerdrive</code>.</p>
+<h2 id="setup">Setup</h2>
+<p>Clone the repo and install all dependencies (including dev extras) with <a href="https://docs.astral.sh/uv/">uv</a>:</p>
+<div data-copy="git clone https://github.com/dusktreader/typerdrive
+cd typerdrive
+uv sync" class="highlight shell-ps1"><pre><span></span><code><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dusktreader/typerdrive
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>typerdrive
+<span class="gp">$ </span>uv<span class="w"> </span>sync
+</code></pre></div>
+
+<h2 id="quality-checks">Quality checks</h2>
+<p>All quality targets live under the <code>qa/</code> namespace in the Makefile.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>make qa</code></td>
+<td>Alias for <code>make qa/full</code></td>
+</tr>
+<tr>
+<td><code>make qa/full</code></td>
+<td>Tests + lint + type checks</td>
+</tr>
+<tr>
+<td><code>make qa/test</code></td>
+<td>Unit + integration tests (with coverage)</td>
+</tr>
+<tr>
+<td><code>make qa/test-unit</code></td>
+<td>Unit tests only (no coverage enforcement)</td>
+</tr>
+<tr>
+<td><code>make qa/test-integration</code></td>
+<td>Integration tests only (no coverage enforcement)</td>
+</tr>
+<tr>
+<td><code>make qa/lint</code></td>
+<td>Ruff linter + typos spell-checker</td>
+</tr>
+<tr>
+<td><code>make qa/types</code></td>
+<td>Static type checking via <code>ty</code></td>
+</tr>
+<tr>
+<td><code>make qa/format</code></td>
+<td>Auto-format and sort imports with Ruff</td>
+</tr>
+<tr>
+<td><code>make qa/benchmark</code></td>
+<td>Startup performance benchmarks</td>
+</tr>
+</tbody>
+</table>
+<h2 id="startup-benchmarks">Startup benchmarks</h2>
+<p><code>typerdrive</code> is imported on every CLI invocation, so its import-time cost directly affects how fast any app built
+with it responds to commands — including <code>--help</code>. The benchmark suite exists to catch regressions in that cost,
+not to drive optimization work.</p>
+<h3 id="running-benchmarks">Running benchmarks</h3>
+<div data-copy="make qa/benchmark" class="highlight shell-ps1"><pre><span></span><code><span class="gp">$ </span>make<span class="w"> </span>qa/benchmark
+</code></pre></div>
+
+<p>Or directly with pytest:</p>
+<div data-copy="uv run pytest tests/benchmarks/ -m benchmark -v" class="highlight shell-ps1"><pre><span></span><code><span class="gp">$ </span>uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/benchmarks/<span class="w"> </span>-m<span class="w"> </span>benchmark<span class="w"> </span>-v
+</code></pre></div>
+
+<p>Benchmarks are <strong>excluded from normal test runs</strong> (<code>make qa/test</code>, <code>make qa/full</code>) via the <code>benchmark</code> marker.
+They are slower by design — each round spawns a fresh subprocess to simulate a genuine cold-start.</p>
+<h3 id="what-is-measured">What is measured</h3>
+<p>The suite in <code>tests/benchmarks/test_startup.py</code> measures two costs across three CLI variants:</p>
+<p><strong>Import time</strong> — the cost of executing module-level code for each variant, measured in a fresh subprocess per
+round so <code>sys.modules</code> caching does not mask the real first-import cost.</p>
+<p><strong><code>--help</code> wall-clock time</strong> — the full round-trip of <code>python &lt;script&gt; --help</code> as a user would experience it:
+interpreter startup + all imports + Typer command-tree construction + help rendering and exit.</p>
+<p><strong>CLI variants</strong> defined in <code>src/typerdrive_benchmarks/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cli_baseline.py</code></td>
+<td>Plain <code>typer</code> + <code>pydantic</code>, no typerdrive — the zero-overhead reference</td>
+</tr>
+<tr>
+<td><code>cli_settings.py</code></td>
+<td><code>typerdrive</code> with <code>attach_settings</code> only</td>
+</tr>
+<tr>
+<td><code>cli_full.py</code></td>
+<td><code>typerdrive</code> with all features and management subcommands attached</td>
+</tr>
+</tbody>
+</table>
+<p>The delta between the baseline and the typerdrive variants is typerdrive's net contribution. A significant
+increase in that delta across commits indicates a regression worth investigating.</p>
+<h3 id="interpreting-results">Interpreting results</h3>
+<p><code>pytest-benchmark</code> prints a summary table after each run. The columns to focus on are <code>Mean</code> and <code>Median</code>.
+<code>StdDev</code> will naturally be higher for the <code>--help</code> tests because subprocess scheduling adds noise.</p>
+<p>Current baseline figures (approximate, M-series Mac):</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Import time</th>
+<th><code>--help</code> time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>baseline</code></td>
+<td>~97 ms</td>
+<td>~110 ms</td>
+</tr>
+<tr>
+<td><code>settings</code></td>
+<td>~149 ms</td>
+<td>~153 ms</td>
+</tr>
+<tr>
+<td><code>full</code></td>
+<td>~152 ms</td>
+<td>~163 ms</td>
+</tr>
+</tbody>
+</table>
+<p>typerdrive adds roughly <strong>50–55 ms</strong> over the plain typer/pydantic baseline. This is imperceptible to humans
+and is not worth optimizing at this time.</p>
 
 
 
@@ -858,15 +1083,31 @@
       
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
+          
+          <a href="../demo/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Runnable Demo">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Runnable Demo
+              </div>
+            </div>
+          </a>
+        
         
           
-          <a href="quickstart/" class="md-footer__link md-footer__link--next" aria-label="Next: Quickstart">
+          <a href="../reference/base_modules/" class="md-footer__link md-footer__link--next" aria-label="Next: Base Modules">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Quickstart
+                Base Modules
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -902,10 +1143,10 @@
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.expand", "navigation.footer", "navigation.tracking", "content.code.copy"], "search": "assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand", "navigation.footer", "navigation.tracking", "content.code.copy"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.c8b220af.min.js"></script>
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   </body>

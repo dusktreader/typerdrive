@@ -1091,6 +1091,20 @@ wheels = [
 ]
 
 [[package]]
+name = "superfences-ps1"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "mkdocs" },
+    { name = "pygments" },
+    { name = "pymdown-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c4/4c/7de690a91a0d57f1f41859051474ab03f0a8a17b0832051412081147e77d/superfences_ps1-0.1.0.tar.gz", hash = "sha256:17334254064954d03204fb80c0c2e1e9634390934c34c07f95caecdc79803e0f", size = 5771, upload-time = "2026-03-26T21:19:21.431Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/92/b7/c84f4cf96a04c79d4a621be132ccdf7aff566dbbc4580c531d68bb018428/superfences_ps1-0.1.0-py3-none-any.whl", hash = "sha256:eed17bf0a457cb0333f496becc42c7f0e497d504070ba3aa29cb9816e37bfdb9", size = 7361, upload-time = "2026-03-26T21:19:22.334Z" },
+]
+
+[[package]]
 name = "traitlets"
 version = "5.14.3"
 source = { registry = "https://pypi.org/simple" }
@@ -1193,6 +1207,7 @@ dev = [
     { name = "pytest-random-order" },
     { name = "respx" },
     { name = "ruff" },
+    { name = "superfences-ps1" },
     { name = "ty" },
     { name = "typos" },
 ]
@@ -1232,6 +1247,7 @@ dev = [
     { name = "pytest-random-order", specifier = ">=1.1" },
     { name = "respx", specifier = ">=0.22.0" },
     { name = "ruff", specifier = ">=0.11" },
+    { name = "superfences-ps1", specifier = ">=0.1.0" },
     { name = "ty", specifier = ">=0.0" },
     { name = "typos", specifier = ">=1.31" },
 ]

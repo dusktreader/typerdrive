@@ -7,7 +7,7 @@ This page covers the development workflows for contributors to `typerdrive`.
 
 Clone the repo and install all dependencies (including dev extras) with [uv](https://docs.astral.sh/uv/):
 
-```bash
+```shell-ps1
 git clone https://github.com/dusktreader/typerdrive
 cd typerdrive
 uv sync
@@ -39,13 +39,13 @@ not to drive optimization work.
 
 ### Running benchmarks
 
-```bash
+```shell-ps1
 make qa/benchmark
 ```
 
 Or directly with pytest:
 
-```bash
+```shell-ps1
 uv run pytest tests/benchmarks/ -m benchmark -v
 ```
 

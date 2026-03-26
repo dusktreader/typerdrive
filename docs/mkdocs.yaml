@@ -47,6 +47,8 @@ nav:
 plugins:
   search:
     lang: en
+  superfences-ps1:
+      prompt_color: "#89b0c2"
   mkdocstrings:
     default_handler: python
     handlers:

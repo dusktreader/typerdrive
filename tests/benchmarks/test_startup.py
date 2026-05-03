@@ -32,6 +32,7 @@ import sys
 from pathlib import Path
 
 import pytest
+from pytest_benchmark.fixture import BenchmarkFixture
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -105,17 +106,17 @@ class TestImportTime:
     user pays on every invocation.
     """
 
-    def test_baseline(self, benchmark: pytest.fixture) -> None:
+    def test_baseline(self, benchmark: BenchmarkFixture) -> None:
         """Plain typer + pydantic import cost (reference baseline)."""
         benchmark.extra_info["description"] = "typer + pydantic only"
         benchmark(lambda: _run_import(_IMPORT_SNIPPETS["baseline"]))
 
-    def test_typerdrive_settings(self, benchmark: pytest.fixture) -> None:
+    def test_typerdrive_settings(self, benchmark: BenchmarkFixture) -> None:
         """typerdrive import cost with attach_settings only."""
         benchmark.extra_info["description"] = "typerdrive: attach_settings"
         benchmark(lambda: _run_import(_IMPORT_SNIPPETS["typerdrive_settings"]))
 
-    def test_typerdrive_full(self, benchmark: pytest.fixture) -> None:
+    def test_typerdrive_full(self, benchmark: BenchmarkFixture) -> None:
         """typerdrive import cost with all features attached."""
         benchmark.extra_info["description"] = "typerdrive: all features"
         benchmark(lambda: _run_import(_IMPORT_SNIPPETS["typerdrive_full"]))
@@ -135,17 +136,17 @@ class TestHelpStartup:
     typer command-tree construction + help rendering and exit.
     """
 
-    def test_baseline(self, benchmark: pytest.fixture) -> None:
+    def test_baseline(self, benchmark: BenchmarkFixture) -> None:
         """Plain typer + pydantic --help round-trip (reference baseline)."""
         benchmark.extra_info["description"] = "typer + pydantic only"
         benchmark(lambda: _run_help(_BASELINE))
 
-    def test_typerdrive_settings(self, benchmark: pytest.fixture) -> None:
+    def test_typerdrive_settings(self, benchmark: BenchmarkFixture) -> None:
         """typerdrive --help round-trip with attach_settings only."""
         benchmark.extra_info["description"] = "typerdrive: attach_settings"
         benchmark(lambda: _run_help(_SETTINGS))
 
-    def test_typerdrive_full(self, benchmark: pytest.fixture) -> None:
+    def test_typerdrive_full(self, benchmark: BenchmarkFixture) -> None:
         """typerdrive --help round-trip with all features attached."""
         benchmark.extra_info["description"] = "typerdrive: all features"
         benchmark(lambda: _run_help(_FULL))

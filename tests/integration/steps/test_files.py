@@ -7,7 +7,6 @@ typer's CliRunner.
 """
 
 import json
-from pathlib import Path
 
 import pytest
 import typer

@@ -17,14 +17,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from typer.testing import CliRunner
 
 from typerdrive.config import get_typerdrive_config
-from typerdrive.settings.commands import (
-    add_reset,
-    add_settings_subcommand,
-    add_show,
-    add_unset,
-    add_update,
-)
-from typerdrive.settings.commands import add_bind as _add_bind
+from typerdrive.settings.commands import add_settings_subcommand
 
 
 # ---------------------------------------------------------------------------

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.4 - 2026-05-02
+- Fixed the bug in show logs where characters in the output were interpreted by rich as markup
+
+
 ## v0.9.3 - 2026-03-26
 - Added startup benchmark suite (`tests/benchmarks/test_startup.py`) measuring import-time and `--help`
   wall-clock cost across three CLI variants (baseline, settings-only, full)

@@ -58,7 +58,7 @@ class LoggingManager:
         """
         console = Console()
         with console.pager(styles=True):
-            console.print(self.log_file.read_text())
+            console.print(self.log_file.read_text(), markup=False)
 
     def audit(self):
         """

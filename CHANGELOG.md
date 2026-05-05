@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.6 - 2026-05-04
+- Introduced `SignatureRewriter.apply(wrapper)` method to encapsulate `__signature__`
+  stamping in one place, replacing direct `wrapper.__signature__ = rewriter.build()`
+  calls in all five `attach_*` decorators
+- Uses `setattr` internally so type checkers (`ty`, mypy) never see the assignment on
+  a wrapped callable type — eliminates false-positive `unresolved-attribute` errors for
+  both library internals and downstream consumers
+- Removed unused `inspect.Parameter` import from `tests/unit/test_signature.py`
+
+
 ## v0.9.5 - 2026-05-04
 - Fixed `NameError` in `attach_cache`, `attach_client`, `attach_files`, `attach_logging`
   - Caused by string annotations (`from __future__ import annotations` or Python 3.14+)

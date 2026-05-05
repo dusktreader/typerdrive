@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.5 - 2026-05-04
+- Fixed `NameError` in `attach_cache`, `attach_client`, `attach_files`, `attach_logging`
+  - Caused by string annotations (`from __future__ import annotations` or Python 3.14+)
+  - Now uses `get_type_hints()` instead of `func.__annotations__`
+  - Consistent with existing fix in `attach_settings`
+- Fixed type-checker error in `attach_settings` exposed by the annotation resolution refactor
+  - Added `# type: ignore[invalid-type-form]` where `settings_model` is used in a runtime `Annotated` expression
+
+
 ## v0.9.4 - 2026-05-02
 - Fixed the bug in show logs where characters in the output were interpreted by rich as markup
 

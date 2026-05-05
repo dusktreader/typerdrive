@@ -4,7 +4,7 @@ Provide a decorator that attaches the `typerdrive` files to a `typer` command fu
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast, get_type_hints
 
 import typer
 
@@ -43,8 +43,9 @@ def attach_files(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
 
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
-        for key in func.__annotations__.keys():
-            if func.__annotations__[key] is FilesManager:
+        resolved = get_type_hints(func)
+        for key, hint in resolved.items():
+            if hint is FilesManager:
                 func.__annotations__[key] = Annotated[FilesManager | None, CloakingDevice]
                 manager_param_key = key
 

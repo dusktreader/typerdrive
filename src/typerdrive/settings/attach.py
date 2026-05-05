@@ -4,7 +4,7 @@ Provide a decorator that attaches the `typerdrive` settings to a `typer` command
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast, get_type_hints
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
 from pydantic import BaseModel
@@ -16,6 +16,7 @@ from typerdrive.context import from_context, to_context
 from typerdrive.format import terminal_message
 from typerdrive.settings.exceptions import SettingsError
 from typerdrive.settings.manager import SettingsManager
+from typerdrive.signature import SignatureRewriter
 
 
 def get_settings[ST: BaseModel](
@@ -88,16 +89,15 @@ def attach_settings(
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         settings_param_key: str | None = None
-        resolved = get_type_hints(func)
-        for key, hint in resolved.items():
+        rewriter = SignatureRewriter(func)
+        for key, hint in rewriter.hints.items():
             if hint is settings_model:
-                func.__annotations__[key] = Annotated[settings_model | None, CloakingDevice]  # type: ignore[invalid-type-form]
+                rewriter.cloak(key, Annotated[settings_model | None, CloakingDevice])  # type: ignore[invalid-type-form]
                 settings_param_key = key
             elif hint is SettingsManager:
-                func.__annotations__[key] = Annotated[SettingsManager | None, CloakingDevice]
+                rewriter.cloak(key, Annotated[SettingsManager | None, CloakingDevice])
                 manager_param_key = key
 
-        # TODO: Figure out how we can make the ctx param optional for the wrapped function
         @wraps(func)
         def wrapper(ctx: typer.Context, *args: P.args, **kwargs: P.kwargs) -> T:
             manager: SettingsManager = SettingsManager(settings_model)
@@ -133,6 +133,7 @@ def attach_settings(
 
             return ret_val
 
+        wrapper.__signature__ = rewriter.build()
         return wrapper
 
     return _decorate

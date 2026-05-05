@@ -4,7 +4,7 @@ Provide a decorator that attaches logging functionality to a `typer` command fun
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast, get_type_hints
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
 from loguru import logger
@@ -13,6 +13,7 @@ from typerdrive.cloaked import CloakingDevice
 from typerdrive.context import from_context, to_context
 from typerdrive.logging.exceptions import LoggingError
 from typerdrive.logging.manager import LoggingManager
+from typerdrive.signature import SignatureRewriter
 
 
 def get_logging_manager(ctx: typer.Context) -> LoggingManager:
@@ -43,10 +44,10 @@ def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], C
 
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
-        resolved = get_type_hints(func)
-        for key, hint in resolved.items():
+        rewriter = SignatureRewriter(func)
+        for key, hint in rewriter.hints.items():
             if hint is LoggingManager:
-                func.__annotations__[key] = Annotated[LoggingManager | None, CloakingDevice]
+                rewriter.cloak(key, Annotated[LoggingManager | None, CloakingDevice])
                 manager_param_key = key
 
         @wraps(func)
@@ -62,6 +63,7 @@ def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], C
 
             return func(ctx, *args, **kwargs)
 
+        wrapper.__signature__ = rewriter.build()
         return wrapper
 
     return _decorate

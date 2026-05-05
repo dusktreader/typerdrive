@@ -4,7 +4,7 @@ Provide a decorator that attaches `TyperdriveClient` instances to a `typer` comm
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast, get_type_hints
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
 from pydantic import BaseModel
@@ -16,6 +16,7 @@ from typerdrive.cloaked import CloakingDevice
 from typerdrive.context import from_context, to_context
 from typerdrive.settings.attach import get_settings_manager
 from typerdrive.settings.exceptions import SettingsError
+from typerdrive.signature import SignatureRewriter
 
 
 def get_client_manager(ctx: typer.Context) -> ClientManager:
@@ -57,14 +58,14 @@ def attach_client(**client_urls_or_settings_keys: str) -> Callable[[ContextFunct
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
         client_param_keys: list[str] = []
-        resolved = get_type_hints(func)
-        for key, hint in resolved.items():
+        rewriter = SignatureRewriter(func)
+        for key, hint in rewriter.hints.items():
             if hint is TyperdriveClient:
+                rewriter.cloak(key, Annotated[TyperdriveClient | None, CloakingDevice])
                 if key in client_urls_or_settings_keys:
-                    func.__annotations__[key] = Annotated[TyperdriveClient | None, CloakingDevice]
                     client_param_keys.append(key)
             elif hint is ClientManager:
-                func.__annotations__[key] = Annotated[ClientManager | None, CloakingDevice]
+                rewriter.cloak(key, Annotated[ClientManager | None, CloakingDevice])
                 manager_param_key = key
 
         @wraps(func)
@@ -96,6 +97,7 @@ def attach_client(**client_urls_or_settings_keys: str) -> Callable[[ContextFunct
 
             return func(ctx, *args, **kwargs)
 
+        wrapper.__signature__ = rewriter.build()
         return wrapper
 
     return _decorate

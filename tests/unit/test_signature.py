@@ -2,6 +2,7 @@
 Tests for SignatureRewriter.
 """
 
+from functools import wraps
 from inspect import signature
 from typing import Annotated
 
@@ -96,12 +97,10 @@ class TestSignatureRewriter:
         inner_rewriter = SignatureRewriter(func)
         inner_rewriter.cloak("inner", cloaked_inner)
 
-        from functools import wraps
-
         @wraps(func)
         def inner_wrapper(*args, **kwargs): ...
 
-        inner_wrapper.__signature__ = inner_rewriter.build()  # type: ignore[attr-defined]
+        inner_rewriter.apply(inner_wrapper)
 
         # Outer decorator wraps the inner wrapper, only cloaks 'outer'
         cloaked_outer = Annotated[Outer | None, CloakingDevice]
@@ -119,3 +118,80 @@ class TestSignatureRewriter:
 
         rewriter = SignatureRewriter(func)
         assert rewriter.hints["name"] == Annotated[str, opt]
+
+
+class TestSignatureRewriterApply:
+    def test_apply__sets_signature_on_wrapper(self):
+        class Sentinel: ...
+
+        def func(ctx: typer.Context, mgr: Sentinel) -> None: ...
+
+        cloaked = Annotated[Sentinel | None, CloakingDevice]
+        rewriter = SignatureRewriter(func)
+        rewriter.cloak("mgr", cloaked)
+
+        @wraps(func)
+        def wrapper(ctx: typer.Context, *args, **kwargs): ...
+
+        rewriter.apply(wrapper)
+
+        sig = signature(wrapper)
+        assert sig.parameters["mgr"].annotation == cloaked
+
+    def test_apply__annotations_is_plain_dict(self):
+        """__annotations__ must be a plain resolved dict, not a lazy __annotate__ closure."""
+        def func(ctx: typer.Context, name: str) -> None: ...
+
+        rewriter = SignatureRewriter(func)
+
+        @wraps(func)
+        def wrapper(ctx: typer.Context, *args, **kwargs): ...
+
+        rewriter.apply(wrapper)
+
+        assert isinstance(wrapper.__annotations__, dict)
+        assert wrapper.__annotations__ == {"ctx": typer.Context, "name": str}
+
+    def test_apply__annotations_reflects_overrides(self):
+        class Sentinel: ...
+
+        def func(ctx: typer.Context, mgr: Sentinel) -> None: ...
+
+        cloaked = Annotated[Sentinel | None, CloakingDevice]
+        rewriter = SignatureRewriter(func)
+        rewriter.cloak("mgr", cloaked)
+
+        @wraps(func)
+        def wrapper(ctx: typer.Context, *args, **kwargs): ...
+
+        rewriter.apply(wrapper)
+
+        assert wrapper.__annotations__["mgr"] == cloaked
+        assert wrapper.__annotations__["ctx"] is typer.Context
+
+    def test_apply__survives_poisoned_annotate(self):
+        """
+        Simulates Python 3.14 behavior: the wrapper has a lazy __annotate__ that
+        raises NameError (as happens when a decorator-scope name like `Context`
+        is not available at evaluation time). After apply(), inspect.signature()
+        must succeed without triggering __annotate__.
+        """
+        def func(ctx: typer.Context, name: str) -> None: ...
+
+        rewriter = SignatureRewriter(func)
+
+        @wraps(func)
+        def wrapper(ctx: typer.Context, *args, **kwargs): ...
+
+        # Poison __annotate__ to simulate the Python 3.14 NameError
+        def bad_annotate(format):
+            raise NameError("name 'Context' is not defined")
+
+        wrapper.__annotate__ = bad_annotate  # type: ignore[attr-defined]
+
+        rewriter.apply(wrapper)
+
+        # inspect.signature() must not raise, even with the poisoned __annotate__
+        sig = signature(wrapper)
+        assert "ctx" in sig.parameters
+        assert "name" in sig.parameters

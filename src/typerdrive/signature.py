@@ -49,7 +49,20 @@ class SignatureRewriter:
         """
         Stamp the rewritten `Signature` onto the wrapper function.
 
-        Uses `setattr` to assign `__signature__`, which is a well-known but
-        dynamically-set attribute not declared in stub types for wrapped callables.
+        Sets `__signature__` so introspection tools see the rewritten parameters,
+        then replaces `__annotations__` with an eagerly-evaluated dict that matches
+        the rewritten signature exactly.
+
+        On Python 3.14+, `inspect.signature()` on a plain function bypasses
+        `__signature__` and calls `get_annotations()`, which triggers the lazy
+        `__annotate__` closure — which references names (e.g. `Context`) that are
+        not in scope at evaluation time. Replacing `__annotations__` with a plain
+        pre-resolved dict prevents that evaluation entirely.
         """
-        setattr(wrapper, "__signature__", self.build())
+        sig = self.build()
+        setattr(wrapper, "__signature__", sig)
+        wrapper.__annotations__ = {
+            name: p.annotation
+            for name, p in sig.parameters.items()
+            if p.annotation is not p.empty
+        }

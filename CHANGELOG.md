@@ -6,13 +6,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.7 - 2026-05-05
+- Fixed `NameError: name 'Context' is not defined` crash on Python 3.14+ when using
+  any `attach_*` decorator
+  - Root cause: Python 3.14 `inspect.signature()` on a plain function bypasses
+    `__signature__` and calls `get_annotations()`, which triggers the lazy
+    `__annotate__` closure — evaluated in the wrong scope where `Context` is not
+    defined
+  - Fix: `SignatureRewriter.apply()` now also replaces `wrapper.__annotations__` with
+    a pre-resolved dict matching the rewritten signature, preventing lazy evaluation
+
 ## v0.9.6 - 2026-05-04
 - Introduced `SignatureRewriter.apply(wrapper)` method to encapsulate `__signature__`
   stamping in one place, replacing direct `wrapper.__signature__ = rewriter.build()`
   calls in all five `attach_*` decorators
-- Uses `setattr` internally so type checkers (`ty`, mypy) never see the assignment on
-  a wrapped callable type — eliminates false-positive `unresolved-attribute` errors for
-  both library internals and downstream consumers
+- Uses `setattr` for `__signature__` so type checkers (`ty`, mypy) never see the
+  assignment on a wrapped callable type — eliminates false-positive
+  `unresolved-attribute` errors for both library internals and downstream consumers
 - Removed unused `inspect.Parameter` import from `tests/unit/test_signature.py`
 
 

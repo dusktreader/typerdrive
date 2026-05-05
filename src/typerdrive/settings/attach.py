@@ -89,11 +89,11 @@ def attach_settings(
         manager_param_key: str | None = None
         settings_param_key: str | None = None
         resolved = get_type_hints(func)
-        for key in func.__annotations__.keys():
-            if resolved.get(key) is settings_model:
-                func.__annotations__[key] = Annotated[settings_model | None, CloakingDevice]
+        for key, hint in resolved.items():
+            if hint is settings_model:
+                func.__annotations__[key] = Annotated[settings_model | None, CloakingDevice]  # type: ignore[invalid-type-form]
                 settings_param_key = key
-            elif resolved.get(key) is SettingsManager:
+            elif hint is SettingsManager:
                 func.__annotations__[key] = Annotated[SettingsManager | None, CloakingDevice]
                 manager_param_key = key
 

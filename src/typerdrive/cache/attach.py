@@ -4,7 +4,7 @@ Provide a decorator that attaches the `typerdrive` cache to a `typer` command fu
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast, get_type_hints
 
 import typer
 
@@ -42,8 +42,9 @@ def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
 
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
-        for key in func.__annotations__.keys():
-            if func.__annotations__[key] is CacheManager:
+        resolved = get_type_hints(func)
+        for key, hint in resolved.items():
+            if hint is CacheManager:
                 func.__annotations__[key] = Annotated[CacheManager | None, CloakingDevice]
                 manager_param_key = key
 

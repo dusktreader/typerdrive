@@ -4,7 +4,7 @@ Provide a decorator that attaches logging functionality to a `typer` command fun
 
 from collections.abc import Callable
 from functools import wraps
-from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
+from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast, get_type_hints
 
 import typer
 from loguru import logger
@@ -43,8 +43,9 @@ def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], C
 
     def _decorate(func: ContextFunction[P, T]) -> ContextFunction[P, T]:
         manager_param_key: str | None = None
-        for key in func.__annotations__.keys():
-            if func.__annotations__[key] is LoggingManager:
+        resolved = get_type_hints(func)
+        for key, hint in resolved.items():
+            if hint is LoggingManager:
                 func.__annotations__[key] = Annotated[LoggingManager | None, CloakingDevice]
                 manager_param_key = key
 

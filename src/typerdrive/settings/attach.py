@@ -133,7 +133,7 @@ def attach_settings(
 
             return ret_val
 
-        wrapper.__signature__ = rewriter.build()
+        rewriter.apply(wrapper)
         return wrapper
 
     return _decorate

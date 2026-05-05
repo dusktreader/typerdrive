@@ -97,7 +97,7 @@ def attach_client(**client_urls_or_settings_keys: str) -> Callable[[ContextFunct
 
             return func(ctx, *args, **kwargs)
 
-        wrapper.__signature__ = rewriter.build()
+        rewriter.apply(wrapper)
         return wrapper
 
     return _decorate

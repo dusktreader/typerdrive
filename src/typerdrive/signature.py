@@ -10,11 +10,11 @@ from typing import Any, get_type_hints
 class SignatureRewriter:
     """
     Collects annotation overrides for specific parameters and builds a new
-    `Signature` with those overrides applied.
+    `Signature` with those overrides applied, then stamps it onto a wrapper.
 
     Typical use: inside a decorator, call `cloak()` for each parameter whose
-    annotation should be replaced, then assign `wrapper.__signature__ = rewriter.build()`
-    after the wrapper function is defined.
+    annotation should be replaced, then call `apply(wrapper)` after the wrapper
+    function is defined.
     """
 
     func: Callable
@@ -44,3 +44,12 @@ class SignatureRewriter:
             for p in self.sig.parameters.values()
         ]
         return self.sig.replace(parameters=new_params)
+
+    def apply(self, wrapper: Callable) -> None:
+        """
+        Stamp the rewritten `Signature` onto the wrapper function.
+
+        Uses `setattr` to assign `__signature__`, which is a well-known but
+        dynamically-set attribute not declared in stub types for wrapped callables.
+        """
+        setattr(wrapper, "__signature__", self.build())

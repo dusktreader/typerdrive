@@ -63,7 +63,7 @@ def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], C
 
             return func(ctx, *args, **kwargs)
 
-        wrapper.__signature__ = rewriter.build()
+        rewriter.apply(wrapper)
         return wrapper
 
     return _decorate

@@ -66,7 +66,7 @@ def attach_files(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
 
             return ret_val
 
-        wrapper.__signature__ = rewriter.build()
+        rewriter.apply(wrapper)
         return wrapper
 
     return _decorate

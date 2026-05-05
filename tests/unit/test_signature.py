@@ -2,7 +2,7 @@
 Tests for SignatureRewriter.
 """
 
-from inspect import Parameter, signature
+from inspect import signature
 from typing import Annotated
 
 import typer
@@ -101,7 +101,7 @@ class TestSignatureRewriter:
         @wraps(func)
         def inner_wrapper(*args, **kwargs): ...
 
-        inner_wrapper.__signature__ = inner_rewriter.build()
+        inner_wrapper.__signature__ = inner_rewriter.build()  # type: ignore[attr-defined]
 
         # Outer decorator wraps the inner wrapper, only cloaks 'outer'
         cloaked_outer = Annotated[Outer | None, CloakingDevice]

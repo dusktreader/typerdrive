@@ -63,9 +63,6 @@ dev = [
 [tool.uv]
 package = true
 
-[tool.uv.sources]
-typer-repyt = { path = "../typer-repyt" }
-
 
 [tool.pytest.ini_options]
 addopts = [

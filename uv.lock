@@ -1363,7 +1363,7 @@ wheels = [
 [[package]]
 name = "typer-repyt"
 version = "0.9.2"
-source = { directory = "../typer-repyt" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "humanize" },
     { name = "inflection" },
@@ -1372,41 +1372,14 @@ dependencies = [
     { name = "snick" },
     { name = "typer" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "auto-name-enum", marker = "extra == 'demo'", specifier = ">=3.0.0" },
-    { name = "humanize", specifier = ">=4.12.2" },
-    { name = "inflection", specifier = ">=0.5.1" },
-    { name = "py-buzz", specifier = ">=7.3" },
-    { name = "pydantic", specifier = ">=2.13.3" },
-    { name = "rich", marker = "extra == 'demo'", specifier = ">=14.0.0" },
-    { name = "snick", specifier = ">=2.1" },
-    { name = "typer", specifier = ">=0.15.2" },
-]
-provides-extras = ["demo"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "debugpy", specifier = "~=1.8" },
-    { name = "ipython", specifier = "~=8.18" },
-    { name = "mkdocs-material", specifier = "~=9.6" },
-    { name = "mkdocstrings", extras = ["python"], specifier = "~=0.29" },
-    { name = "pyclean", specifier = "~=3.1" },
-    { name = "pygments", specifier = "~=2.19" },
-    { name = "pytest", specifier = "~=8.3" },
-    { name = "pytest-cov", specifier = "~=6.0" },
-    { name = "pytest-mock", specifier = ">=3.14.0" },
-    { name = "pytest-pretty", specifier = "~=1.2" },
-    { name = "pytest-random-order", specifier = "~=1.1" },
-    { name = "ruff", specifier = "~=0.11" },
-    { name = "ty", specifier = ">=0.0.1a7" },
-    { name = "typos", specifier = "~=1.31" },
+sdist = { url = "https://files.pythonhosted.org/packages/35/a8/4224b52fd624ea7745de6cc2d69a441b9f1341cecca59ccf731d5e17cd46/typer_repyt-0.9.2.tar.gz", hash = "sha256:2d2b472ee7d345292a927dbca33717302132567ea1af7b187cf2a2a62fdf3dec", size = 10960, upload-time = "2026-05-08T04:32:48.955Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/5d/124f4e2ecb8a98199ed8a972e06e4934ed9a6894773a8faa5fa13d03f8aa/typer_repyt-0.9.2-py3-none-any.whl", hash = "sha256:96798c77787d3cd88dfe95b05d34a83cda0e223f7323f24e7dc41d67cc2bc95f", size = 14529, upload-time = "2026-05-08T04:32:47.554Z" },
 ]
 
 [[package]]
 name = "typerdrive"
-version = "0.9.7"
+version = "0.9.8"
 source = { editable = "." }
 dependencies = [
     { name = "diskcache" },
@@ -1461,7 +1434,7 @@ requires-dist = [
     { name = "rich", specifier = ">=14.0" },
     { name = "snick", specifier = ">=3.0" },
     { name = "typer", specifier = ">=0.15" },
-    { name = "typer-repyt", directory = "../typer-repyt" },
+    { name = "typer-repyt", specifier = ">=0.9.2" },
     { name = "xdg-base-dirs", specifier = ">=6.0.2" },
 ]
 
@@ -1485,7 +1458,7 @@ dev = [
     { name = "ruff", specifier = ">=0.11" },
     { name = "superfences-ps1", specifier = ">=0.1.0" },
     { name = "ty", specifier = ">=0.0" },
-    { name = "typer-repyt", directory = "../typer-repyt" },
+    { name = "typer-repyt" },
     { name = "typos", specifier = ">=1.31" },
 ]
 

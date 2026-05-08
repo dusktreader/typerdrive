@@ -2,6 +2,8 @@
 Provide commands that can be added to a `typer` app to manage logs.
 """
 
+from typing import Annotated, Optional
+
 import typer
 
 from typerdrive.handle_errors import handle_errors
@@ -12,11 +14,16 @@ from typerdrive.logging.manager import LoggingManager
 
 @handle_errors("Failed to show log", handle_exc_class=LoggingError)
 @attach_logging()
-def show(ctx: typer.Context, manager: LoggingManager):
+def show(
+    ctx: typer.Context,
+    manager: LoggingManager,
+    follow: Annotated[bool, typer.Option("--follow", "-f", help="Follow the log output in real time.")] = False,
+    lines: Annotated[Optional[int], typer.Option("--lines", "-n", help="Number of lines to show from the end of the log.")] = None,
+):
     """
     Show the current log.
     """
-    manager.show()
+    manager.show(follow=follow, lines=lines)
 
 
 def add_show(cli: typer.Typer):

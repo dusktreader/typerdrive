@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.9 - 2026-05-07
+- Added `--follow` / `-f` flag to `logs show` to stream the log file in real time via `tail -f`
+- Added `--lines` / `-n` flag to `logs show` to limit output to the last N lines
+
+
 ## v0.9.8 - 2026-05-07
 - Added Python 3.14 string-annotation regression tests for all `attach_*` decorators and `handle_errors`
   - Each decorator now has a `string_annotation_module.py` with `from __future__ import annotations` in effect

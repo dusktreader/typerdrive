@@ -74,6 +74,11 @@ following:
 The `show` command opens the current log file in a [pager](https://en.wikipedia.org/wiki/Terminal_pager) for you to
 peruse. Your system's pager will be used. Usually you can exit the pager by using the "q" key.
 
+Two optional flags are available:
+
+- `--lines` / `-n`: Limit the output to the last N lines of the log file.
+- `--follow` / `-f`: Follow the log output in real time (like `tail -f`). Press `Ctrl+C` to stop.
+
 
 #### `audit`
 

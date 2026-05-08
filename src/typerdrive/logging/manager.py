@@ -2,9 +2,10 @@
 Provide a class for managing the `typerdrive` logging feature.
 """
 
+import subprocess
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 from loguru import logger
 from rich.console import Console
@@ -52,13 +53,23 @@ class LoggingManager:
         logger.configure(handlers=handlers)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
         logger.enable("typerdrive")
 
-    def show(self):
+    def show(self, *, follow: bool = False, lines: Optional[int] = None):
         """
         Show the current log file.
         """
-        console = Console()
-        with console.pager(styles=True):
-            console.print(self.log_file.read_text(), markup=False)
+        if follow:
+            cmd = ["tail", "-f"]
+            if lines is not None:
+                cmd += ["-n", str(lines)]
+            cmd.append(str(self.log_file))
+            subprocess.run(cmd)
+        else:
+            text = self.log_file.read_text()
+            if lines is not None:
+                text = "\n".join(text.splitlines()[-lines:])
+            console = Console()
+            with console.pager(styles=True):
+                console.print(text, markup=False)
 
     def audit(self):
         """

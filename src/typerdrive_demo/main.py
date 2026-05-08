@@ -45,7 +45,7 @@ def start(
 
     feature_map: dict[Feature, list[types.FunctionType]] = {}
     for feature in features:
-        feature_map[feature] = get_demo_functions(feature)  # type: ignore[assignment]
+        feature_map[feature] = get_demo_functions(feature)  # type: ignore[assignment]  # ty: ignore[invalid-assignment]
 
     override_label_map: dict[Feature, str] = {}
 

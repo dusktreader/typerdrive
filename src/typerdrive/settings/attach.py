@@ -3,7 +3,6 @@ Provide a decorator that attaches the `typerdrive` settings to a `typer` command
 """
 
 from collections.abc import Callable
-from functools import wraps
 from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
@@ -98,7 +97,6 @@ def attach_settings(
                 rewriter.cloak(key, Annotated[SettingsManager | None, CloakingDevice])
                 manager_param_key = key
 
-        @wraps(func)
         def wrapper(ctx: typer.Context, *args: P.args, **kwargs: P.kwargs) -> T:
             manager: SettingsManager = SettingsManager(settings_model)
 

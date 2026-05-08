@@ -4,7 +4,6 @@ Provide an error handler that can be attached to a command through a decorator.
 
 from typing import ParamSpec, TypeVar, cast
 from collections.abc import Callable
-from functools import wraps
 
 from buzz import DoExceptParams, get_traceback, reformat_exception
 import snick
@@ -13,6 +12,7 @@ import typer
 from typerdrive.constants import ExitCode
 from typerdrive.exceptions import TyperdriveError
 from typerdrive.format import terminal_message
+from typerdrive.signature import SignatureRewriter
 
 
 P = ParamSpec("P")
@@ -64,7 +64,8 @@ def handle_errors(
     ignore_exc_class = _DefaultIgnoreException if ignore_exc_class is None else ignore_exc_class
 
     def _decorate(func: WrappedFunction[P, T]) -> WrappedFunction[P, T]:
-        @wraps(func)
+        rewriter = SignatureRewriter(func)
+
         def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
             return_value: T | None = None
             try:
@@ -127,6 +128,7 @@ def handle_errors(
                 if do_finally:
                     do_finally()
 
+        rewriter.apply(wrapper)
         return wrapper
 
     return _decorate

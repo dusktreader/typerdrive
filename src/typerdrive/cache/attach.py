@@ -3,7 +3,6 @@ Provide a decorator that attaches the `typerdrive` cache to a `typer` command fu
 """
 
 from collections.abc import Callable
-from functools import wraps
 from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
@@ -49,7 +48,6 @@ def attach_cache(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
                 rewriter.cloak(key, Annotated[CacheManager | None, CloakingDevice])
                 manager_param_key = key
 
-        @wraps(func)
         def wrapper(ctx: typer.Context, *args: P.args, **kwargs: P.kwargs) -> T:
             manager: CacheManager = CacheManager()
             to_context(ctx, "cache_manager", manager)

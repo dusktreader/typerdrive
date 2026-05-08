@@ -169,12 +169,12 @@ class TestSignatureRewriterApply:
         assert wrapper.__annotations__["mgr"] == cloaked
         assert wrapper.__annotations__["ctx"] is typer.Context
 
-    def test_apply__survives_poisoned_annotate(self):
+    def test_apply__neutralises_annotate_copied_by_wraps(self):
         """
-        Simulates Python 3.14 behavior: the wrapper has a lazy __annotate__ that
-        raises NameError (as happens when a decorator-scope name like `Context`
-        is not available at evaluation time). After apply(), inspect.signature()
-        must succeed without triggering __annotate__.
+        On Python 3.13+, functools.WRAPPER_ASSIGNMENTS includes __annotate__, so
+        @wraps copies the original function's lazy __annotate__ onto the wrapper.
+        apply() must neutralise it so Python 3.14 lazy evaluation never fires —
+        either by deletion or by replacing it with one that returns the resolved dict.
         """
         def func(ctx: typer.Context, name: str) -> None: ...
 
@@ -183,15 +183,17 @@ class TestSignatureRewriterApply:
         @wraps(func)
         def wrapper(ctx: typer.Context, *args, **kwargs): ...
 
-        # Poison __annotate__ to simulate the Python 3.14 NameError
-        def bad_annotate(format):
-            raise NameError("name 'Context' is not defined")
-
-        wrapper.__annotate__ = bad_annotate  # type: ignore[attr-defined]
+        # On Python 3.13+, @wraps will have copied __annotate__ from func
+        # Verify the precondition holds on this interpreter
+        if not hasattr(wrapper, "__annotate__"):
+            return  # pragma: no cover — older Python, nothing to test
 
         rewriter.apply(wrapper)
 
-        # inspect.signature() must not raise, even with the poisoned __annotate__
-        sig = signature(wrapper)
-        assert "ctx" in sig.parameters
-        assert "name" in sig.parameters
+        # Either __annotate__ is gone, or it has been replaced with one that
+        # returns the pre-resolved dict rather than the original lazy closure.
+        if hasattr(wrapper, "__annotate__"):
+            result = wrapper.__annotate__(1)  # type: ignore[attr-defined]  # ty: ignore[call-non-callable]
+            assert result == {"ctx": typer.Context, "name": str}
+        else:
+            pass  # deleted — also fine

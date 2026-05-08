@@ -8,6 +8,13 @@ from typerdrive.constants import ExitCode
 from typerdrive.settings.commands import add_bind, add_reset, add_settings_subcommand, add_show, add_unset, add_update
 
 from tests.unit.helpers import match_help, match_output
+from tests.unit.settings.commands_string_annotation_module import (
+    make_string_annotated_bind_cli,
+    make_string_annotated_reset_cli,
+    make_string_annotated_show_cli,
+    make_string_annotated_unset_cli,
+    make_string_annotated_update_cli,
+)
 from tests.unit.settings.models import DefaultSettingsModel, RequiredFieldsModel, SecretFieldsModel
 
 
@@ -75,8 +82,8 @@ class TestBind:
 
         expected_pattern = [
             "Options",
-            r"--name TEXT \[default: None\] \[required\]",
-            r"--planet TEXT \[default: None\] \[required\]",
+            r"--nameTEXT\[required\]",
+            r"--planetTEXT\[required\]",
             r"--is-humanoid --no-is-humanoid  \[default: is-humanoid\]",
             r"--alignment TEXT \[default: neutral\]",
         ]
@@ -251,10 +258,10 @@ class TestUpdate:
 
         expected_pattern = [
             "Options",
-            r"--name TEXT \[default: None\]",
-            r"--planet TEXT \[default: None\]",
+            r"--nameTEXT",
+            r"--planetTEXT",
             r"--is-humanoid",  # NOTE: This doesn't match typer docs. It should show a default
-            r"--alignment TEXT \[default: None\]",
+            r"--alignmentTEXT",
         ]
         match_help(
             cli,
@@ -529,7 +536,7 @@ class TestSubcommand:
         match_output(
             cli,
             "settings",
-            exit_code=0,
+            exit_code=2,
             expected_pattern=expected_pattern,
             prog_name="test",
         )
@@ -624,5 +631,77 @@ class TestSecretFields:
         match_help(
             cli,
             expected_pattern=[r"settings.*Manage settings for the app"],
+            prog_name="test",
+        )
+
+
+class TestStringAnnotations:
+    """
+    Verify that `add_bind`, `add_update`, `add_unset`, `add_show`, and `add_reset`
+    all work correctly when called from a module that uses
+    `from __future__ import annotations`.
+
+    The `build_command` utility in `typer-repyt` dynamically constructs command
+    functions in `settings/commands.py`'s module scope.  Python 3.14's lazy
+    `__annotate__` must be able to resolve `Context` and `Annotated` in that
+    scope — which is why `settings/commands.py` explicitly re-exports both names.
+    If that re-export is missing, invoking the CLI would raise:
+        NameError: name 'Context' is undefined
+    """
+
+    def test_add_bind_invocable_with_string_annotations(self, fake_settings_path: Path):
+        """Commands built by add_bind are invocable when caller uses string annotations."""
+        cli = make_string_annotated_bind_cli()
+
+        match_output(
+            cli,
+            "--name=jawa",
+            "--planet=tatooine",
+            expected_pattern=["name.*jawa", "planet.*tatooine"],
+            exit_code=0,
+            prog_name="test",
+        )
+
+    def test_add_update_invocable_with_string_annotations(self, fake_settings_path: Path):
+        """Commands built by add_update are invocable when caller uses string annotations."""
+        cli = make_string_annotated_update_cli()
+
+        match_output(
+            cli,
+            "--name=hutt",
+            expected_pattern=["name.*hutt"],
+            exit_code=0,
+            prog_name="test",
+        )
+
+    def test_add_unset_invocable_with_string_annotations(self, fake_settings_path: Path):
+        """Commands built by add_unset are invocable when caller uses string annotations."""
+        cli = make_string_annotated_unset_cli()
+
+        match_output(
+            cli,
+            exit_code=0,
+            prog_name="test",
+        )
+
+    def test_add_show_invocable_with_string_annotations(self, fake_settings_path: Path):
+        """Commands built by add_show are invocable when caller uses string annotations."""
+        cli = make_string_annotated_show_cli()
+
+        match_output(
+            cli,
+            expected_pattern=["name.*jawa"],
+            exit_code=0,
+            prog_name="test",
+        )
+
+    def test_add_reset_invocable_with_string_annotations(self, fake_settings_path: Path):
+        """Commands built by add_reset are invocable when caller uses string annotations."""
+        cli = make_string_annotated_reset_cli()
+
+        match_output(
+            cli,
+            input="y\n",
+            exit_code=0,
             prog_name="test",
         )

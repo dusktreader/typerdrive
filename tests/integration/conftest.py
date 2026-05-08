@@ -17,13 +17,13 @@ from typerdrive.env import tweak_env
 
 @pytest.fixture
 def runner() -> CliRunner:
-    return CliRunner(mix_stderr=True)
+    return CliRunner()
 
 
 @pytest.fixture
 def tmp_home(tmp_path: Path) -> Generator[Path, None, None]:
     """A temporary HOME directory, isolated per-test."""
-    with tweak_env(HOME=str(tmp_path)):
+    with tweak_env(HOME=str(tmp_path), XDG_CACHE_HOME=str(tmp_path / ".cache")):
         yield tmp_path
 
 

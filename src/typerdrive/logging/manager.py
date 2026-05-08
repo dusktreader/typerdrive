@@ -49,7 +49,7 @@ class LoggingManager:
             )
 
         # Having a hell of a time getting the typing right for `configure()`
-        logger.configure(handlers=handlers)  # type: ignore[arg-type]
+        logger.configure(handlers=handlers)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
         logger.enable("typerdrive")
 
     def show(self):

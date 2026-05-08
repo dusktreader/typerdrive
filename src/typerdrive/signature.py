@@ -3,8 +3,11 @@ Provide a helper class for rewriting function signatures in decorator contexts.
 """
 
 from collections.abc import Callable
+from functools import update_wrapper
 from inspect import Parameter, Signature, signature
 from typing import Any, get_type_hints
+
+METADATA_ASSIGNMENTS = ["__module__", "__name__", "__qualname__", "__doc__"]
 
 
 class SignatureRewriter:
@@ -47,22 +50,39 @@ class SignatureRewriter:
 
     def apply(self, wrapper: Callable) -> None:
         """
-        Stamp the rewritten `Signature` onto the wrapper function.
+        Copy identity metadata from the original function onto the wrapper, then
+        stamp the rewritten `Signature` onto it.
 
-        Sets `__signature__` so introspection tools see the rewritten parameters,
-        then replaces `__annotations__` with an eagerly-evaluated dict that matches
-        the rewritten signature exactly.
+        Uses `update_wrapper` with only `METADATA_ASSIGNMENTS` so that
+        `__annotate__`, `__annotations__`, and `__wrapped__` are never copied from
+        the original function — those are what trigger Python 3.14's lazy annotation
+        evaluation in the wrong scope.
 
-        On Python 3.14+, `inspect.signature()` on a plain function bypasses
-        `__signature__` and calls `get_annotations()`, which triggers the lazy
-        `__annotate__` closure — which references names (e.g. `Context`) that are
-        not in scope at evaluation time. Replacing `__annotations__` with a plain
-        pre-resolved dict prevents that evaluation entirely.
+        Then sets `__signature__` and replaces `__annotations__` with a pre-resolved
+        dict. Also deletes `__annotate__` if present as a safety net for callers that
+        may have set it via other means.
         """
+        update_wrapper(wrapper, self.func, assigned=METADATA_ASSIGNMENTS, updated=[])
+        # update_wrapper always sets __wrapped__ regardless of `assigned`; remove it
+        # so inspect.signature() with eval_str=True (as typer uses) does not follow
+        # the chain back to the original function and trigger its lazy __annotate__.
+        try:
+            del wrapper.__wrapped__  # type: ignore[attr-defined]  # ty: ignore[unresolved-attribute]
+        except AttributeError:
+            pass
         sig = self.build()
         setattr(wrapper, "__signature__", sig)
-        wrapper.__annotations__ = {
+        resolved = {
             name: p.annotation
             for name, p in sig.parameters.items()
             if p.annotation is not p.empty
         }
+        wrapper.__annotations__ = resolved
+        # Replace __annotate__ (copied by update_wrapper on Python 3.13+) with a
+        # callable that returns the pre-resolved dict. On Python 3.14 it cannot be
+        # deleted (it's a slot), so we overwrite it instead.
+        if hasattr(wrapper, "__annotate__"):
+            try:
+                wrapper.__annotate__ = lambda format: resolved  # type: ignore[attr-defined]  # ty: ignore[invalid-assignment]
+            except (AttributeError, TypeError):
+                pass

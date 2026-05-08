@@ -8,6 +8,10 @@ from typerdrive.exceptions import TyperdriveError
 from typerdrive.handle_errors import handle_errors
 from typerdrive.settings.attach import attach_settings, get_settings
 
+from tests.unit.handle_errors_string_annotation_module import (
+    make_string_annotated_cli,
+    make_string_annotated_with_context_cli,
+)
 from tests.unit.helpers import check_output
 
 
@@ -352,5 +356,39 @@ class TestHandleErrors:
                 "WE'RE GONNA HAVE COMPANY!",
             ],
             exit_code=ExitCode.GENERAL_ERROR,
+            prog_name="test",
+        )
+
+
+class TestStringAnnotations:
+    """
+    Verify that `handle_errors` works correctly when the decorated function
+    stores its annotations as strings rather than resolved types.
+
+    This happens in any module that uses `from __future__ import annotations`
+    (all Python versions) and is the default behaviour in Python 3.14+ (PEP 649).
+    Previously, `SignatureRewriter` could trigger a `NameError` when Python 3.14's
+    lazy annotation machinery tried to resolve types in the wrong scope.
+    """
+
+    def test_handle_errors_with_string_annotations(self):
+        """Command decorated with handle_errors runs correctly when annotations are strings."""
+        cli = make_string_annotated_cli()
+
+        check_output(
+            cli,
+            expected_substring="Hello, jawa!",
+            exit_code=0,
+            prog_name="test",
+        )
+
+    def test_handle_errors_with_context_and_string_annotations(self):
+        """Command with Context parameter decorated with handle_errors runs correctly when annotations are strings."""
+        cli = make_string_annotated_with_context_cli()
+
+        check_output(
+            cli,
+            expected_substring="Hello, jawa!",
+            exit_code=0,
             prog_name="test",
         )

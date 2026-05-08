@@ -62,7 +62,7 @@ def to_context(ctx: typer.Context, name: str, val: TyperdriveManager) -> None:
         field_type = defined_types[0]
 
     # TODO: Get the type hinting on the next line right.
-    ContextError.ensure_type(val, field_type, "Value is not of type any of the union types")  # type: ignore[arg-type]
+    ContextError.ensure_type(val, field_type, "Value is not of type any of the union types")  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
     setattr(user_context, name, val)
 

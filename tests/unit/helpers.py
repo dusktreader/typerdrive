@@ -29,7 +29,7 @@ def get_output(
     if env_vars is None:
         env_vars = {}
     result = runner.invoke(cli, args, env=env_vars, **kwargs)
-    output = result.stdout
+    output = result.output
     if strip_terminal_controls:
         output = strip_ansi_escape_sequences(output)
     assert result.exit_code == exit_code, build_code_fail_message(exit_code, result.exit_code, output, result.exception)

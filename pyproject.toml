@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.9.7"
+version = "0.9.8"
 description = "Develop API-Connected Typer Apps at Lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -20,7 +20,7 @@ dependencies = [
     "pyperclip>=1.9",
     "snick>=3.0",
     "typer>=0.15",
-    "typer-repyt>=0.9.1",
+    "typer-repyt>=0.9.2",
     "rich>=14.0",
     "xdg-base-dirs>=6.0.2",
 ]
@@ -56,6 +56,7 @@ dev = [
     "ty>=0.0",
     "typos>=1.31",
     "superfences-ps1>=0.1.0",
+    "typer-repyt",
 ]
 
 

@@ -3,7 +3,6 @@ Provide a decorator that attaches the `typerdrive` files to a `typer` command fu
 """
 
 from collections.abc import Callable
-from functools import wraps
 from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
@@ -50,7 +49,6 @@ def attach_files(show: bool = False) -> Callable[[ContextFunction[P, T]], Contex
                 rewriter.cloak(key, Annotated[FilesManager | None, CloakingDevice])
                 manager_param_key = key
 
-        @wraps(func)
         def wrapper(ctx: typer.Context, *args: P.args, **kwargs: P.kwargs) -> T:
             manager: FilesManager = FilesManager()
             to_context(ctx, "files_manager", manager)

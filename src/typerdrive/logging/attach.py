@@ -3,7 +3,6 @@ Provide a decorator that attaches logging functionality to a `typer` command fun
 """
 
 from collections.abc import Callable
-from functools import wraps
 from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
@@ -36,7 +35,7 @@ ContextFunction = Callable[Concatenate[typer.Context, P], T]
 
 def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], ContextFunction[P, T]]:
     """
-    Attach a logging functinoality  to the decorated `typer` command function.
+    Attach logging functionality  to the decorated `typer` command function.
 
     Parameters:
         verbose: A `verbose` flag passed along to the `LoggingManager`
@@ -50,7 +49,6 @@ def attach_logging(verbose: bool = False) -> Callable[[ContextFunction[P, T]], C
                 rewriter.cloak(key, Annotated[LoggingManager | None, CloakingDevice])
                 manager_param_key = key
 
-        @wraps(func)
         def wrapper(ctx: typer.Context, *args: P.args, **kwargs: P.kwargs) -> T:
             manager: LoggingManager = LoggingManager(verbose=verbose)
             to_context(ctx, "logging_manager", manager)

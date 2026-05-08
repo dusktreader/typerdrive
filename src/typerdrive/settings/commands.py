@@ -2,9 +2,10 @@
 Provide commands that can be added to a `typer` app to manage settings.
 """
 
-from typing import Any
+from typing import Annotated, Any  # noqa: F401 -- Annotated must be in __globals__ for Python 3.14 lazy annotation eval
 
 import typer
+from typer import Context as Context  # re-exported so bind/__globals__ resolves 'Context' on Python 3.14
 from pydantic import BaseModel, SecretStr
 from pydantic_core import PydanticUndefined
 from typer_repyt.build_command import DecDef, OptDef, build_command

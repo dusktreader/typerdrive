@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.9.8 - 2026-05-07
+- Added Python 3.14 string-annotation regression tests for all `attach_*` decorators and `handle_errors`
+  - Each decorator now has a `string_annotation_module.py` with `from __future__ import annotations` in effect
+  - `TestStringAnnotations` test classes verify commands can be built and invoked without `NameError`
+- Removed `@wraps` from all `attach_*` decorators; metadata copying is handled exclusively by `SignatureRewriter.apply()`
+  - `@wraps` copied `__annotate__` from the original function onto the wrapper, triggering Python 3.14 lazy evaluation in the wrong scope
+- Re-exported `Context` and `Annotated` in `settings/commands.py` so `build_command` (from `typer-repyt`) resolves them in the correct scope
+- Updated `typer-repyt` requirement to `>=0.9.2` to include the upstream Python 3.14 `Context` scope fix
+- Fixed cache test isolation: `fake_cache_path` and `tmp_home` fixtures now set `XDG_CACHE_HOME` explicitly
+- Bumped `.python-version` to `3.14`
+
 ## v0.9.7 - 2026-05-05
 - Fixed `NameError: name 'Context' is not defined` crash on Python 3.14+ when using
   any `attach_*` decorator

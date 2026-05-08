@@ -6,6 +6,11 @@ from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager
 from typerdrive.settings.attach import attach_settings
 
+from tests.unit.client.string_annotation_module import (
+    make_string_annotated_cli,
+    make_string_annotated_client_param_cli,
+    make_string_annotated_manager_cli,
+)
 from tests.unit.helpers import check_output, match_output
 
 
@@ -175,5 +180,51 @@ class TestGetManager:
             exception_type=ClientError,
             exception_pattern="Item in user context at `client_manager` was not a ClientManager",
             exit_code=1,
+            prog_name="test",
+        )
+
+
+class TestStringAnnotations:
+    """
+    Verify that `attach_client` works correctly when the decorated function
+    stores its annotations as strings rather than resolved types.
+
+    This happens in any module that uses `from __future__ import annotations`
+    (all Python versions) and is the default behaviour in Python 3.14+ (PEP 649).
+    Previously, the decorator compared raw `__annotations__` values against type
+    objects using `is`, which always failed for string annotations and could raise
+    a `NameError` when Python's machinery tried to resolve the strings.
+    """
+
+    def test_client_attached_with_string_annotations(self):
+        """Client manager is attached correctly when annotations are strings."""
+        cli = make_string_annotated_cli()
+
+        match_output(
+            cli,
+            expected_pattern=["Passed"],
+            exit_code=0,
+            prog_name="test",
+        )
+
+    def test_manager_parameter_injected_with_string_annotations(self):
+        """ClientManager parameter is injected correctly when annotations are strings."""
+        cli = make_string_annotated_manager_cli()
+
+        match_output(
+            cli,
+            expected_pattern=["Passed"],
+            exit_code=0,
+            prog_name="test",
+        )
+
+    def test_client_parameter_injected_with_string_annotations(self):
+        """TyperdriveClient parameter is injected correctly when annotations are strings."""
+        cli = make_string_annotated_client_param_cli()
+
+        match_output(
+            cli,
+            expected_pattern=["Passed"],
+            exit_code=0,
             prog_name="test",
         )

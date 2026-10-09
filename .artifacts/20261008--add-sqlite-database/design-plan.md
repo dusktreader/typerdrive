@@ -73,9 +73,11 @@ The registry assigns indices starting at 1 and increments by one in registration
 migration identifier as `f"{idx:08d}{inflection.underscore(desc)}"`. Applications register the full history in order and
 append new migrations; empty descriptions or SQL text produce a feature-specific error before any migration is applied,
 and the attached application command does not proceed. The same registered migrations are used by command attachments
-and database-management commands. Opening an attached database applies pending migrations in registration order before
-the command uses the database. A new database reaches the same current schema as an existing database after all
-registered migrations run.
+and database-management commands. Attaching to an absent
+database creates and configures it, then applies the full registered sequence before the command runs. Attaching to an
+existing database applies pending migrations before the command runs. This differs from `db setup`, which creates an
+empty database without application migrations, and `db migrate`, which applies pending migrations only to an existing
+database. A new database reaches the same current schema as an existing database after all registered migrations run.
 
 
 #### AC07: Migrations are tracked and concurrency-safe
@@ -97,13 +99,18 @@ a corrected pending migration can be retried.
 
 #### AC09: Database commands expose safe inspection and control
 
-The optional `db` command group reports the database path without creating it, inspects database metadata without
-exposing application row data, and reports applied and pending migration status without modifying the database. When
-the database file does not exist, `inspect` reports that it does not exist and `status` reports every registered
-migration as pending; neither creates the file. `reset` requires confirmation and exclusive database access before
-clearing stored data and migration history, then recreates the database using the currently registered migration
-sequence.
-If an active manager or migration prevents exclusive access, reset fails without modifying the database or its sidecars.
+The optional `db` command group reports the database path, inspects safe metadata, reports migration status, creates the
+database with `setup`, applies pending application migrations with `migrate`, and supports confirmed `reset`. `inspect`
+and `status` are read-only; for an absent file they report non-existence and all registered migrations pending without
+creating it. `setup` obtains exclusive lifecycle access, creates the configured SQLite file if absent, and does not
+apply
+application migrations; if it already exists, setup is a no-op that preserves its data and schema. If active managers or
+migrations prevent exclusivity, setup fails without changes. `migrate` requires an existing database, applies pending
+registered migrations, and fails without creating a file when the database is absent. `reset` requires confirmation and
+exclusive database access before deleting stored data and migration history, then recreates the database using the
+currently registered migration sequence. If an active manager or migration prevents exclusive access, reset fails
+without
+modifying the database or its sidecars.
 
 
 #### AC10: Errors follow typerdrive conventions
@@ -115,10 +122,15 @@ with typerdrive’s existing user-facing error handling and exit-code convention
 #### AC11: Users can learn and run the feature
 
 The feature includes new API and command reference documentation, usage examples, runnable demos, and a changelog entry.
-Examples demonstrate async and synchronous access and client-supplied SQL migration registration. Demos exercise
-database
-lifecycle, migrations, and management commands. Documentation explains async and sync usage, migration registration and
-failure semantics, database location, reset behavior, and ORM layering.
+Examples demonstrate async and synchronous access and client-supplied SQL migration registration. A runnable attachment
+demo starts with an absent database and verifies from inside the command that the database file exists, WAL is
+configured,
+and a table from the registered migrations is available before normal command logic runs. A management demo shows `db
+setup` leaving application migrations pending, `db migrate` applying them, and confirmed `db reset` rebuilding from the
+current registry. Demo functions show migration SQL inline. Documentation
+explains async and sync usage, how attachment differs from `db setup` and `db migrate`, migration registration and
+failure
+semantics, database location, reset behavior, and ORM layering.
 
 
 #### AC12: WAL is the default journal mode
@@ -135,6 +147,11 @@ The database feature follows the existing attachment pattern: one manager owns t
 places itself in typerdrive context, and makes it available through typed injection or context lookup. Its default file
 lives under the application’s XDG state directory. The manager exposes aiosqlite-level operations so applications own
 their tables, queries, and data models; an application may wrap the connection with its preferred ORM.
+
+Attaching to a missing database creates and configures the file, then applies all registered migrations before
+application
+code runs. Attaching to an existing database applies pending migrations. `db setup` creates an empty database without
+application schema, while `db migrate` applies pending migrations only when a database already exists.
 
 Async commands use an async manager lifecycle. The attachment integrates async command execution with Typer’s
 synchronous callback boundary and reports a clear limitation if invoked from an already-running event loop. Synchronous
@@ -175,10 +192,14 @@ The optional `db` group follows the existing feature subcommand convention. `pat
 location without creating the database. `inspect` reports safe operational metadata, such as whether the database
 exists, its SQLite and schema versions, and its journal mode, but not application records. `status` reports applied and
 pending migrations without applying them. For an absent database, `inspect` reports non-existence and `status` lists all
-registered migrations as pending, without creating the file. `reset` obtains exclusive database access before deleting
-the database, migration history, and sidecars; it then applies the currently registered migration sequence. If existing
-users prevent exclusive access, reset fails without changes. While reset holds exclusive access, new attachments and
-migration runs cannot begin.
+registered migrations as pending, without creating the file. `setup` obtains exclusive lifecycle access and creates an
+empty database if absent, without application migrations; for an existing database it is a no-op. If active users
+prevent
+exclusive access, setup fails without changes. `migrate` requires an existing database and applies pending registered
+migrations; if no database exists, it fails without creating the file. `reset` obtains exclusive database access before
+deleting the database, migration history, and sidecars; it then applies the currently registered migration sequence. If
+existing users prevent exclusive access, reset fails without changes. While setup or reset holds exclusive access, new
+attachments and migration runs cannot begin.
 
 The manager surfaces SQLite contention as a useful feature error rather than presenting concurrent access as unlimited
 write parallelism. WAL is the default journal mode to support concurrent readers and a writer; applications may select a

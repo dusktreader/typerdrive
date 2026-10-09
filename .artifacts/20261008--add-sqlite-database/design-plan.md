@@ -68,20 +68,22 @@ active event loop fail clearly and direct callers to the async API.
 
 #### AC06: Registered migrations bring the database to the current schema
 
-An application packages its ordered SQL migration scripts as application resources and registers that migration source
-with the database feature. Migration identifiers are unique and sortable, and the registered sequence must be strictly
-increasing by identifier; the feature does not silently reorder scripts. Duplicate or out-of-order identifiers, or
-unavailable migration resources, produce a feature-specific error before any migration is applied, and the attached
-application command does not proceed. The same registered source is used by command attachments and database-management
-commands. Opening an attached database applies pending migrations in order before the command uses the database. A new
-database reaches the same current schema as an existing database after all registered migrations run.
+A client application obtains each migration's pure SQL text using its chosen method and registers it with a description.
+The registry assigns indices starting at 1 and increments by one in registration order. It generates each stable
+migration identifier as `f"{idx:08d}{inflection.underscore(desc)}"`. Applications register the full history in order and
+append new migrations; empty descriptions or SQL text produce a feature-specific error before any migration is applied,
+and the attached application command does not proceed. The same registered migrations are used by command attachments
+and database-management commands. Opening an attached database applies pending migrations in registration order before
+the command uses the database. A new database reaches the same current schema as an existing database after all
+registered migrations run.
 
 
 #### AC07: Migrations are tracked and concurrency-safe
 
-The database records applied migration identifiers and checksums. Concurrent application starts cannot apply the same
-migration more than once. Modified historical migration content is detected; a checksum mismatch fails with a
-migration-integrity error before any further migration is applied, and an attached application command does not proceed.
+The database records applied migration indices, generated identifiers, and SQL checksums. The registered history must
+contain every applied index with the same identifier and checksum; removed migrations, changed descriptions, or changed
+SQL fail with a migration-integrity error before any further migration is applied, and the attached application command
+does not proceed. Concurrent application starts cannot apply the same migration more than once.
 
 
 #### AC08: A failed migration does not claim success
@@ -98,9 +100,10 @@ a corrected pending migration can be retried.
 The optional `db` command group reports the database path without creating it, inspects database metadata without
 exposing application row data, and reports applied and pending migration status without modifying the database. When
 the database file does not exist, `inspect` reports that it does not exist and `status` reports every registered
-migration as pending; neither creates the file. Its
-`migrate` command applies pending migrations, and `reset` requires confirmation before replacing stored data and
-reapplying the registered schema.
+migration as pending; neither creates the file. `reset` requires confirmation and exclusive database access before
+clearing stored data and migration history, then recreates the database using the currently registered migration
+sequence.
+If an active manager or migration prevents exclusive access, reset fails without modifying the database or its sidecars.
 
 
 #### AC10: Errors follow typerdrive conventions
@@ -112,10 +115,10 @@ with typerdrive’s existing user-facing error handling and exit-code convention
 #### AC11: Users can learn and run the feature
 
 The feature includes new API and command reference documentation, usage examples, runnable demos, and a changelog entry.
-Examples demonstrate async and synchronous access and packaged migration registration. Demos exercise database
-lifecycle,
-migrations, and management commands. Documentation explains async and sync usage, migration registration and failure
-semantics, database location, reset behavior, and ORM layering.
+Examples demonstrate async and synchronous access and client-supplied SQL migration registration. Demos exercise
+database
+lifecycle, migrations, and management commands. Documentation explains async and sync usage, migration registration and
+failure semantics, database location, reset behavior, and ORM layering.
 
 
 #### AC12: WAL is the default journal mode
@@ -146,29 +149,24 @@ feature-specific error rather than mistaken for successful concurrent writes.
 
 ### Migration model
 
-V1 uses numbered SQL migration scripts owned and packaged as application resources. The application registers an
-explicitly ordered migration source with the database feature for use by both command attachments and
-database-management
-commands. Identifiers must be unique and sortable, and the source sequence must be strictly increasing by identifier;
-invalid order is rejected rather than silently corrected. This avoids relying on a project-relative path and works in
-installed applications as well as source checkouts.
+V1 migrations are pure SQL strings. Each client application chooses how to obtain that text and registers migrations
+with a description and SQL string. The registry assigns indices beginning at 1 in registration order and generates each
+stable identifier as `f"{idx:08d}{inflection.underscore(desc)}"`. Applications register the full migration sequence in
+order with the same registry used by command attachments and database-management commands; typerdrive does not load
+migration files or run Python migration callbacks.
 
-The database persistently records stable migration identifiers and checksums. Concurrent application starts do not
-apply the same migration more than once. If previously applied migration content has changed, migration stops with a
-migration-integrity error before applying further changes, and the attached application command does not proceed. Each
-migration and its recorded success are atomic: a failure leaves earlier successful migrations intact and the failed
-migration eligible for retry.
+The database persistently records each applied index, generated identifier, and SQL checksum. On startup, the complete
+registered history must match every already-applied index and identity; a removed migration, changed description, or
+changed SQL fails with a migration-integrity error before further changes or application code. Concurrent application
+starts do not apply the same migration more than once. Each migration and its recorded success are atomic: a failure
+leaves earlier successful migrations intact and the failed migration eligible for retry.
 
 Migrations are forward-only in v1; there is no command to downgrade previously applied migrations. Transaction rollback
 only protects the database when an individual migration fails: that migration's partial changes are undone, while
 earlier successful migrations remain applied. Applications can correct mistakes with a new forward migration or
-deliberately reset data. The `db` command group provides `path`, `inspect`, `status`, `migrate`, and confirmed `reset`
-operations. Normal attachment applies pending migrations before application code runs; `status` remains non-mutating,
-while `migrate` makes the operation available explicitly. Reset replaces the database and applies the currently
-registered migration set.
-
-Migration sources remain separate from the files feature. They are immutable application assets, while files is
-runtime-writable user data; storing migration scripts there would let runtime data alter future schema upgrades.
+`db reset`. Reset deletes the database and its migration history, then applies the currently registered migration
+sequence. Normal attachment applies pending migrations before application code runs; `status` remains non-mutating and
+provides visibility into pending changes without starting the application command.
 
 
 ### Typer integration and operations
@@ -177,9 +175,10 @@ The optional `db` group follows the existing feature subcommand convention. `pat
 location without creating the database. `inspect` reports safe operational metadata, such as whether the database
 exists, its SQLite and schema versions, and its journal mode, but not application records. `status` reports applied and
 pending migrations without applying them. For an absent database, `inspect` reports non-existence and `status` lists all
-registered migrations as pending, without creating the file. `migrate` creates the database if needed and applies
-pending migrations. `reset` requires explicit confirmation before discarding the database, then restores the registered
-schema.
+registered migrations as pending, without creating the file. `reset` obtains exclusive database access before deleting
+the database, migration history, and sidecars; it then applies the currently registered migration sequence. If existing
+users prevent exclusive access, reset fails without changes. While reset holds exclusive access, new attachments and
+migration runs cannot begin.
 
 The manager surfaces SQLite contention as a useful feature error rather than presenting concurrent access as unlimited
 write parallelism. WAL is the default journal mode to support concurrent readers and a writer; applications may select a
@@ -200,7 +199,7 @@ No unresolved design questions remain before implementation planning.
 - The project supports Python 3.12 and newer. Aiosqlite becomes a runtime dependency for this feature.
 - Aiosqlite’s asynchronous API is the primary interface. Synchronous wrappers are convenience for synchronous callers,
   not a second database abstraction or an ORM.
-- V1 uses pure SQL migrations; applications package and register their migration resources. Migration API details belong
-  in the implementation plan.
+- V1 uses pure SQL migrations. Applications choose how to load SQL text and supply it to the registry, which assigns
+  monotonically increasing indices and stable identifiers. Migration API details belong in the implementation plan.
 - Migrations are forward-only in v1. Checksums detect edited applied migrations, and failed migrations do not advance
   recorded schema state.

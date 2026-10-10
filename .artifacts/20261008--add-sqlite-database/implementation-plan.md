@@ -15,8 +15,8 @@ loop or mixed async/sync manager access.
 
 Integrate the feature with the project's attachment, context, error, command, packaging, documentation, example, and
 demo conventions. Typer's sync callback boundary must await decorated async commands to completion and close the manager
-after success, errors, or cancellation. Provide optional `db path`, `db inspect`, `db status`, and confirmed
-`db reset` commands. Do not add an ORM or application schema to typerdrive.
+after success, errors, or cancellation. Provide optional `db path`, `db inspect`, `db status`, `db setup`, `db migrate`,
+and confirmed `db reset` commands. Do not add an ORM or application schema to typerdrive.
 
 
 ## Project Commands
@@ -154,8 +154,9 @@ synchronous wrappers.
 
 #### Acceptance Criteria
 
-- AC01: Async manager entry creates parent directories, opens one connection at the configured path, selects WAL by
-  default, and closes the connection on normal exit, exception, and cancellation.
+- AC01: Async manager entry creates parent directories and creates the SQLite file if absent, opens one connection at
+  the
+  configured path, selects WAL by default, and closes the connection on normal exit, exception, and cancellation.
 - AC02: Callers can execute parameterized SQL and retrieve rows through the async API without an ORM; SQLite and
   connection failures become database feature errors.
 - AC03: A manager lifecycle permits async APIs or sync-wrapper APIs, but mixing them fails with a lifecycle error that
@@ -268,8 +269,9 @@ behavior, and error handling at Typer's synchronous callback boundary.
 
 - AC01: `@attach_database` provides a live manager through `TyperdriveContext`, a typed command parameter, and
   `get_database_manager(ctx)`; string annotations work as they do for other attachments.
-- AC02: Opening an attached database validates and applies pending migrations before invoking user code; a failed
-  migration prevents user code from running.
+- AC02: Attaching to an absent database creates and configures the file, then applies the full migration registry before
+  user code runs. Attaching to an existing database applies pending migrations. Any validation or migration failure
+  prevents user code from running.
 - AC03: Decorated async commands are awaited to completion, and the database remains open until completion; sync
   decorated commands remain callable with sync wrappers.
 - AC04: The attachment closes the manager after command success, exception, and cancellation and preserves the original
@@ -321,9 +323,9 @@ inspects.
 
 ### 05: Add optional database management commands
 
-Provide safe path and metadata inspection, read-only migration status, and confirmed database reset under the `db`
-command
-group. Migrations run automatically on attachment and after reset; there is no separate `db migrate` command.
+Provide read-only inspection, explicit empty database setup, pending migration application, and confirmed reset under
+the
+`db` command group. Attachments continue to create the database and apply pending migrations automatically.
 
 
 #### Acceptance Criteria
@@ -333,36 +335,47 @@ group. Migrations run automatically on attachment and after reset; there is no s
   rows; an absent file remains absent.
 - AC03: `db status` reports applied and pending migrations without mutation; an absent file reports every registered
   migration as pending and does not create it.
-- AC04: `db reset` requires confirmation and exclusive cross-process access before deleting data or migration history.
+- AC04: `db setup` obtains exclusive lifecycle access and creates/configures the database only when absent. It does not
+  apply application migrations; when the database already exists, it makes no changes. If active managers or migrations
+  prevent exclusive access, it fails without modifying files; new attachments wait while setup holds exclusivity.
+- AC05: `db migrate` requires an existing database and applies pending registered migrations; it does not create the
+  database when absent. It uses the same integrity checks and migration runner as attachments.
+- AC06: `db reset` requires confirmation and exclusive cross-process access before deleting data or migration history.
   If an active manager or migration holds shared access, reset fails without modifying the database or sidecars. While
   reset holds exclusive access, new manager lifecycles and migrations wait; success applies the current sequence, while
   declined confirmation preserves the database.
-- AC05: Management failures use feature-specific errors and existing user-facing formatting/exit-code conventions; the
+- AC07: Management failures use feature-specific errors and existing user-facing formatting/exit-code conventions; the
   optional group follows existing `invoke_without_command=True` and `no_args_is_help=True` behavior.
 
 
 #### Steps
 
-1. Add failing command/help tests in `tests/unit/database/test_commands.py` for the four commands, group help,
-   no-argument help, missing database behavior, output, exit codes, and confirmation decline.
+1. Add failing command/help tests in `tests/unit/database/test_commands.py` for all six commands, group help,
+   no-argument help, absent database behavior, output, exit codes, setup idempotency, migrate-before-setup rejection,
+   and
+   confirmation decline.
 2. Implement `src/typerdrive/database/commands.py` and expose
    `add_database_subcommand(cli, migration_registry)` so the command group uses the same registry passed to
    `attach_database`; follow `cache/commands.py` conventions.
-3. Implement `path` without constructing/opening a manager; implement absent-file `inspect` and `status` as read-only
-   operations so those commands do not create the database.
+3. Implement `path` without opening a manager; keep absent-file `inspect` and `status` read-only.
 4. Implement `inspect` with operational metadata only. Query SQLite version, schema version, journal mode, and safe
    existence/state metadata, never application tables or rows.
 5. Implement `status` by validating the registered migration sequence and comparing it with the ledger when the file
    exists; report all registered migrations pending if absent.
-6. Implement `reset` with the database-path-scoped cross-process lock. Acquire exclusive access before destructive work;
-   if a manager or migration holds shared access, fail without touching the database or sidecars. Retain the exclusive
-   lease through deletion and rebuild, and invoke an internal locked migration routine that reuses this lease without
-   acquiring a conflicting shared lease. New manager lifecycles and migrations wait until reset releases exclusivity.
-7. Test active managers and migrations make reset fail without data/history changes. Add multiprocess tests proving a
-   manager in another process blocks reset and new attachments/migrations wait while reset is held. Assert reset's
-   migration routine completes under its existing exclusive lease. Seed rows/history, change the registry, reset, and
-   verify old state is gone and the new schema/ledger match; declined confirmation preserves both rows and history.
-8. Run `make qa/test-unit`.
+6. Implement `setup` under exclusive cross-process lifecycle access. If the file is absent, create and configure the
+   empty
+SQLite database without invoking application migrations; if present, report it is already set up and preserve it. Fail
+without changes when active shared users prevent exclusivity.
+7. Implement `migrate` only for an existing database using the shared migration runner. If absent, report a feature
+   error
+   directing the user to `db setup` or an attached command; do not create a file.
+8. Implement `reset` with the database-path-scoped cross-process lock. Retain exclusive access through deletion and
+   rebuild, then invoke an internal locked migration routine that does not acquire a conflicting shared lease.
+9. Test setup leaves application migrations pending and is a no-op when DB exists; verify it fails without changes when
+   a manager holds shared access. Test migrate rejects absent DB and applies pending migrations after setup. Retain
+   reset
+   data/history and cross-process lock coverage.
+10. Run `make qa/test-unit`.
 
 
 ### 06: Cover the complete database workflow with CLI integration tests
@@ -375,17 +388,21 @@ persistence between invocations and all important failure paths.
 
 - AC01: A CLI scenario can use injected/context database access to create and retrieve app-owned rows across separate
   command invocations.
-- AC02: A CLI scenario registers client-loaded SQL text, applies migrations before command execution, and rejects empty
-  descriptions or SQL, checksum changes, and failed SQL without entering the command body; generated IDs follow
-  registration order.
+- AC02: A CLI scenario starts without a database and registers client-loaded SQL. Its first command-body assertions
+  prove
+  attachment created the file, enabled WAL, and applied the migration-created schema before later logic runs. Other
+  cases
+  reject empty descriptions or SQL, checksum changes, and failed SQL; generated IDs follow registration order.
 - AC03: Async command success, raised failure, and cancellation close the manager; sync commands use the sync wrapper
   and persist results.
-- AC04: Integration scenarios verify `db path`, absent-file `inspect`/`status`, and `db reset`; successful reset removes
-  seeded application rows and old migration history, then applies a changed current registry. Declined reset preserves
-  rows and migration history.
-- AC05: Cross-process tests show active managers/migrations make reset fail without changing data or history; new
-  attachments and migrations wait while reset holds exclusive access.
-- AC06: An async-loop boundary failure is actionable and does not leave a live connection or coroutine warning.
+- AC04: Integration scenarios verify `db setup` creates an empty database without application schema, is idempotent, and
+  fails without changes when a manager holds shared access. `db migrate` fails without creating an absent database, then
+  applies migrations after setup; `db inspect` reports the initialized metadata.
+- AC05: Successful `db reset` removes seeded application rows and old migration history, then applies a changed current
+  registry. Declined reset preserves rows and migration history.
+- AC06: Cross-process tests show active managers/migrations block setup or reset without changes; new attachments and
+  migrations wait while setup/reset holds exclusive access.
+- AC07: An async-loop boundary failure is actionable and does not leave a live connection or coroutine warning.
 
 
 #### Steps
@@ -394,15 +411,16 @@ persistence between invocations and all important failure paths.
    existing files/cache BDD structure; share isolated XDG state fixtures from `tests/integration/conftest.py`.
 2. Use a test application that loads SQL text with its own chosen source and registers it with the migration registry;
    invoke commands with `CliRunner` exactly as users invoke the CLI.
-3. Add happy-path scenarios for async insert/select, synchronous access, context lookup, persistence across CLI
-   invocations, automatic migration, and multiple registered migrations.
+3. Add a fresh-state attachment scenario whose first command-body assertions check that the database file exists, WAL is
+   active, and the migration-created table is queryable. Also cover async insert/select, synchronous access, context
+   lookup, persistence across invocations, and multiple migrations.
 4. Add failure scenarios for empty description or SQL registration, checksum mismatch, migration rollback/retry,
    command-body suppression, SQL errors, cleanup after callback error, and loop-boundary rejection.
 5. Add database-management scenarios for non-mutating absent-file commands, migration status, and safe inspect output.
-   Seed rows and history; verify reset clears both and applies a changed registry, while decline preserves both. Use
-   separate processes to verify an active manager/migration blocks reset without mutation and attachments/migrations
-   wait
-   while reset holds the exclusive lock.
+   Verify setup creates an empty database without app schema, is idempotent, and fails without changes when a manager is
+   active. Verify migrate requires setup and applies the registered schema, while attachment still
+   auto-creates/migrates.
+   Seed rows/history; verify reset replaces both. Use separate processes to verify setup/reset lock behavior.
 6. Run `make qa/test-integration`, inspect failing scenario output, and then run `make qa` to check combined coverage
    and regressions in existing features.
 
@@ -415,15 +433,17 @@ Publish the feature API and behavior in docs, runnable examples, demo modules, d
 #### Acceptance Criteria
 
 - AC01: Feature documentation explains async and sync APIs, explicit async lifecycle, connection lifecycle, transaction
-  serialization/rollback, path configuration, WAL selection, migrations, checksums/failure ordering, command behavior,
-  reset data loss, and ORM layering.
+  serialization/rollback, path configuration, WAL selection, migration registration/checksums/failure ordering,
+  automatic create-and-migrate on attachment, `db setup` creating an empty database without app schema, `db migrate`
+  requiring an existing database and applying pending migrations, reset data loss, and ORM layering.
 - AC02: API reference covers database attachment, manager, migration API, commands, and feature errors.
-- AC03: Runnable examples demonstrate async SQL, sync wrappers, application-controlled loading and registration of SQL
-  text, app-owned schema, and database subcommand registration. The demo may use package resources as one
-  client-selected
-  way to load SQL text.
-- AC04: Demo supports database attachment/lifecycle, migrations, and management commands through the existing
-  `--feature` selection convention.
+- AC03: Runnable examples demonstrate async SQL, sync wrappers, client-supplied SQL text, and database subcommand
+  registration. The commands example demonstrates `db setup` leaving migrations pending and `db migrate` applying them.
+  Client-selected package-resource loading may be shown as an alternative source.
+- AC04: An attachment demo starts with an absent database and verifies inside the command body that the file exists, WAL
+  is configured, and the migrated table is available. Database command demos show inline migration SQL, demonstrate `db
+  setup` leaving migrations pending, `db migrate` applying them, and confirmed `db reset` rebuilding from the current
+  registry. All demos remain selectable via `--feature`.
 - AC05: Demo migration SQL is included in both wheel and source distribution and can be loaded after installation
   through `importlib.resources`.
 - AC06: `CHANGELOG.md` records the feature under a new `Unreleased` section; docs navigation and feature overview link
@@ -437,11 +457,17 @@ Publish the feature API and behavior in docs, runnable examples, demo modules, d
 2. Update `docs/mkdocs.yaml` navigation, `docs/source/index.md`, and `README.md` feature lists to link to the database
    feature and reference.
 3. Add `examples/database/attach.py`, `examples/database/commands.py`, and a sample client-owned SQL migration source.
-   Demonstrate app-owned tables and show the client loading migration text from its own package resource before passing
-   the text and description to the registry.
-4. Add `src/typerdrive_demo/attach_database.py`, `src/typerdrive_demo/database_commands.py`, and an importable demo
-   migration resource package with `__init__.py` and numbered `.sql` files; register the new features in
-   `src/typerdrive_demo/main.py` and the demo feature mapping.
+   Demonstrate app-owned tables, show the client loading SQL text from its chosen source, and exercise `db setup`
+   followed
+   by `db migrate` to distinguish empty database creation from schema migration.
+4. Add `src/typerdrive_demo/attach_database.py`, `src/typerdrive_demo/database_commands.py`, and the importable demo
+   migration resource package. Show migration SQL inline in demo functions and keep the packaged SQL asset for the
+   distribution check. Start the attachment demo with an absent database and assert inside the command body that the
+   file
+   exists, WAL is active, and the migration-created table is queryable. The command demo shows setup leaving migrations
+   pending, migrate applying them, inspect reporting metadata, and confirmed reset reapplying the current registry.
+   Register
+   the features in `src/typerdrive_demo/main.py`.
 5. Configure `pyproject.toml`/uv-build package inclusion for the demo migration `.sql` assets as needed. Verify
    resources are readable via `importlib.resources` in the built artifact, not merely from the source tree.
 6. Add a concise database feature entry to `CHANGELOG.md` without changing the package version unless the release

@@ -3,6 +3,15 @@ revision = 3
 requires-python = ">=3.12"
 
 [[package]]
+name = "aiosqlite"
+version = "0.22.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4e/8a/64761f4005f17809769d23e518d915db74e6310474e733e3593cfc854ef1/aiosqlite-0.22.1.tar.gz", hash = "sha256:043e0bd78d32888c0a9ca90fc788b38796843360c855a7262a532813133a0650", size = 14821, upload-time = "2025-12-23T19:25:43.997Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/00/b7/e3bf5133d697a08128598c8d0abc5e16377b51465a33756de24fa7dee953/aiosqlite-0.22.1-py3-none-any.whl", hash = "sha256:21c002eb13823fad740196c5a2e9d8e62f6243bd9e7e4a1f87fb5e44ecb4fceb", size = 17405, upload-time = "2025-12-23T19:25:42.139Z" },
+]
+
+[[package]]
 name = "annotated-doc"
 version = "0.0.4"
 source = { registry = "https://pypi.org/simple" }
@@ -875,14 +884,14 @@ wheels = [
 
 [[package]]
 name = "py-buzz"
-version = "8.1.2"
+version = "8.2.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/dd/ab/c94f80de2b17d8c612016f667bb23c215e37944996dae8d6589f2afbb184/py_buzz-8.1.2.tar.gz", hash = "sha256:7ca3c8fedc0e2fec9258cd0b3f550cffc785b7094016c5d4174e2c6ebe4ffb17", size = 20158, upload-time = "2026-04-11T01:19:58.61Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/84/81/e390eac7b96e25dadc00c31c6bd3d45ff2f69a4b6a21c05daa156bb4bed2/py_buzz-8.2.1.tar.gz", hash = "sha256:58776541367e9c93af8d5252606a0e2a02ac30677fba7850e159a5082a2dde89", size = 22886, upload-time = "2026-10-13T00:05:32.695Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2d/9c/24230b1e5255430f42c8d31604287e9b16012de65a5cc4561cb3d9c11a72/py_buzz-8.1.2-py3-none-any.whl", hash = "sha256:217fa7c06467f60eb98c473e95009a951fe759360761070d26640c358018c7b5", size = 29264, upload-time = "2026-04-11T01:19:59.585Z" },
+    { url = "https://files.pythonhosted.org/packages/8d/06/878eb0400dd15dbc457ec52b1f7508334359c2b6ff46bba41d08fd6d33b0/py_buzz-8.2.1-py3-none-any.whl", hash = "sha256:7bec983ee0d88e6f4804afc0f28d4c1704303b0c82e70b0aa08ae69b0d6e0615", size = 30488, upload-time = "2026-10-13T00:05:31.533Z" },
 ]
 
 [[package]]
@@ -1379,9 +1388,11 @@ wheels = [
 
 [[package]]
 name = "typerdrive"
-version = "0.9.8"
+version = "0.10.0"
 source = { editable = "." }
 dependencies = [
+    { name = "aiosqlite" },
+    { name = "anyio" },
     { name = "diskcache" },
     { name = "httpx" },
     { name = "humanize" },
@@ -1423,12 +1434,14 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "aiosqlite", specifier = ">=0.21" },
+    { name = "anyio", specifier = ">=4.13" },
     { name = "diskcache", specifier = ">=5.6" },
     { name = "httpx", specifier = ">=0.28" },
     { name = "humanize", specifier = ">=4.12" },
     { name = "inflection", specifier = ">=0.5" },
     { name = "loguru", specifier = ">=0.7" },
-    { name = "py-buzz", specifier = ">=8.0" },
+    { name = "py-buzz", specifier = "==8.2.1" },
     { name = "pydantic", specifier = ">=2.11" },
     { name = "pyperclip", specifier = ">=1.9" },
     { name = "rich", specifier = ">=14.0" },

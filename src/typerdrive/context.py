@@ -11,12 +11,13 @@ from buzz import require_condition
 
 from typerdrive.cache.manager import CacheManager
 from typerdrive.client.manager import ClientManager
+from typerdrive.database.manager import DatabaseManager
 from typerdrive.exceptions import ContextError
 from typerdrive.files.manager import FilesManager
 from typerdrive.logging.manager import LoggingManager
 from typerdrive.settings.manager import SettingsManager
 
-type TyperdriveManager = SettingsManager | CacheManager | ClientManager | LoggingManager | FilesManager
+type TyperdriveManager = SettingsManager | CacheManager | ClientManager | LoggingManager | FilesManager | DatabaseManager
 
 
 @dataclass
@@ -30,6 +31,7 @@ class TyperdriveContext:
     client_manager: ClientManager | None = None
     logging_manager: LoggingManager | None = None
     files_manager: FilesManager | None = None
+    database_manager: DatabaseManager | None = None
 
 
 def get_user_context(ctx: typer.Context):

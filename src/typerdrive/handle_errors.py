@@ -2,8 +2,9 @@
 Provide an error handler that can be attached to a command through a decorator.
 """
 
-from typing import ParamSpec, TypeVar, cast
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
+from inspect import isawaitable, iscoroutinefunction
+from typing import NoReturn, ParamSpec, TypeVar, cast
 
 from buzz import DoExceptParams, get_traceback, reformat_exception
 import snick
@@ -66,69 +67,79 @@ def handle_errors(
     def _decorate(func: WrappedFunction[P, T]) -> WrappedFunction[P, T]:
         rewriter = SignatureRewriter(func)
 
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
-            return_value: T | None = None
+        def handle_error(err: Exception) -> NoReturn:
             try:
-                return_value = func(*args, **kwargs)
+                final_message = reformat_exception(base_message, err)
+            except Exception as msg_err:
+                raise RuntimeError(f"Failed while formatting message: {repr(msg_err)}")
+
+            trace = get_traceback()
+            if do_except:
+                do_except(
+                    DoExceptParams(
+                        err=err,
+                        base_message=base_message,
+                        final_message=final_message,
+                        trace=trace,
+                    )
+                )
+
+            subject: str | None = base_message
+            footer: str | None = None
+            if isinstance(err, TyperdriveError):
+                if err.subject:
+                    subject = err.subject
+                if err.footer:
+                    footer = err.footer
+                message = err.message if debug else err.base_message or err.message
+                if unwrap_message:
+                    message = snick.unwrap(message)
+                exit_code = err.exit_code
+            else:
+                message = str(err)
+                exit_code = ExitCode.GENERAL_ERROR
+
+            terminal_message(message, subject=f"[red]{subject}[/red]", footer=footer, error=True)
+            raise typer.Exit(code=exit_code)
+
+        async def await_result(awaitable: Awaitable[T]) -> T:
+            try:
+                result = await awaitable
             except ignore_exc_class:
                 raise
             except handle_exc_class as err:
-                try:
-                    final_message = reformat_exception(base_message, cast(Exception, err))
-                except Exception as msg_err:
-                    raise RuntimeError(f"Failed while formatting message: {repr(msg_err)}")
-
-                trace = get_traceback()
-
-                if do_except:
-                    do_except(
-                        DoExceptParams(
-                            err=cast(Exception, err),
-                            base_message=base_message,
-                            final_message=final_message,
-                            trace=trace,
-                        )
-                    )
-
-                subject: str | None = base_message
-                footer: str | None = None
-                message: str
-
-                exit_code: int = ExitCode.GENERAL_ERROR
-                if isinstance(err, TyperdriveError):
-                    if err.subject:
-                        subject = err.subject
-                    if err.footer:
-                        footer = err.footer
-                    if debug:
-                        message = err.message
-                    else:
-                        message = err.base_message or err.message
-                    if unwrap_message:
-                        message = snick.unwrap(message)
-                    exit_code = err.exit_code
-                else:
-                    message = str(err)
-
-                terminal_message(
-                    message,
-                    subject=f"[red]{subject}[/red]",
-                    footer=footer,
-                    error=True,
-                )
-
-                raise typer.Exit(code=exit_code)
-
+                handle_error(cast(Exception, err))
             else:
                 if do_else:
                     do_else()
-                return return_value
-
+                return result
             finally:
                 if do_finally:
                     do_finally()
 
+        if iscoroutinefunction(func):
+            async def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+                return await await_result(cast(Awaitable[T], func(*args, **kwargs)))
+        else:
+            def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+                return_value: T | Awaitable[T] | None = None
+                try:
+                    return_value = func(*args, **kwargs)
+                    if isawaitable(return_value):
+                        return cast(T, await_result(cast(Awaitable[T], return_value)))
+                except ignore_exc_class:
+                    raise
+                except handle_exc_class as err:
+                    handle_error(cast(Exception, err))
+                else:
+                    if do_else:
+                        do_else()
+                    return cast(T, return_value)
+                finally:
+                    if not isawaitable(return_value) and do_finally:
+                        do_finally()
+
         rewriter.apply(wrapper)
-        return wrapper
+        return cast(WrappedFunction[P, T], wrapper)
 
     return _decorate

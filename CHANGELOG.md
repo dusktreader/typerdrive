@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.10.0 - 2026-10-09
+
+- Added an async-first SQLite `DatabaseManager` with async SQL, synchronous wrappers backed by AnyIO, transaction
+  isolation, and WAL by default
+- Added client-registered SQL migrations with generated identifiers, checksums, integrity validation, and atomic
+  application
+- Added `@attach_database` with typed injection, context lookup, and automatic database creation and migration
+- Added `db setup` for an empty database, `db migrate` for pending migrations, read-only inspection/status, and
+  confirmed
+  transactional `db reset`
+- Coordinated concurrent app instances through SQLite transactions and busy handling without process lock files
+- Added database documentation, runnable examples, and demos showing inline migrations and setup/migrate/reset behavior
+
+
 ## v0.9.9 - 2026-05-07
 - Added `--follow` / `-f` flag to `logs show` to stream the log file in real time via `tail -f`
 - Added `--lines` / `-n` flag to `logs show` to limit output to the last N lines
@@ -15,12 +29,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added Python 3.14 string-annotation regression tests for all `attach_*` decorators and `handle_errors`
   - Each decorator now has a `string_annotation_module.py` with `from __future__ import annotations` in effect
   - `TestStringAnnotations` test classes verify commands can be built and invoked without `NameError`
-- Removed `@wraps` from all `attach_*` decorators; metadata copying is handled exclusively by `SignatureRewriter.apply()`
-  - `@wraps` copied `__annotate__` from the original function onto the wrapper, triggering Python 3.14 lazy evaluation in the wrong scope
-- Re-exported `Context` and `Annotated` in `settings/commands.py` so `build_command` (from `typer-repyt`) resolves them in the correct scope
+- Removed `@wraps` from all `attach_*` decorators; metadata copying is handled exclusively by
+  `SignatureRewriter.apply()`
+  - `@wraps` copied `__annotate__` from the original function onto the wrapper, triggering Python 3.14 lazy evaluation
+    in the wrong scope
+- Re-exported `Context` and `Annotated` in `settings/commands.py` so `build_command` (from `typer-repyt`) resolves them
+  in the correct scope
 - Updated `typer-repyt` requirement to `>=0.9.2` to include the upstream Python 3.14 `Context` scope fix
 - Fixed cache test isolation: `fake_cache_path` and `tmp_home` fixtures now set `XDG_CACHE_HOME` explicitly
 - Bumped `.python-version` to `3.14`
+
 
 ## v0.9.7 - 2026-05-05
 - Fixed `NameError: name 'Context' is not defined` crash on Python 3.14+ when using
@@ -31,6 +49,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     defined
   - Fix: `SignatureRewriter.apply()` now also replaces `wrapper.__annotations__` with
     a pre-resolved dict matching the rewritten signature, preventing lazy evaluation
+
 
 ## v0.9.6 - 2026-05-04
 - Introduced `SignatureRewriter.apply(wrapper)` method to encapsulate `__signature__`

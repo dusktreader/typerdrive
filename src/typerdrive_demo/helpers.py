@@ -115,7 +115,12 @@ def capture(demo: types.FunctionType) -> Captured:
         fake_settings_dir = Path(fake_home) / ".local/share" / demo_name
         fake_settings_dir.mkdir(parents=True)
         fake_settings_path = fake_settings_dir / "settings.json"
-        with tweak_env(COLUMNS="80", HOME=fake_home):
+        with tweak_env(
+            COLUMNS="80",
+            HOME=fake_home,
+            XDG_CACHE_HOME=str(Path(fake_home) / ".cache"),
+            XDG_STATE_HOME=str(Path(fake_home) / ".local" / "state"),
+        ):
             try:
                 demo()
             except SystemExit as exited:

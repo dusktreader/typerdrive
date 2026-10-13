@@ -32,6 +32,7 @@ nav:
     - Settings: features/settings.md
     - Cache: features/cache.md
     - Files: features/files.md
+    - Database: features/database.md
     - Logging: features/logging.md
     - Error Handling: features/exceptions.md
     - API Clients: features/client.md
@@ -40,6 +41,7 @@ nav:
   - Reference:
     - Base Modules: reference/base_modules.md
     - Cache: reference/cache.md
+    - Database: reference/database.md
     - Files: reference/files.md
     - Client: reference/client.md
     - Logging: reference/logging.md

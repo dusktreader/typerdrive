@@ -98,6 +98,14 @@ class TyperdriveConfig(BaseModel):
         """
         return xdg_state_home() / self.app_name / "files"
 
+    @computed_field
+    @property
+    def database_path(self) -> Path:
+        """
+        Retrieve the file where the application database will be stored.
+        """
+        return xdg_state_home() / self.app_name / "db.sqlite"
+
 
 _typerdrive_config: TyperdriveConfig = TyperdriveConfig.model_construct()
 

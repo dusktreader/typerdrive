@@ -23,7 +23,11 @@ def runner() -> CliRunner:
 @pytest.fixture
 def tmp_home(tmp_path: Path) -> Generator[Path, None, None]:
     """A temporary HOME directory, isolated per-test."""
-    with tweak_env(HOME=str(tmp_path), XDG_CACHE_HOME=str(tmp_path / ".cache")):
+    with tweak_env(
+        HOME=str(tmp_path),
+        XDG_CACHE_HOME=str(tmp_path / ".cache"),
+        XDG_STATE_HOME=str(tmp_path / ".state"),
+    ):
         yield tmp_path
 
 

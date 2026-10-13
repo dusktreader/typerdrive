@@ -19,6 +19,8 @@ class Feature(StrEnum):
     cache_commands = auto()
     attach_files = auto()
     files_commands = auto()
+    attach_database = auto()
+    database_commands = auto()
     handle_errors = auto()
     attach_client = auto()
     typerdrive_client = auto()

@@ -1,6 +1,6 @@
 [project]
 name = "typerdrive"
-version = "0.9.9"
+version = "0.10.0"
 description = "Develop API-Connected Typer Apps at Lightspeed"
 authors = [
     {name = "Tucker Beck", email ="tucker.beck@gmail.com"},
@@ -10,12 +10,14 @@ license-files = ["LICENSE.md"]
 
 requires-python = ">=3.12"
 dependencies = [
+    "aiosqlite>=0.21",
+    "anyio>=4.13",
     "diskcache>=5.6",
     "httpx>=0.28",
     "humanize>=4.12",
     "inflection>=0.5",
     "loguru>=0.7",
-    "py-buzz>=8.0",
+    "py-buzz==8.2.1",
     "pydantic>=2.11",
     "pyperclip>=1.9",
     "snick>=3.0",
@@ -62,6 +64,11 @@ dev = [
 
 [tool.uv]
 package = true
+
+
+[tool.uv.build-backend]
+module-name = ["typerdrive", "typerdrive_demo"]
+source-include = ["src/typerdrive_demo/database_migrations/*.sql"]
 
 
 [tool.pytest.ini_options]

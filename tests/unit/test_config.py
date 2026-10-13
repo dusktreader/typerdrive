@@ -58,6 +58,26 @@ class TestTyperdriveConfig:
             expected = Path.home() / ".cache/test_app"
             assert config.cache_dir == expected
 
+    def test_database_path_uses_xdg_state_home(self):
+        with patch.dict(os.environ, {"XDG_STATE_HOME": "/custom/state"}):
+            config = TyperdriveConfig(app_name="test_app")
+            assert config.database_path == Path("/custom/state/test_app/db.sqlite")
+
+    def test_database_path_default_fallback(self):
+        env = {k: v for k, v in os.environ.items() if k != "XDG_STATE_HOME"}
+        with patch.dict(os.environ, env, clear=True):
+            config = TyperdriveConfig(app_name="test_app")
+            assert config.database_path == Path.home() / ".local/state/test_app/db.sqlite"
+
+    def test_database_path_isolated_by_app_name_and_state_home(self):
+        with patch.dict(os.environ, {"XDG_STATE_HOME": "/custom/state", "XDG_CACHE_HOME": "/custom/cache"}):
+            first = TyperdriveConfig(app_name="first")
+            second = TyperdriveConfig(app_name="second")
+            assert first.database_path != second.database_path
+            assert first.database_path.parent == Path("/custom/state/first")
+            assert first.database_path != first.cache_dir
+            assert first.database_path != first.files_dir
+
     def test_custom_app_name(self):
         config = TyperdriveConfig(app_name="my_custom_app")
 

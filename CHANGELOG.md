@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and
 this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.11.1 - 2026-10-21
+
+- Added documentation, runnable examples, and demos for the formatted message helpers
+
+
 ## v0.11.0 - 2026-10-20
 
 - Added app version and description config with `info` and `version` commands

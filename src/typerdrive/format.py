@@ -48,18 +48,25 @@ def terminal_message(
     Show a formatted message to the user in a `rich` Panel.
 
     Parameters:
-        message:       The message to show to the user. May be a string or any other `rich.RenderableType`
-        subject:       An optional heading for the panel to show to the user
-        subject_align: The alignment for the `subject`
-        subject_color: The color to render the `subject` in
+        message:       The message to show to the user. May be a string or any other `rich.RenderableType`.
+        subject:       An optional heading for the panel to show to the user.
+        subject_align: The alignment for the `subject`.
+        subject_color: The color to render the `subject` in.
         footer:        An optional footer to show to the user. If `to_clipboard` results in a successful copy, this will
                        include a message indicating that the message was copied to the clipboard.
-        footer_align:  The alignment for the `footer`
-        indent:        If `True`, indent all lines of the message by 2 spaces
-        markdown:      If `True`, render the text with `rich.markdown`
-        error:         If `True`, print the output to stderr instead of stdout
+        footer_align:  The alignment for the `footer`.
+        indent:        If `True`, indent all lines of the message by 2 spaces.
+        markdown:      If `True`, render the text with `rich.markdown`.
+        error:         If `True`, print the output to stderr instead of stdout.
         to_clipboard:  If `True`, attempt to copy the output to the user's clipboard. The text copied to the clipboard
                        will not include the `rich.panel` decoration including the header and footer.
+
+    Example:
+        terminal_message(
+            "Three migrations applied.",
+            subject="Database setup",
+            footer="Ready to launch",
+        )
     """
     if to_clipboard:
         if _to_clipboard(message):
@@ -111,12 +118,15 @@ def simple_message(
     Show a simple, non-decorated message to the user.
 
     Parameters:
-        message:      The message to show to the user; May not be a `rich.RenderableType`
-        indent:       If `True`, indent all lines of the message by 2 spaces
-        markdown:     If `True`, render the text with `rich.markdown`
-        error:        If `True`, print the output to stderr instead of stdout
-        to_clipboard: If `True`, attempt to copy the output to the user's clipboard
-        padding:      If `True` (default), print a blank line before and after the message
+        message:      The message to show to the user; it cannot be a `rich.RenderableType`.
+        indent:       If `True`, indent all lines of the message by 2 spaces.
+        markdown:     If `True`, render the text with `rich.markdown`.
+        error:        If `True`, print the output to stderr instead of stdout.
+        to_clipboard: If `True`, attempt to copy the output to the user's clipboard.
+        padding:      If `True` (default), print a blank line before and after the message.
+
+    Example:
+        simple_message("**Sync complete**\n\nThree files were updated.", markdown=True, indent=True)
     """
     text: str = snick.dedent(message)
 
@@ -142,7 +152,7 @@ def simple_message(
 @contextmanager
 def status_message(action: str, error: bool = False) -> Generator[None, None, None]:
     """
-    Context manager that prints status lines bracketing an operation.
+    Print status lines before and after an operation.
 
     Parameters:
         action: A short description of the operation being performed (should start with lower-case).
@@ -150,18 +160,13 @@ def status_message(action: str, error: bool = False) -> Generator[None, None, No
 
     Example:
         with status_message("database migrations"):
-            run_migrations()  # this will succeed
+            run_migrations()
 
-        # → Starting database migrations...
-        # <migration output>
-        # ✓ Completed database migrations
+        with status_message("cache refresh"):
+            refresh_cache()
 
-        with status_message("doomed process"):
-            doomed()  # this will fail
-
-        # → Starting doomed process...
-        # <error message>
-        # ✗ Failed doomed process
+        The first operation prints a completion line. If either operation raises an exception, the context manager prints
+        a failure line and re-raises the exception.
     """
     console = Console(stderr=error)
     console.print(f"[bold blue]→[/bold blue] Starting {action}...")

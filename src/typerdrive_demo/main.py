@@ -23,6 +23,7 @@ class Feature(StrEnum):
     attach_database = auto()
     database_commands = auto()
     handle_errors = auto()
+    format = auto()
     attach_client = auto()
     typerdrive_client = auto()
 

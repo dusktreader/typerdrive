@@ -35,6 +35,7 @@ nav:
     - Database: features/database.md
     - Logging: features/logging.md
     - Error Handling: features/exceptions.md
+    - Formatted Messages: features/messages.md
     - API Clients: features/client.md
   - Typerdrive Configuration: config.md
   - Runnable Demo: demo.md

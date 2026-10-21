@@ -76,7 +76,7 @@ def setup() -> None:
         return
 
     async def initialize() -> None:
-        async with DatabaseManager(db_path):
+        async with DatabaseManager(db_path).create_session():
             pass
 
     try:
@@ -97,8 +97,8 @@ def migrate(registry: MigrationRegistry) -> None:
         )
 
     async def apply_migrations() -> None:
-        async with DatabaseManager(db_path) as manager:
-            await registry.apply(manager)
+        async with DatabaseManager(db_path).create_session() as session:
+            await registry.apply(session)
 
     try:
         _run_cli_async(apply_migrations)
@@ -115,22 +115,22 @@ def reset(registry: MigrationRegistry) -> None:
     typer.confirm("Reset the database and delete all application data?", abort=True)
 
     async def rebuild() -> None:
-        async with DatabaseManager(db_path) as manager:
-            foreign_keys = await manager.fetch_value("PRAGMA foreign_keys")
-            await manager.execute("PRAGMA foreign_keys=OFF")
+        async with DatabaseManager(db_path).create_session() as session:
+            foreign_keys = await session.fetch_value("PRAGMA foreign_keys")
+            await session.execute("PRAGMA foreign_keys=OFF")
             try:
-                async with manager.transaction(immediate=True):
-                    objects = await manager.fetch_all(
+                async with session.transaction(immediate=True):
+                    objects = await session.fetch_all(
                         "SELECT type, name FROM sqlite_master "
                         "WHERE type IN ('view', 'trigger', 'table') AND name NOT LIKE 'sqlite_%' "
                         "ORDER BY CASE type WHEN 'view' THEN 0 WHEN 'trigger' THEN 1 ELSE 2 END"
                     )
                     for object_type, name in objects:
                         escaped_name = name.replace('"', '""')
-                        await manager.execute(f'DROP {object_type.upper()} IF EXISTS "{escaped_name}"')
-                    await registry._apply_in_transaction(manager)
+                        await session.execute(f'DROP {object_type.upper()} IF EXISTS "{escaped_name}"')
+                    await registry._apply_in_transaction(session)
             finally:
-                await manager.execute(f"PRAGMA foreign_keys={'ON' if foreign_keys else 'OFF'}")
+                await session.execute(f"PRAGMA foreign_keys={'ON' if foreign_keys else 'OFF'}")
 
     try:
         _run_cli_async(rebuild)

@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 from typerdrive.database.exceptions import DatabaseMigrationError, DatabaseMigrationIntegrityError
-from typerdrive.database.manager import DatabaseManager
 from typerdrive.database.migrations import MigrationRegistry
+from typerdrive.database.session import DatabaseSession
 
 
 def run(coro):
@@ -48,7 +48,7 @@ class TestMigrationRegistry:
         )
         registry = MigrationRegistry()
         registry.register_migration("Create Items", sql_text)
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -62,15 +62,16 @@ class TestMigrationRegistry:
     def test_empty_registration_fails_before_database_changes(self, tmp_path: Path, description: str, sql: str):
         registry = MigrationRegistry()
         registry.register_migration(description, sql)
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
                 with pytest.raises(DatabaseMigrationError):
                     await registry.apply(manager)
-                assert await manager.fetch_value(
-                    "SELECT name FROM sqlite_master WHERE name = '_typerdrive_migrations'"
-                ) is None
+                assert (
+                    await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = '_typerdrive_migrations'")
+                    is None
+                )
 
         run(scenario())
 
@@ -78,7 +79,7 @@ class TestMigrationRegistry:
         registry = MigrationRegistry()
         registry.register_migration("Create Items", "CREATE TABLE item (id INTEGER PRIMARY KEY);")
         registry.register_migration("Add Name", "ALTER TABLE item ADD COLUMN name TEXT;")
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -115,7 +116,7 @@ class TestMigrationRegistry:
         changed.register_migration("Later", "CREATE TABLE later (id INTEGER);")
 
         async def scenario():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 with pytest.raises(DatabaseMigrationIntegrityError):
                     await changed.apply(manager)
                 assert await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = 'later'") is None
@@ -133,7 +134,7 @@ class TestMigrationRegistry:
         shorter.register_migration("Create Items", "CREATE TABLE item (id INTEGER);")
 
         async def scenario():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 before = await manager.fetch_all("SELECT name FROM sqlite_master ORDER BY name")
                 with pytest.raises(DatabaseMigrationIntegrityError, match="no longer registered"):
                     await shorter.apply(manager)
@@ -149,7 +150,7 @@ class TestMigrationRegistry:
         path = tmp_path / "database.sqlite"
 
         async def scenario():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 await registry.apply(manager)
                 await manager.execute("DELETE FROM _typerdrive_migrations WHERE migration_index = 1")
                 with pytest.raises(DatabaseMigrationIntegrityError, match="index sequence"):
@@ -164,12 +165,10 @@ class TestMigrationRegistry:
         registry.register_migration("Broken", "CREATE TABLE partial (id INTEGER); INVALID SQL;")
 
         async def scenario():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 with pytest.raises(DatabaseMigrationError):
                     await registry.apply(manager)
-                assert await manager.fetch_value(
-                    "SELECT name FROM sqlite_master WHERE name = 'partial'"
-                ) is None
+                assert await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = 'partial'") is None
                 assert await manager.fetch_value("SELECT COUNT(*) FROM _typerdrive_migrations") == 1
 
         run(scenario())
@@ -185,11 +184,11 @@ class TestMigrationRegistry:
 
         async def scenario():
             async def apply():
-                async with DatabaseManager(path) as manager:
+                async with DatabaseSession(path) as manager:
                     await registry.apply(manager)
 
             await asyncio.gather(apply(), apply())
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 assert await manager.fetch_value("SELECT COUNT(*) FROM _typerdrive_migrations") == 1
                 assert await manager.fetch_value("SELECT COUNT(*) FROM item") == 1
 
@@ -204,7 +203,7 @@ import asyncio
 import sys
 import time
 from pathlib import Path
-from typerdrive.database.manager import DatabaseManager
+from typerdrive.database.session import DatabaseSession
 from typerdrive.database.migrations import MigrationRegistry
 
 path, start, ready = sys.argv[1:]
@@ -214,7 +213,7 @@ while not Path(start).exists():
 registry = MigrationRegistry()
 registry.register_migration("Create Items", "CREATE TABLE item (id INTEGER); INSERT INTO item VALUES (1);")
 async def apply():
-    async with DatabaseManager(path) as manager:
+    async with DatabaseSession(path) as manager:
         await registry.apply(manager)
 asyncio.run(apply())
 """
@@ -243,7 +242,7 @@ asyncio.run(apply())
                     process.communicate()
 
         async def verify():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 assert await manager.fetch_value("SELECT COUNT(*) FROM _typerdrive_migrations") == 1
                 assert await manager.fetch_value("SELECT COUNT(*) FROM item") == 1
 
@@ -251,5 +250,5 @@ asyncio.run(apply())
 
     @staticmethod
     async def apply_with_manager(registry: MigrationRegistry, path: Path):
-        async with DatabaseManager(path) as manager:
+        async with DatabaseSession(path) as manager:
             await registry.apply(manager)

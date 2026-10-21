@@ -94,6 +94,7 @@ def decompose(func: types.FunctionType) -> Decomposed:
 
 def capture(demo: types.FunctionType) -> Captured:
     demo_name = demo.__name__
+    original_config = get_typerdrive_config()
 
     cap = Captured()
 
@@ -113,22 +114,29 @@ def capture(demo: types.FunctionType) -> Captured:
     sys.argv = [demo_name]
 
     with tempfile.TemporaryDirectory() as fake_home:
-        fake_settings_dir = Path(fake_home) / ".local/share" / demo_name
+        fake_state_home = Path(fake_home) / ".local" / "state"
+        fake_settings_dir = fake_state_home / demo_name
         fake_settings_dir.mkdir(parents=True)
         fake_settings_path = fake_settings_dir / "settings.json"
         with tweak_env(
             COLUMNS="80",
             HOME=fake_home,
             XDG_CACHE_HOME=str(Path(fake_home) / ".cache"),
-            XDG_STATE_HOME=str(Path(fake_home) / ".local" / "state"),
+            XDG_STATE_HOME=str(fake_state_home),
         ):
             try:
+                set_typerdrive_config(
+                    app_name=demo_name,
+                    state_home=fake_state_home,
+                    cache_home=Path(fake_home) / ".cache",
+                )
                 demo()
             except SystemExit as exited:
                 cap.exit_code = exited.code
             except Exception as exc:
                 cap.error = exc
             finally:
+                set_typerdrive_config(**original_config.model_dump())
                 if fake_settings_path.exists():
                     cap.settings = fake_settings_path.read_text()
                 sys.stdout = original_stdout

@@ -13,17 +13,17 @@ from typerdrive.database.exceptions import (
     DatabaseRollbackError,
     DatabaseTransactionError,
 )
-from typerdrive.database.manager import DatabaseManager
+from typerdrive.database.session import DatabaseSession
 
 
 def run(coro):
     return asyncio.run(coro)
 
 
-class TestDatabaseManager:
+class TestDatabaseSession:
     def test_async_lifecycle_creates_parent_and_uses_wal(self, tmp_path: Path):
         path = tmp_path / "nested" / "database.sqlite"
-        manager = DatabaseManager(path)
+        manager = DatabaseSession(path)
 
         async def scenario():
             async with manager:
@@ -35,7 +35,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_async_sql_methods_parameterize_and_fetch_rows(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -48,7 +48,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_alternate_journal_mode(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite", journal_mode="DELETE")
+        manager = DatabaseSession(tmp_path / "database.sqlite", journal_mode="DELETE")
 
         async def scenario():
             async with manager:
@@ -58,10 +58,10 @@ class TestDatabaseManager:
 
     def test_invalid_journal_mode_fails_initialization(self, tmp_path: Path):
         with pytest.raises(DatabaseInitError, match="journal mode"):
-            DatabaseManager(tmp_path / "database.sqlite", journal_mode="INVALID")
+            DatabaseSession(tmp_path / "database.sqlite", journal_mode="INVALID")
 
     def test_query_failure_is_wrapped(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -71,7 +71,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_transaction_commits_and_rolls_back(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -92,7 +92,7 @@ class TestDatabaseManager:
             raise OSError("rollback failed")
 
         monkeypatch.setattr(aiosqlite.Connection, "rollback", fail_rollback)
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -103,7 +103,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_async_transaction_rejects_nesting_with_lifecycle_error(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -115,7 +115,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_non_owner_waits_until_transaction_finishes(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -143,7 +143,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_cancelled_transaction_rolls_back_and_closes(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             with pytest.raises(asyncio.CancelledError):
@@ -163,7 +163,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_sync_lifecycle_keeps_one_connection(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
         assert isinstance(manager._sync_adapter, BlockingAsyncAdapter)
         assert not hasattr(manager, "_async_bridge")
 
@@ -175,14 +175,14 @@ class TestDatabaseManager:
         assert not manager.is_open
 
     def test_manager_does_not_reference_portal_implementation(self):
-        source = inspect.getsource(DatabaseManager)
+        source = inspect.getsource(DatabaseSession)
         assert "BlockingPortal" not in source
         assert "start_blocking_portal" not in source
         assert "_portal" not in source
         assert "_async_bridge" not in source
 
     def test_async_and_sync_apis_cannot_be_mixed(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             async with manager:
@@ -192,7 +192,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_sync_calls_reject_running_event_loop(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             with pytest.raises(DatabaseLifecycleError, match="async API"):
@@ -201,7 +201,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_sync_lifecycle_rejects_running_event_loop(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             with pytest.raises(DatabaseLifecycleError, match="async with"):
@@ -211,7 +211,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_async_api_cannot_join_sync_lifecycle(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
         entered = threading.Event()
         release = threading.Event()
 
@@ -238,8 +238,8 @@ class TestDatabaseManager:
         async def fail_connect(*args, **kwargs):
             raise OSError("connection failed")
 
-        monkeypatch.setattr("typerdrive.database.manager.aiosqlite.connect", fail_connect)
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        monkeypatch.setattr("typerdrive.database.session.aiosqlite.connect", fail_connect)
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             with pytest.raises(DatabaseInitError, match="connection failed"):
@@ -256,7 +256,7 @@ class TestDatabaseManager:
             raise OSError("close failed")
 
         monkeypatch.setattr(aiosqlite.Connection, "close", close_then_fail)
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         async def scenario():
             with pytest.raises(DatabaseInitError, match="close failed"):
@@ -270,8 +270,8 @@ class TestDatabaseManager:
         def fail_mkdir(*args, **kwargs):
             raise OSError("permission denied")
 
-        monkeypatch.setattr("typerdrive.database.manager.Path.mkdir", fail_mkdir)
-        manager = DatabaseManager(tmp_path / "nested" / "database.sqlite")
+        monkeypatch.setattr("typerdrive.database.session.Path.mkdir", fail_mkdir)
+        manager = DatabaseSession(tmp_path / "nested" / "database.sqlite")
 
         async def scenario():
             with pytest.raises(DatabaseInitError, match="permission denied"):
@@ -281,7 +281,7 @@ class TestDatabaseManager:
         run(scenario())
 
     def test_sync_transaction_rolls_back_on_exception(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         with manager:
             manager.execute_sync("CREATE TABLE item (value INTEGER)")
@@ -292,7 +292,7 @@ class TestDatabaseManager:
             assert manager.fetch_value_sync("SELECT COUNT(*) FROM item") == 0
 
     def test_sync_transaction_rolls_back_after_deferred_constraint_commit_failure(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         with manager:
             manager.execute_sync("CREATE TABLE parent (id INTEGER PRIMARY KEY)")
@@ -308,7 +308,7 @@ class TestDatabaseManager:
             assert manager.fetch_value_sync("SELECT COUNT(*) FROM child") == 1
 
     def test_sync_transaction_preserves_commit_and_rollback_failures(self, tmp_path: Path, monkeypatch):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
         original_rollback = aiosqlite.Connection.rollback
 
         async def fail_rollback(connection):
@@ -333,7 +333,7 @@ class TestDatabaseManager:
             monkeypatch.setattr(aiosqlite.Connection, "rollback", original_rollback)
 
     def test_sync_transaction_isolates_cross_thread_commit(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
         started = threading.Event()
         finished = threading.Event()
 
@@ -357,7 +357,7 @@ class TestDatabaseManager:
             assert [tuple(row) for row in rows] == [(1,), (2,)]
 
     def test_sync_transaction_isolates_cross_thread_rollback(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
         started = threading.Event()
         finished = threading.Event()
 
@@ -383,7 +383,7 @@ class TestDatabaseManager:
             assert [tuple(row) for row in rows] == [(2,)]
 
     def test_sync_transaction_rejects_nesting(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
 
         with manager:
             with manager.transaction_sync():
@@ -392,7 +392,7 @@ class TestDatabaseManager:
                         pass
 
     def test_cross_thread_transaction_waits_until_commit(self, tmp_path: Path):
-        manager = DatabaseManager(tmp_path / "database.sqlite")
+        manager = DatabaseSession(tmp_path / "database.sqlite")
         started = threading.Event()
         finished = threading.Event()
 
@@ -419,4 +419,4 @@ class TestDatabaseManager:
 
     def test_manager_exposes_configured_path(self, tmp_path: Path):
         path = tmp_path / "configured.sqlite"
-        assert DatabaseManager(path).database_path == path
+        assert DatabaseSession(path).database_path == path

@@ -8,10 +8,10 @@ import pytest
 import typer
 from typer.testing import CliRunner
 from typerdrive.config import get_typerdrive_config, set_typerdrive_config
-from typerdrive.database.attach import attach_database, get_database_manager
+from typerdrive.database.attach import attach_database, get_database_manager, get_database_session
 from typerdrive.database.exceptions import DatabaseLifecycleError
-from typerdrive.database.manager import DatabaseManager
 from typerdrive.database.migrations import MigrationRegistry
+from typerdrive.database.session import DatabaseSession
 from typerdrive.handle_errors import handle_errors
 
 
@@ -26,7 +26,7 @@ def _use_temporary_config_homes(tmp_path: Path):
 
 
 class TestAttachDatabase:
-    def test_sync_command_injects_manager_and_context_lookup(self, tmp_path: Path, monkeypatch):
+    def test_sync_command_injects_session_and_context_lookup(self, tmp_path: Path, monkeypatch):
         monkeypatch.setenv("XDG_STATE_HOME", str(tmp_path))
         registry = MigrationRegistry()
         registry.register_migration("Create Item", "CREATE TABLE item (value TEXT);")
@@ -35,8 +35,8 @@ class TestAttachDatabase:
 
         @cli.command()
         @attach_database(registry)
-        def command(ctx: typer.Context, database: DatabaseManager):
-            assert database is get_database_manager(ctx)
+        def command(ctx: typer.Context, database: DatabaseSession):
+            assert database is get_database_session(ctx)
             database.execute_sync("INSERT INTO item VALUES (?)", ("ok",))
             results.append(database.fetch_value_sync("SELECT value FROM item"))
 
@@ -53,7 +53,7 @@ class TestAttachDatabase:
 
         @cli.command()
         @attach_database(registry)
-        async def command(ctx: typer.Context, database: DatabaseManager):
+        async def command(ctx: typer.Context, database: DatabaseSession):
             await asyncio.sleep(0)
             await database.execute("INSERT INTO item VALUES ('done')")
             output.append(await database.fetch_value("SELECT value FROM item"))
@@ -102,7 +102,7 @@ class TestAttachDatabase:
 
         @cli.command()
         @attach_database()
-        async def command(ctx: typer.Context, database: DatabaseManager):
+        async def command(ctx: typer.Context, database: DatabaseSession):
             managers.append(database)
             await asyncio.sleep(0)
             raise ValueError("callback failed")
@@ -118,7 +118,7 @@ class TestAttachDatabase:
 
         @cli.command()
         @attach_database()
-        async def command(ctx: typer.Context, database: DatabaseManager):
+        async def command(ctx: typer.Context, database: DatabaseSession):
             managers.append(database)
             raise asyncio.CancelledError
 
@@ -203,11 +203,11 @@ class TestAttachDatabase:
         monkeypatch.setenv("XDG_STATE_HOME", str(tmp_path))
         namespace: dict[str, Any] = {
             "typer": typer,
-            "DatabaseManager": DatabaseManager,
+            "DatabaseSession": DatabaseSession,
             "attach_database": attach_database,
         }
         exec(
-            "def command(ctx: 'typer.Context', database: 'DatabaseManager'):\n"
+            "def command(ctx: 'typer.Context', database: 'DatabaseSession'):\n"
             "    database.execute_sync('SELECT 1')\n"
             "command = attach_database()(command)\n",
             namespace,

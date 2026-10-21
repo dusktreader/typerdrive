@@ -521,10 +521,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#async-sql-and-transactions" class="md-nav__link">
+  <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Async SQL and transactions
+        Usage
       
     </span>
   </a>
@@ -532,39 +532,62 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#synchronous-commands" class="md-nav__link">
+  <a href="#details" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Synchronous commands
+        Details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#database-location-and-journal-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database location and journal mode
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#attach-the-database-to-commands" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#session-apis-and-transactions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Attach the database to commands
+        Session APIs and transactions
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#register-sql-migrations" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#command-attachment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Register SQL migrations
+        Command attachment
       
     </span>
   </a>
   
 </li>
+        
+          <li class="md-nav__item">
+  <a href="#bootstrapping-the-database" class="md-nav__link">
+    <span class="md-ellipsis">
       
-        <li class="md-nav__item">
+        Bootstrapping the database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#database-management-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -574,8 +597,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#orm-layering" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -583,6 +606,11 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1085,10 +1113,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#async-sql-and-transactions" class="md-nav__link">
+  <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Async SQL and transactions
+        Usage
       
     </span>
   </a>
@@ -1096,39 +1124,62 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#synchronous-commands" class="md-nav__link">
+  <a href="#details" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Synchronous commands
+        Details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#database-location-and-journal-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database location and journal mode
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#attach-the-database-to-commands" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#session-apis-and-transactions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Attach the database to commands
+        Session APIs and transactions
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#register-sql-migrations" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#command-attachment" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Register SQL migrations
+        Command attachment
       
     </span>
   </a>
   
 </li>
+        
+          <li class="md-nav__item">
+  <a href="#bootstrapping-the-database" class="md-nav__link">
+    <span class="md-ellipsis">
       
-        <li class="md-nav__item">
+        Bootstrapping the database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#database-management-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1138,8 +1189,8 @@
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
+        
+          <li class="md-nav__item">
   <a href="#orm-layering" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1147,6 +1198,11 @@
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1171,111 +1227,264 @@
 
 
 <h1 id="sqlite-databases-for-applications">SQLite databases for applications</h1>
-<p>The database feature gives a Typer application durable structured storage through SQLite without imposing an ORM or
-application schema. Applications own their SQL, queries, and data models.</p>
+<p>Big CLI applications often need to preserve structured data between commands, such as local records, task history, or
+application-specific state. To help with that, <code>typerdrive</code> uses SQLite to provide durable storage without requiring a
+separate database service and manages the sessions so command code can focus on the data it needs.</p>
 <h2 id="overview">Overview</h2>
-<p><code>typerdrive</code> provides a <code>DatabaseManager</code> that owns one aiosqlite connection per lifecycle. The database defaults to
-<code>&lt;XDG_STATE_HOME&gt;/&lt;app_name&gt;/db.sqlite</code>, or <code>~/.local/state/&lt;app_name&gt;/db.sqlite</code> when <code>XDG_STATE_HOME</code> is unset. The
-path is separate from cache and files storage.</p>
-<p>The manager supports async SQL operations and transactions. Synchronous commands can use explicit wrappers backed by
-the same aiosqlite connection. A lifecycle uses either the async API or the sync wrappers, never both. Sync wrappers
-reject calls from a running event loop; use the async methods instead.</p>
+<p>You can take advantage of the builtin SQLite database provided by <code>typerdrive</code> without any additional dependencies or an
+ORM. Your application defines the schema and writes the SQL; Typerdrive takes care of managing database connections.</p>
+<p><code>DatabaseManager</code> is the session factory. It creates independent <code>DatabaseSession</code> instances, each with its own
+connection and transaction state. A command can receive one session for straightforward query work, or
+receive the manager and create separate sessions when coordinating multiple services.</p>
+<p>Sessions work with both async and synchronous commands. The sync wrappers use the same aiosqlite connection as the async
+methods, so choose one API for each session lifecycle. Sync wrappers cannot run inside an active event loop.</p>
+<h2 id="usage">Usage</h2>
+<p>The runnable example shows async and sync commands with an attached <code>DatabaseSession</code>, plus a command that
+receives a <code>DatabaseManager</code> and creates separate sessions for helper operations:</p>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatabaseManager</span><span class="p">,</span> <span class="n">DatabaseSession</span><span class="p">,</span> <span class="n">MigrationRegistry</span><span class="p">,</span> <span class="n">attach_database</span><span class="p">,</span> <span class="n">terminal_message</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="n">cli</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="n">registry</span> <span class="o">=</span> <span class="n">MigrationRegistry</span><span class="p">()</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="n">migration_text</span> <span class="o">=</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;migrations&quot;</span> <span class="o">/</span> <span class="s2">&quot;0001_create_items.sql&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="n">registry</span><span class="o">.</span><span class="n">register_migration</span><span class="p">(</span><span class="s2">&quot;create_items&quot;</span><span class="p">,</span> <span class="n">migration_text</span><span class="p">)</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="nd">@attach_database</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_item</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">DatabaseSession</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a>    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO items (name) VALUES (?)&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,))</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a>    <span class="n">terminal_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;Database&quot;</span><span class="p">)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="nd">@attach_database</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_items</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">DatabaseSession</span><span class="p">):</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a>    <span class="n">rows</span> <span class="o">=</span> <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">fetch_all</span><span class="p">(</span><span class="s2">&quot;SELECT id, name FROM items ORDER BY id&quot;</span><span class="p">)</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>    <span class="n">items</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;No items found&quot;</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>    <span class="n">terminal_message</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;Items&quot;</span><span class="p">)</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="nd">@attach_database</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_item_sync</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">DatabaseSession</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a>    <span class="n">database</span><span class="o">.</span><span class="n">execute_sync</span><span class="p">(</span><span class="s2">&quot;INSERT INTO items (name) VALUES (?)&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,))</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a>    <span class="n">terminal_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;Database&quot;</span><span class="p">)</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="nd">@attach_database</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="k">def</span><span class="w"> </span><span class="nf">list_items_sync</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">DatabaseSession</span><span class="p">):</span>
+</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="n">rows</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">fetch_all_sync</span><span class="p">(</span><span class="s2">&quot;SELECT id, name FROM items ORDER BY id&quot;</span><span class="p">)</span>
+</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>    <span class="n">items</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;No items found&quot;</span>
+</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>    <span class="n">terminal_message</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;Items&quot;</span><span class="p">)</span>
+</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>
+</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">load_item_names</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">DatabaseSession</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a>    <span class="n">rows</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">fetch_all</span><span class="p">(</span><span class="s2">&quot;SELECT name FROM items ORDER BY id&quot;</span><span class="p">)</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span>
+</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>
+</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a>
+</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">count_items</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">DatabaseSession</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a>    <span class="k">return</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">fetch_value</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM items&quot;</span><span class="p">)</span>
+</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>
+</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>
+</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="nd">@attach_database</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">report_items</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">DatabaseManager</span><span class="p">):</span>
+</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">names_session</span><span class="p">:</span>
+</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="n">names</span> <span class="o">=</span> <span class="k">await</span> <span class="n">load_item_names</span><span class="p">(</span><span class="n">names_session</span><span class="p">)</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a>
+</span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">count_session</span><span class="p">:</span>
+</span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="n">count</span> <span class="o">=</span> <span class="k">await</span> <span class="n">count_items</span><span class="p">(</span><span class="n">count_session</span><span class="p">)</span>
+</span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>
+</span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a>    <span class="n">terminal_message</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Count: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="se">\n</span><span class="s2">Names: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;Item report&quot;</span><span class="p">)</span>
+</span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a>
+</span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a>
+</span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a>    <span class="n">cli</span><span class="p">()</span>
+</span></code></pre></div></td></tr></table></div>
+<p>Run the example from the repository root:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>examples/database/attach.py<span class="w"> </span>add-item<span class="w"> </span>astromech
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>examples/database/attach.py<span class="w"> </span>report-items
+</span></code></pre></div>
+<p>The commands print formatted panels:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>╭─ Database ───────────────────────────────────────────────────────────────────╮
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│                                                                              │
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   Added astromech                                                            │
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│                                                                              │
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>╰──────────────────────────────────────────────────────────────────────────────╯
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>╭─ Item report ────────────────────────────────────────────────────────────────╮
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│                                                                              │
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│   Count: 1                                                                   │
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>│   Names: astromech                                                           │
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>│                                                                              │
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>╰──────────────────────────────────────────────────────────────────────────────╯
+</span></code></pre></div>
+<p><code>add-item</code> and the list commands use an attached session for direct queries. <code>report-items</code>
+uses the manager to create a session for each helper operation.</p>
+<h2 id="details">Details</h2>
+<h3 id="database-location-and-journal-mode">Database location and journal mode</h3>
+<p>The database location is managed by Typerdrive's internal <a href="../../config/"><code>TyperdriveConfig</code></a>, which derives the default
+path from the app identity and state directory. The database path is separate from cache and files storage.</p>
 <p>WAL is the default journal mode. <code>DatabaseManager</code> and <code>attach_database</code> accept another supported SQLite journal mode
 when the storage environment requires it.</p>
-<h2 id="async-sql-and-transactions">Async SQL and transactions</h2>
-<p>Enter the manager explicitly for async work that outlives one command:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatabaseManager</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">DatabaseManager</span><span class="p">()</span> <span class="k">as</span> <span class="n">database</span><span class="p">:</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;CREATE TABLE IF NOT EXISTS notes (body TEXT NOT NULL)&quot;</span><span class="p">)</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO notes (body) VALUES (?)&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,))</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>        <span class="n">rows</span> <span class="o">=</span> <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">fetch_all</span><span class="p">(</span><span class="s2">&quot;SELECT body FROM notes&quot;</span><span class="p">)</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;body&quot;</span><span class="p">])</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
-</span></code></pre></div>
+<h3 id="session-apis-and-transactions">Session APIs and transactions</h3>
 <p><code>execute</code>, <code>fetch_one</code>, <code>fetch_all</code>, and <code>fetch_value</code> accept parameterized SQL. Query methods return SQLite rows, which
 support integer and column-name indexing. SQLite and connection failures become database feature errors.</p>
-<p>A transaction serializes operations from other tasks on the same manager. Other tasks wait until the transaction
-commits or rolls back, and their operations do not join the transaction. Normal exit commits. An exception or
-cancellation rolls back:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">async</span> <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE accounts SET balance = balance - ? WHERE id = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">source_id</span><span class="p">))</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE accounts SET balance = balance + ? WHERE id = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">target_id</span><span class="p">))</span>
+<p>The sync methods are <code>execute_sync</code>, <code>fetch_one_sync</code>, <code>fetch_all_sync</code>, <code>fetch_value_sync</code>, and <code>transaction_sync</code>.
+Calling them inside an active event loop raises <code>DatabaseLifecycleError</code> and points to the async API. Do not mix the
+sync and async APIs during one session lifecycle.</p>
+<p>A transaction serializes operations from other tasks on the same session. Other tasks wait until the transaction commits
+or rolls back, and their operations do not join the transaction. Normal exit commits. An exception or cancellation rolls
+back:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE accounts SET balance = balance - ? WHERE id = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">source_id</span><span class="p">))</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE accounts SET balance = balance + ? WHERE id = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">target_id</span><span class="p">))</span>
 </span></code></pre></div>
-<p>SQLite remains responsible for coordinating independent connections and processes. Unresolvable locking and contention
-failures are reported as feature errors.</p>
-<h2 id="synchronous-commands">Synchronous commands</h2>
-<p>Use the sync wrappers inside a normal <code>with</code> lifecycle. They bridge to the manager's aiosqlite connection and keep it
-open for the whole command:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">with</span> <span class="n">DatabaseManager</span><span class="p">()</span> <span class="k">as</span> <span class="n">database</span><span class="p">:</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">database</span><span class="o">.</span><span class="n">execute_sync</span><span class="p">(</span><span class="s2">&quot;INSERT INTO notes (body) VALUES (?)&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,))</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">note</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">fetch_value_sync</span><span class="p">(</span><span class="s2">&quot;SELECT body FROM notes LIMIT 1&quot;</span><span class="p">)</span>
+<p>SQLite coordinates independent sessions and processes. Unresolvable locking and contention failures are reported as
+feature errors.</p>
+<h3 id="command-attachment">Command attachment</h3>
+<p><code>@attach_database</code> looks for a parameter annotated as exactly <code>DatabaseSession</code> or <code>DatabaseManager</code>.</p>
+<p>For direct query work, declare a <code>DatabaseSession</code> parameter. The decorator passes the live session to the command and
+closes it afterward, including on failure or cancellation:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nd">@attach_database</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_items</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">DatabaseSession</span><span class="p">):</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="n">items</span> <span class="o">=</span> <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">fetch_all</span><span class="p">(</span><span class="s2">&quot;SELECT id, name FROM items ORDER BY id&quot;</span><span class="p">)</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2"> items&quot;</span><span class="p">)</span>
 </span></code></pre></div>
-<p>The sync methods are <code>execute_sync</code>, <code>fetch_one_sync</code>, <code>fetch_all_sync</code>, <code>fetch_value_sync</code>, and
-<code>transaction_sync</code>. Calling them inside an active event loop raises <code>DatabaseLifecycleError</code> and points to the async
-API. Do not use both sets of methods during one lifecycle.</p>
-<h2 id="attach-the-database-to-commands">Attach the database to commands</h2>
-<p><code>@attach_database</code> creates and closes a manager around each command, binds it to <code>TyperdriveContext</code>, and injects a
-<code>DatabaseManager</code> parameter. For an async command, the synchronous Typer callback boundary runs one top-level event loop
-and awaits the command before closing the manager. Synchronous command functions use the sync wrappers.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatabaseManager</span><span class="p">,</span> <span class="n">MigrationRegistry</span><span class="p">,</span> <span class="n">attach_database</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">cli</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">registry</span> <span class="o">=</span> <span class="n">MigrationRegistry</span><span class="p">()</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">registry</span><span class="o">.</span><span class="n">register_migration</span><span class="p">(</span><span class="s2">&quot;create_notes&quot;</span><span class="p">,</span> <span class="s2">&quot;CREATE TABLE notes (body TEXT NOT NULL)&quot;</span><span class="p">)</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="nd">@attach_database</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_note</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">DatabaseManager</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="k">await</span> <span class="n">database</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO notes (body) VALUES (?)&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">body</span><span class="p">,))</span>
+<p>For work that needs more than one session, declare a <code>DatabaseManager</code> parameter. The manager provides configuration
+and a session factory, but has no lifecycle, query, or transaction methods:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nd">@attach_database</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">report_items</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">manager</span><span class="p">:</span> <span class="n">DatabaseManager</span><span class="p">):</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">count_session</span><span class="p">:</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="n">count</span> <span class="o">=</span> <span class="k">await</span> <span class="n">count_session</span><span class="o">.</span><span class="n">fetch_value</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM items&quot;</span><span class="p">)</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_session</span><span class="p">()</span> <span class="k">as</span> <span class="n">names_session</span><span class="p">:</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="n">names</span> <span class="o">=</span> <span class="k">await</span> <span class="n">names_session</span><span class="o">.</span><span class="n">fetch_all</span><span class="p">(</span><span class="s2">&quot;SELECT name FROM items ORDER BY id&quot;</span><span class="p">)</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> items: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">row</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">names</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div>
-<p>Use <code>get_database_manager(ctx)</code> when a command prefers context lookup over typed injection. Attachment automatically
-creates and configures an absent database, then applies every registered migration before the callback starts. For an
-existing database, it applies pending migrations. A failed or invalid migration prevents callback execution. The manager
-closes after success, error, or cancellation. The synchronous Typer boundary cannot run inside an existing event loop;
-invoke CLI commands synchronously and use explicit async lifecycles for async applications.</p>
-<h2 id="register-sql-migrations">Register SQL migrations</h2>
-<p>The application chooses how to load SQL text and passes the text and a non-empty description to <code>MigrationRegistry</code>.
-Registration order determines migration order, starting at index 1. Each ID is generated by
-<code>f"{idx:08d}{inflection.underscore(desc)}"</code>; the registry also stores a SHA-256 checksum of the exact SQL text.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">importlib.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">files</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">MigrationRegistry</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">registry</span> <span class="o">=</span> <span class="n">MigrationRegistry</span><span class="p">()</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">registry</span><span class="o">.</span><span class="n">register_migration</span><span class="p">(</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    <span class="s2">&quot;create_notes&quot;</span><span class="p">,</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="n">files</span><span class="p">(</span><span class="s2">&quot;my_app.migrations&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;001_create_notes.sql&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(),</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="p">)</span>
+<p><code>get_database_manager(ctx)</code> retrieves the manager in either case. <code>get_database_session(ctx)</code> retrieves the live session
+when the command declares a <code>DatabaseSession</code> parameter or uses context lookup without a <code>DatabaseManager</code> parameter.</p>
+<p>The synchronous Typer boundary cannot run inside an existing event loop; invoke CLI commands synchronously and use
+explicit async sessions for async applications.</p>
+<h3 id="bootstrapping-the-database">Bootstrapping the database</h3>
+<p>Before invoking the decorated command, <code>@attach_database</code> checks to see if a database has been created for the app yet.
+If it has not, it creates the database automatically.</p>
+<p>Your <code>typerdrive</code> app can provide migrations to set up its schema. Before invoking the decorated command,
+<code>@attach_database</code> applies pending migrations in a dedicated session, separate from the command's session. This applies
+to new databases and to existing databases with newly registered migrations. If a migration fails, attachment aborts
+before the decorated command runs.</p>
+<p>The migrations are provided to a <code>MigrationRegistry</code> as text using the <code>register_migration()</code> method. You get to choose
+how you want to load and store those migrations. The migrations are applied to the database in the order that you
+register them.</p>
+<p>Registration order assigns each migration an index. Its ID combines that index with a name derived from the description,
+and the registry stores a SHA-256 checksum of the exact SQL text.</p>
+<p>Pass a description and SQL text to the registry:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">importlib.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">files</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">MigrationRegistry</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">registry</span> <span class="o">=</span> <span class="n">MigrationRegistry</span><span class="p">()</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">registry</span><span class="o">.</span><span class="n">register_migration</span><span class="p">(</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="s2">&quot;create notes&quot;</span><span class="p">,</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="n">files</span><span class="p">(</span><span class="s2">&quot;my_app.migrations&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;create_notes.sql&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(),</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="p">)</span>
 </span></code></pre></div>
-<p>Register the full history in order and append new migrations. Applied indices must remain registered with the same
-identifier and SQL checksum. Removing a migration, changing its description, or editing its SQL fails integrity
-validation before later migrations run. Migrations are forward-only. Each migration and its tracking record are applied
-atomically; a failed migration rolls back its changes and leaves earlier successful migrations available for retry.</p>
+<p>Once a migration has been applied, keep it registered with the same description and SQL. The registry validates applied
+migration IDs and checksums, so removing or changing an applied migration fails integrity validation. To evolve the
+schema, append a new migration. <code>db reset</code> rebuilds the schema from the registered migrations but deletes all application
+data, so use it only when that data can be discarded.</p>
+<p>Migrations are forward-only. Each migration and its tracking record are applied atomically; a failed migration rolls
+back its changes and leaves earlier successful migrations available for retry.</p>
 <p>The registry accepts strings only. It does not load files, call Python migration functions, or define application
 schemas. The tracking table is owned by <code>typerdrive</code>; all other tables and SQL remain application-owned.</p>
-<h2 id="database-management-commands">Database management commands</h2>
+<h3 id="database-management-commands">Database management commands</h3>
 <p>Register the optional management group with the same registry used by <code>attach_database</code>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_database_subcommand</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">add_database_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">registry</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">add_database_subcommand</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">add_database_subcommand</span><span class="p">(</span><span class="n">cli</span><span class="p">,</span> <span class="n">registry</span><span class="p">)</span>
 </span></code></pre></div>
 <p>The commands are:</p>
 <ul>
 <li><code>db path</code> prints the configured path without creating it.</li>
 <li><code>db inspect</code> reports database existence, SQLite version, schema version, and journal mode without application rows.</li>
 <li><code>db status</code> lists applied and pending migrations without modifying the database.</li>
-<li><code>db setup</code> creates and configures an empty database only; it does not apply application migrations and is a no-op
-  when the database already exists.</li>
+<li><code>db setup</code> creates and configures an empty database only; it does not apply application migrations and is a no-op when
+  the database already exists.</li>
 <li><code>db migrate</code> requires an existing database and applies pending registered migrations. It does not create an absent
   database.</li>
 <li><code>db reset</code> requires confirmation and transactionally rebuilds the schema and migration history in the existing
@@ -1286,9 +1495,9 @@ neither command creates the file. Concurrent setup initializes through SQLite an
 that is declined preserves data and history. Existing readers retain a consistent SQLite snapshot while reset runs;
 concurrent writers serialize through SQLite's busy timeout. Reset does not unlink the database or its WAL sidecars.</p>
 <p>Reset replaces all application data. Back up any data that must survive before confirming it.</p>
-<h2 id="orm-layering">ORM layering</h2>
+<h3 id="orm-layering">ORM layering</h3>
 <p>The database feature exposes direct SQL and SQLite rows. It does not provide an ORM, model layer, or application schema.
-An application may build its own repository layer or integrate an ORM while using the attached manager's connection.</p>
+An application may build its own repository layer or integrate an ORM while using a session's connection.</p>
 
 
 

@@ -7,11 +7,22 @@ import click
 import pytest
 import typer
 from typer.testing import CliRunner
+from typerdrive.config import get_typerdrive_config, set_typerdrive_config
 from typerdrive.database.attach import attach_database, get_database_manager
 from typerdrive.database.exceptions import DatabaseLifecycleError
 from typerdrive.database.manager import DatabaseManager
 from typerdrive.database.migrations import MigrationRegistry
 from typerdrive.handle_errors import handle_errors
+
+
+@pytest.fixture(autouse=True)
+def _use_temporary_config_homes(tmp_path: Path):
+    original_config = get_typerdrive_config()
+    set_typerdrive_config(state_home=tmp_path, cache_home=tmp_path / ".cache")
+    try:
+        yield
+    finally:
+        set_typerdrive_config(**original_config.model_dump())
 
 
 class TestAttachDatabase:

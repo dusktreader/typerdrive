@@ -37,4 +37,9 @@ def _configure_typerdrive(tmp_home: Path):  # noqa: ARG001
     Reset typerdrive config to use 'test' as the app name for every integration
     scenario, pointing at the temporary HOME.
     """
-    set_typerdrive_config(app_name="test", console_width=80)
+    set_typerdrive_config(
+        app_name="test",
+        console_width=80,
+        state_home=tmp_home / ".state",
+        cache_home=tmp_home / ".cache",
+    )

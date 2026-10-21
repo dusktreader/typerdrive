@@ -35,6 +35,7 @@ from typerdrive.files.exceptions import FilesClearError, FilesError, FilesInitEr
 from typerdrive.files.manager import FilesManager
 from typerdrive.format import simple_message, status_message, strip_rich_style, terminal_message
 from typerdrive.handle_errors import handle_errors
+from typerdrive.info import add_info_subcommand
 from typerdrive.logging.attach import attach_logging, get_logging_manager
 from typerdrive.logging.commands import add_logs_subcommand
 from typerdrive.logging.exceptions import LoggingError
@@ -101,6 +102,7 @@ __all__ = [
     "add_cache_subcommand",
     "add_database_subcommand",
     "add_files_subcommand",
+    "add_info_subcommand",
     "add_logs_subcommand",
     "add_settings_subcommand",
     "attach_cache",

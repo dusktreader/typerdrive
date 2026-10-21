@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and
 this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.12.0 - 2026-10-21
+
+- Added `DatabaseSession` for scoped query, transaction, and sync/async lifecycle management
+- Made `DatabaseManager` a session factory and enabled manager or session dependency injection
+- Applied migrations in a separate session before opening command sessions
+- Isolated demo database configuration and documented database sessions
+
+
 ## v0.11.1 - 2026-10-21
 
 - Added documentation, runnable examples, and demos for the formatted message helpers

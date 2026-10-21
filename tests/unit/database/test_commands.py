@@ -8,8 +8,8 @@ from pathlib import Path
 import typer
 from typer.testing import CliRunner
 from typerdrive.database.commands import add_database_subcommand
-from typerdrive.database.manager import DatabaseManager
 from typerdrive.database.migrations import MigrationRegistry
+from typerdrive.database.session import DatabaseSession
 
 
 class TestDatabaseCommands:
@@ -70,7 +70,7 @@ class TestDatabaseCommands:
         registry.register_migration("Add Name", "ALTER TABLE item ADD COLUMN name TEXT;")
 
         async def apply_first():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 await MigrationRegistryWithFirst(registry).apply(manager)
 
         asyncio.run(apply_first())
@@ -91,7 +91,7 @@ class TestDatabaseCommands:
         original.register_migration("Create Old", "CREATE TABLE old_item (value TEXT);")
 
         async def seed():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 await original.apply(manager)
                 await manager.execute("INSERT INTO old_item VALUES ('old data')")
 
@@ -105,7 +105,7 @@ class TestDatabaseCommands:
         assert result.exit_code == 0, result.output
 
         async def verify():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 assert await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = 'old_item'") is None
                 assert await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = 'new_item'") == "new_item"
                 assert await manager.fetch_value("SELECT COUNT(*) FROM _typerdrive_migrations") == 1
@@ -119,7 +119,7 @@ class TestDatabaseCommands:
         registry.register_migration("Create Item", "CREATE TABLE item (value TEXT);")
 
         async def seed():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 await registry.apply(manager)
                 await manager.execute("INSERT INTO item VALUES ('keep')")
 
@@ -131,7 +131,7 @@ class TestDatabaseCommands:
         assert result.exit_code != 0
 
         async def verify():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 assert await manager.fetch_value("SELECT value FROM item") == "keep"
                 assert await manager.fetch_value("SELECT COUNT(*) FROM _typerdrive_migrations") == 1
 
@@ -144,7 +144,7 @@ class TestDatabaseCommands:
         original.register_migration("Create Item", "CREATE TABLE item (value TEXT);")
 
         async def seed():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 await original.apply(manager)
                 await manager.execute("INSERT INTO item VALUES ('keep')")
 
@@ -171,7 +171,7 @@ class TestDatabaseCommands:
         original.register_migration("Create Item", "CREATE TABLE item (value TEXT);")
 
         async def seed():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 await original.apply(manager)
                 await manager.execute("INSERT INTO item VALUES ('old snapshot')")
 
@@ -211,7 +211,7 @@ class TestDatabaseCommands:
         original.register_migration("Create Item", "CREATE TABLE item (value TEXT);")
 
         async def seed():
-            async with DatabaseManager(path) as manager:
+            async with DatabaseSession(path) as manager:
                 await original.apply(manager)
                 await manager.execute("INSERT INTO item VALUES ('before writer')")
 
@@ -220,15 +220,15 @@ class TestDatabaseCommands:
         writer.execute("BEGIN IMMEDIATE")
         writer.execute("INSERT INTO item VALUES ('active writer')")
         transaction_requested = threading.Event()
-        original_transaction = DatabaseManager.transaction
+        original_transaction = DatabaseSession.transaction
 
         @asynccontextmanager
-        async def tracked_transaction(manager: DatabaseManager, immediate: bool = False):
+        async def tracked_transaction(manager: DatabaseSession, immediate: bool = False):
             transaction_requested.set()
             async with original_transaction(manager, immediate=immediate):
                 yield manager
 
-        monkeypatch.setattr(DatabaseManager, "transaction", tracked_transaction)
+        monkeypatch.setattr(DatabaseSession, "transaction", tracked_transaction)
         current = MigrationRegistry()
         current.register_migration("Create Replacement", "CREATE TABLE replacement (value TEXT);")
 

@@ -10,12 +10,11 @@ import typer
 from click.testing import Result
 from pytest_bdd import given, parsers, scenario, then, when
 from typer.testing import CliRunner
-
 from typerdrive.config import get_typerdrive_config
-from typerdrive.database.attach import attach_database
+from typerdrive.database.attach import attach_database, get_database_session
 from typerdrive.database.commands import add_database_subcommand
-from typerdrive.database.manager import DatabaseManager
 from typerdrive.database.migrations import MigrationRegistry
+from typerdrive.database.session import DatabaseSession
 
 
 @scenario("../features/database.feature", "Fresh attachment creates and migrates the database before the callback")
@@ -83,13 +82,13 @@ def test_active_loop_command_invocation_fails_clearly():
     pass
 
 
-@scenario("../features/database.feature", "Async command failure closes the database manager")
-def test_async_failure_closes_manager():
+@scenario("../features/database.feature", "Async command failure closes the database session")
+def test_async_failure_closes_session():
     pass
 
 
-@scenario("../features/database.feature", "Cancellation closes the database manager")
-def test_async_cancellation_closes_manager():
+@scenario("../features/database.feature", "Cancellation closes the database session")
+def test_async_cancellation_closes_session():
     pass
 
 
@@ -102,8 +101,8 @@ class DatabaseContext:
     database_path: Path
     entered: bool
     marker_directory: Path
-    cancelled_manager: DatabaseManager | None
-    failed_manager: DatabaseManager | None
+    cancelled_session: DatabaseSession | None
+    failed_session: DatabaseSession | None
     attachment_proof: bool
     setup_results: list[Result]
     pending_status: str
@@ -120,8 +119,8 @@ def ctx(tmp_home: Path, tmp_path: Path):
     context.output = ""
     context.entered = False
     context.marker_directory = tmp_path / "database-process"
-    context.cancelled_manager = None
-    context.failed_manager = None
+    context.cancelled_session = None
+    context.failed_session = None
     context.attachment_proof = False
     context.setup_results = []
     context.pending_status = ""
@@ -141,7 +140,7 @@ def _given_cli_with_database_commands(ctx: DatabaseContext):
 
     @ctx.cli.command()
     @attach_database(ctx.registry)
-    async def async_insert(ctx: typer.Context, database: DatabaseManager):
+    async def async_insert(ctx: typer.Context, database: DatabaseSession):
         assert scenario_context.database_path.exists()
         journal_mode = await database.fetch_value("PRAGMA journal_mode")
         table = await database.fetch_value("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'item'")
@@ -149,28 +148,28 @@ def _given_cli_with_database_commands(ctx: DatabaseContext):
         assert table == "item"
         scenario_context.attachment_proof = True
         typer.echo("attachment ready: file exists, WAL active, migrated table item exists")
-        assert ctx.obj.database_manager is database
+        assert get_database_session(ctx) is database
         await database.execute("INSERT INTO item VALUES (?)", ("first row",))
         typer.echo("row inserted")
 
     @ctx.cli.command()
     @attach_database(ctx.registry)
-    async def async_read(ctx: typer.Context, database: DatabaseManager):
-        assert ctx.obj.database_manager is database
+    async def async_read(ctx: typer.Context, database: DatabaseSession):
+        assert get_database_session(ctx) is database
         rows = await database.fetch_all("SELECT value FROM item ORDER BY rowid")
         typer.echo(" ".join(row[0] for row in rows))
 
     @ctx.cli.command()
     @attach_database(ctx.registry)
-    def sync_insert(ctx: typer.Context, database: DatabaseManager):
-        assert ctx.obj.database_manager is database
+    def sync_insert(ctx: typer.Context, database: DatabaseSession):
+        assert get_database_session(ctx) is database
         database.execute_sync("INSERT INTO item VALUES (?)", ("sync row",))
         typer.echo("row inserted")
 
     @ctx.cli.command()
     @attach_database(ctx.registry)
-    def sync_read(ctx: typer.Context, database: DatabaseManager):
-        assert ctx.obj.database_manager is database
+    def sync_read(ctx: typer.Context, database: DatabaseSession):
+        assert get_database_session(ctx) is database
         rows = database.fetch_all_sync("SELECT value FROM item ORDER BY rowid")
         typer.echo(" ".join(row[0] for row in rows))
 
@@ -182,20 +181,20 @@ def _given_cli_with_database_commands(ctx: DatabaseContext):
 
     @ctx.cli.command()
     @attach_database(ctx.registry)
-    async def fail(ctx: typer.Context, database: DatabaseManager):
+    async def fail(ctx: typer.Context, database: DatabaseSession):
         assert scenario_context.database_path.exists()
         journal_mode = await database.fetch_value("PRAGMA journal_mode")
         table = await database.fetch_value("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'item'")
         assert journal_mode == "wal"
         assert table == "item"
-        scenario_context.failed_manager = database
+        scenario_context.failed_session = database
         raise RuntimeError("command failed after attachment")
 
     @ctx.cli.command()
     @attach_database(ctx.registry)
-    async def cancel(ctx: typer.Context, database: DatabaseManager):
-        assert ctx.obj.database_manager is database
-        scenario_context.cancelled_manager = database
+    async def cancel(ctx: typer.Context, database: DatabaseSession):
+        assert get_database_session(ctx) is database
+        scenario_context.cancelled_session = database
         raise asyncio.CancelledError
 
 
@@ -231,7 +230,7 @@ def _when_sync_read(ctx: DatabaseContext, runner: CliRunner):
 @given("a database with a migration checksum mismatch")
 def _given_checksum_mismatch(ctx: DatabaseContext):
     async def seed() -> None:
-        async with DatabaseManager(ctx.database_path) as manager:
+        async with DatabaseSession(ctx.database_path) as manager:
             await ctx.registry.apply(manager)
 
     asyncio.run(seed())
@@ -373,7 +372,7 @@ import asyncio
 import sys
 import time
 from pathlib import Path
-from typerdrive.database.manager import DatabaseManager
+from typerdrive.database.session import DatabaseSession
 from typerdrive.database.migrations import MigrationRegistry
 
 path, start, ready = sys.argv[1:]
@@ -383,7 +382,7 @@ while not Path(start).exists():
 registry = MigrationRegistry()
 registry.register_migration("Create Item", "CREATE TABLE item (value TEXT);")
 async def migrate():
-    async with DatabaseManager(path) as manager:
+    async with DatabaseSession(path) as manager:
         await registry.apply(manager)
 asyncio.run(migrate())
 """
@@ -436,7 +435,7 @@ def _then_setup_is_idempotent_and_pending(ctx: DatabaseContext):
 @then("the database has no application schema")
 def _then_setup_has_no_application_schema(ctx: DatabaseContext):
     async def verify() -> tuple[str | None, str | None]:
-        async with DatabaseManager(ctx.database_path) as manager:
+        async with DatabaseSession(ctx.database_path) as manager:
             app_table = await manager.fetch_value(
                 "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'item'"
             )
@@ -458,7 +457,7 @@ def _then_migrations_and_inspection_succeed(ctx: DatabaseContext):
 @then("only the first migration is recorded")
 def _then_failed_migration_rolls_back(ctx: DatabaseContext):
     async def verify() -> tuple[int, str | None, str | None]:
-        async with DatabaseManager(ctx.database_path) as manager:
+        async with DatabaseSession(ctx.database_path) as manager:
             count = await manager.fetch_value("SELECT COUNT(*) FROM _typerdrive_migrations")
             item_table = await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = 'item'")
             extra_table = await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = 'extra_item'")
@@ -470,7 +469,7 @@ def _then_failed_migration_rolls_back(ctx: DatabaseContext):
 @then("migration ledger IDs match registration order")
 def _then_migration_ids_match_registration_order(ctx: DatabaseContext):
     async def read_ids() -> list[str]:
-        async with DatabaseManager(ctx.database_path) as manager:
+        async with DatabaseSession(ctx.database_path) as manager:
             rows = await manager.fetch_all("SELECT migration_id FROM _typerdrive_migrations ORDER BY migration_index")
             return [row[0] for row in rows]
 
@@ -478,11 +477,11 @@ def _then_migration_ids_match_registration_order(ctx: DatabaseContext):
     assert asyncio.run(read_ids()) == [migration.migration_id for migration in ctx.registry.migrations]
 
 
-@then("failure handling closes the database manager")
-def _then_failure_closes_manager(ctx: DatabaseContext):
+@then("failure handling closes the database session")
+def _then_failure_closes_session(ctx: DatabaseContext):
     assert ctx.result.exit_code != 0
-    assert ctx.failed_manager is not None
-    assert not ctx.failed_manager.is_open
+    assert ctx.failed_session is not None
+    assert not ctx.failed_session.is_open
 
 
 @then("both migration processes succeed")
@@ -493,7 +492,7 @@ def _then_both_migration_processes_succeed(ctx: DatabaseContext):
 @then("the migration ledger and schema contain one application")
 def _then_migration_was_applied_once(ctx: DatabaseContext):
     async def verify() -> tuple[int, int]:
-        async with DatabaseManager(ctx.database_path) as manager:
+        async with DatabaseSession(ctx.database_path) as manager:
             return (
                 await manager.fetch_value("SELECT COUNT(*) FROM _typerdrive_migrations"),
                 await manager.fetch_value("SELECT COUNT(*) FROM item"),
@@ -532,7 +531,7 @@ def _then_output_contains(ctx: DatabaseContext, value: str):
 @then("the migration ledger contains 1 record")
 def _then_one_migration_is_recorded(ctx: DatabaseContext):
     async def check() -> int:
-        async with DatabaseManager(ctx.database_path) as manager:
+        async with DatabaseSession(ctx.database_path) as manager:
             return await manager.fetch_value("SELECT COUNT(*) FROM _typerdrive_migrations")
 
     assert asyncio.run(check()) == 1
@@ -556,7 +555,7 @@ def _then_database_file_absent(ctx: DatabaseContext):
 @then("the reset database contains the current schema and no old row")
 def _then_reset_schema_is_current(ctx: DatabaseContext):
     async def verify() -> tuple[str | None, str | None, list[tuple[str, str]]]:
-        async with DatabaseManager(ctx.database_path) as manager:
+        async with DatabaseSession(ctx.database_path) as manager:
             old_table = await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = 'item'")
             new_table = await manager.fetch_value("SELECT name FROM sqlite_master WHERE name = 'replacement'")
             history = await manager.fetch_all(
@@ -574,7 +573,7 @@ def _then_reset_schema_is_current(ctx: DatabaseContext):
 @then("the existing application row and migration history remain")
 def _then_declined_reset_preserves_history(ctx: DatabaseContext):
     async def verify() -> tuple[str, str]:
-        async with DatabaseManager(ctx.database_path) as manager:
+        async with DatabaseSession(ctx.database_path) as manager:
             value = await manager.fetch_value("SELECT value FROM item")
             migration_id = await manager.fetch_value(
                 "SELECT migration_id FROM _typerdrive_migrations WHERE migration_index = 1"
@@ -584,8 +583,8 @@ def _then_declined_reset_preserves_history(ctx: DatabaseContext):
     assert asyncio.run(verify()) == ("first row", "00000001create item")
 
 
-@then("cancellation closes the manager before it escapes")
-def _then_cancellation_closes_manager(ctx: DatabaseContext):
-    manager = ctx.cancelled_manager
-    assert manager is not None
-    assert not manager.is_open
+@then("cancellation closes the session before it escapes")
+def _then_cancellation_closes_session(ctx: DatabaseContext):
+    session = ctx.cancelled_session
+    assert session is not None
+    assert not session.is_open

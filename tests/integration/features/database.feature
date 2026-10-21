@@ -89,11 +89,11 @@ Feature: SQLite database via CLI
     And the output explains the event loop limitation
     And the database file remains absent
 
-  Scenario: Async command failure closes the database manager
+  Scenario: Async command failure closes the database session
     When an async command raises an error
     Then the command fails
-    And failure handling closes the database manager
+    And failure handling closes the database session
 
-  Scenario: Cancellation closes the database manager
+  Scenario: Cancellation closes the database session
     When an async command cancels itself
-    Then cancellation closes the manager before it escapes
+    Then cancellation closes the session before it escapes

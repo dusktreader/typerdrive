@@ -1,7 +1,7 @@
 import typer
 from rich import print
 
-from typerdrive import DatabaseManager, MigrationRegistry, attach_database, get_database_manager
+from typerdrive import DatabaseSession, MigrationRegistry, attach_database, get_database_session
 from typerdrive.config import get_typerdrive_config
 
 
@@ -27,7 +27,7 @@ def demo_1__attach_database__async_sql():
 
     @cli.command()
     @attach_database(migration_registry)
-    async def add_item(ctx: typer.Context, database: DatabaseManager):
+    async def add_item(ctx: typer.Context, database: DatabaseSession):
         assert database_path.exists()
         journal_mode = await database.fetch_value("PRAGMA journal_mode")
         migrated_table = await database.fetch_value(
@@ -66,7 +66,7 @@ def demo_2__attach_database__sync_wrappers():
 
     @cli.command()
     @attach_database(migration_registry)
-    def add_sync_item(ctx: typer.Context, database: DatabaseManager):
+    def add_sync_item(ctx: typer.Context, database: DatabaseSession):
         rows = database.fetch_all_sync("SELECT name FROM starships ORDER BY id")
         print(f"[green]Starships:[/green] {', '.join([r['name'] for r  in rows])}")
 
@@ -75,9 +75,9 @@ def demo_2__attach_database__sync_wrappers():
 
 def demo_3__attach_database__context_lookup():
     """
-    This function demonstrates retrieving a database manager from the Typer context instead of declaring a parameter.
-    The attachment opens the connection and applies pending migrations before the command runs; `get_database_manager(ctx)`
-    returns that live manager.
+    This function demonstrates retrieving a database session from the Typer context instead of declaring a parameter.
+    The attachment opens the connection and applies pending migrations before the command runs; `get_database_session(ctx)`
+    returns that live session.
     """
 
     migration_registry = MigrationRegistry()
@@ -97,7 +97,7 @@ def demo_3__attach_database__context_lookup():
     @cli.command()
     @attach_database(migration_registry)
     async def list_items(ctx: typer.Context):
-        database = get_database_manager(ctx)
+        database = get_database_session(ctx)
         rows = await database.fetch_all("SELECT name FROM starships ORDER BY id")
         print(f"[green]Starships:[/green] {', '.join([r['name'] for r  in rows])}")
 

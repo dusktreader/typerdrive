@@ -16,6 +16,7 @@ from typerdrive.database import (
     DatabaseLifecycleError,
     DatabaseManagementError,
     DatabaseManager,
+    DatabaseSession,
     DatabaseMigrationError,
     DatabaseMigrationIntegrityError,
     DatabaseQueryError,
@@ -25,6 +26,7 @@ from typerdrive.database import (
     MigrationRegistry,
     attach_database,
     get_database_manager,
+    get_database_session,
 )
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config, set_typerdrive_config
 from typerdrive.constants import EvictionPolicy, Validation
@@ -72,6 +74,7 @@ __all__ = [
     "DatabaseLifecycleError",
     "DatabaseManagementError",
     "DatabaseManager",
+    "DatabaseSession",
     "DatabaseMigrationError",
     "DatabaseMigrationIntegrityError",
     "DatabaseQueryError",
@@ -115,6 +118,7 @@ __all__ = [
     "get_client",
     "get_client_manager",
     "get_database_manager",
+    "get_database_session",
     "get_files_manager",
     "get_logging_manager",
     "get_settings",

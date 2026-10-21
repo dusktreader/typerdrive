@@ -6,7 +6,7 @@ from pathlib import Path
 import inflection
 
 from typerdrive.database.exceptions import DatabaseMigrationError, DatabaseMigrationIntegrityError
-from typerdrive.database.manager import DatabaseManager
+from typerdrive.database.session import DatabaseSession
 
 
 @dataclass(frozen=True)
@@ -44,61 +44,56 @@ class MigrationRegistry:
             validated.append((migration, self._split_sql(migration.sql_text)))
         return tuple(validated)
 
-    async def apply(self, manager: DatabaseManager) -> None:
+    async def apply(self, session: DatabaseSession) -> None:
         migrations = self.validate()
-        await manager.execute(
+        await session.execute(
             "CREATE TABLE IF NOT EXISTS _typerdrive_migrations ("
             "migration_index INTEGER PRIMARY KEY, "
             "migration_id TEXT NOT NULL UNIQUE, "
             "checksum TEXT NOT NULL)"
         )
-        async with manager.transaction(immediate=True):
-            await self._verify_history(manager, migrations)
+        async with session.transaction(immediate=True):
+            await self._verify_history(session, migrations)
         for migration, statements in migrations:
             try:
-                async with manager.transaction(immediate=True):
-                    await self._apply_migrations_in_transaction(manager, ((migration, statements),), migrations)
+                async with session.transaction(immediate=True):
+                    await self._apply_migrations_in_transaction(session, ((migration, statements),), migrations)
             except DatabaseMigrationIntegrityError:
                 raise
             except DatabaseMigrationError:
                 raise
             except Exception as error:
-                raise DatabaseMigrationError(
-                    f"Failed to apply migration {migration.migration_id}: {error}"
-                ) from error
+                raise DatabaseMigrationError(f"Failed to apply migration {migration.migration_id}: {error}") from error
 
-    async def _apply_in_transaction(self, manager: DatabaseManager) -> None:
+    async def _apply_in_transaction(self, session: DatabaseSession) -> None:
         migrations = self.validate()
-        await manager.execute(
+        await session.execute(
             "CREATE TABLE _typerdrive_migrations ("
             "migration_index INTEGER PRIMARY KEY, "
             "migration_id TEXT NOT NULL UNIQUE, "
             "checksum TEXT NOT NULL)"
         )
-        await self._apply_migrations_in_transaction(manager, migrations, migrations)
+        await self._apply_migrations_in_transaction(session, migrations, migrations)
 
     async def _apply_migrations_in_transaction(
         self,
-        manager: DatabaseManager,
+        session: DatabaseSession,
         pending: tuple[tuple[Migration, tuple[str, ...]], ...],
         all_migrations: tuple[tuple[Migration, tuple[str, ...]], ...],
     ) -> None:
         for migration, statements in pending:
-            applied = await self._verify_history(manager, all_migrations)
+            applied = await self._verify_history(session, all_migrations)
             if migration.index in applied:
                 continue
             try:
                 for statement in statements:
-                    await manager.execute(statement)
-                await manager.execute(
-                    "INSERT INTO _typerdrive_migrations (migration_index, migration_id, checksum) "
-                    "VALUES (?, ?, ?)",
+                    await session.execute(statement)
+                await session.execute(
+                    "INSERT INTO _typerdrive_migrations (migration_index, migration_id, checksum) VALUES (?, ?, ?)",
                     (migration.index, migration.migration_id, migration.checksum),
                 )
             except Exception as error:
-                raise DatabaseMigrationError(
-                    f"Failed to apply migration {migration.migration_id}: {error}"
-                ) from error
+                raise DatabaseMigrationError(f"Failed to apply migration {migration.migration_id}: {error}") from error
 
     async def get_status(self, database_path: Path | str) -> tuple[list[Migration], list[Migration]]:
         migrations = self.validate()
@@ -111,10 +106,14 @@ class MigrationRegistry:
                 table = connection.execute(
                     "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = '_typerdrive_migrations'"
                 ).fetchone()
-                rows = [] if table is None else connection.execute(
-                    "SELECT migration_index, migration_id, checksum "
-                    "FROM _typerdrive_migrations ORDER BY migration_index"
-                ).fetchall()
+                rows = (
+                    []
+                    if table is None
+                    else connection.execute(
+                        "SELECT migration_index, migration_id, checksum "
+                        "FROM _typerdrive_migrations ORDER BY migration_index"
+                    ).fetchall()
+                )
             finally:
                 connection.close()
         except sqlite3.Error as error:
@@ -125,11 +124,10 @@ class MigrationRegistry:
         return applied_migrations, pending_migrations
 
     async def _verify_history(
-        self, manager: DatabaseManager, migrations: tuple[tuple[Migration, tuple[str, ...]], ...]
+        self, session: DatabaseSession, migrations: tuple[tuple[Migration, tuple[str, ...]], ...]
     ) -> set[int]:
-        rows = await manager.fetch_all(
-            "SELECT migration_index, migration_id, checksum "
-            "FROM _typerdrive_migrations ORDER BY migration_index"
+        rows = await session.fetch_all(
+            "SELECT migration_index, migration_id, checksum FROM _typerdrive_migrations ORDER BY migration_index"
         )
         return self._validate_rows(rows, migrations)
 
@@ -139,9 +137,7 @@ class MigrationRegistry:
         applied: set[int] = set()
         for expected_index, (index, migration_id, checksum) in enumerate(rows, start=1):
             if index != expected_index:
-                raise DatabaseMigrationIntegrityError(
-                    f"Applied migration index sequence has a gap before {index}"
-                )
+                raise DatabaseMigrationIntegrityError(f"Applied migration index sequence has a gap before {index}")
             migration = expected.get(index)
             if migration is None:
                 raise DatabaseMigrationIntegrityError(f"Applied migration index {index} is no longer registered")

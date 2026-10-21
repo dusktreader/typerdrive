@@ -84,7 +84,7 @@ def demo_3__database_commands__setup_migrate_reset():
     assert "SQLite version:" in migrated_inspect.output
 
     async def verify_rebuilt_schema() -> None:
-        async with DatabaseManager() as database:
+        async with DatabaseManager().create_session() as database:
             table = await database.fetch_value(
                 "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'starships'"
             )

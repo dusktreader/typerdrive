@@ -7,37 +7,41 @@ Typerdrive uses its own config for app identity and the behavior of its built-in
 
 When you build an app with Typerdrive, there are two kinds of configuration to keep straight.
 
-`TyperdriveConfig` tells Typerdrive how to behave and what to display about your app, such as its name, version, and
-description. The `settings` feature is for values that your app uses to control
-its behavior outside of what typerdrive provides out of the box.
+The [`settings` feature](settings.md) is for values that your app uses to control its behavior outside of what
+typerdrive provides out of the box. When you build an app on top of typerdrive, you might need your app to remember the
+user's home planet. In that case, you will use the builtin `settings` feature to remember the planet name. Typerdrive
+knows about log files and storage, but it doesn't know anything about planets; that's part of your app's logic.
 
-For example, `TyperdriveConfig` controls how long Typerdrive retains logs. When you build an app on top of typerdrive,
-you might need your app to remember the user's home planet. In that case, you will use the builtin `settings` feature to
-remember the planet name. Typerdrive knows about log files and storage, but
-it doesn't know anything about planets; that's part of your app's logic.
+`TyperdriveConfig`, on the other hand, is used internal Typerdrive logic and builtin features. The config controls some
+Typerdrive behavior. None of the config settings are required, but you might find it useful to bind some configuration
+values.
 
+With `TyperdriveConfig`, you can explicitly provide an app name, a version number, and a description that will be shown
+when you use the `info` command to show the app info. You can also control things like log rotation, state and cache
+home directories, and default console display behavior. All of these use sensible defaults, so you may never need to
+use them. If you do, read the info below to learn more.
 
 ## Usage
 
 ### Set configuration
 
-`set_typerdrive_config()` is usually called during app setup, before Typer invokes
-the CLI. It accepts keyword arguments for the values the app wants to override.
+`set_typerdrive_config()` is usually called during app setup, before Typer invokes the CLI. It accepts keyword arguments
+for the values the app wants to override.
 
 ```python {linenums="1"}
 --8<-- "examples/config/info.py"
 ```
 
-The example sets app metadata and logging/output options before creating the CLI. The config stays in
-memory for the current process; it does not write or replace the app's settings file.
+The example sets app metadata and logging/output options before creating the CLI. The config stays in memory for the
+current process; it does not write or replace the app's settings file.
 
 
 ### Inspect configuration
 
 `add_info_subcommand()` adds the `info` and `version` commands to a Typer app. `info` shows app metadata; `info --full`
 shows every config value and computed storage path. `version` prints `<app_name> v<version>` by default, or `<app_name>
-(version unknown)` if no version is configured. `version --terse` prints
-only the version string, or `unknown` when no version is configured.
+(version unknown)` if no version is configured. `version --terse` prints only the version string, or `unknown` when no
+version is configured.
 
 When we run the `info` example, we see the compact app info:
 
@@ -110,7 +114,7 @@ $ python examples/config/info.py version --terse
 
 | Value                  | Default          | Purpose                                                            |
 | ---------------------- | ---------------- | ------------------------------------------------------------------ |
-| `app_name`             | Executable name  | Identifies the client app and scopes its Typerdrive data.          |
+| `app_name`             | `sys.argv[0]`    | Identifies the client app and scopes its Typerdrive data.          |
 | `version`              | `None`           | Client app version displayed by `info` and `version`.              |
 | `description`          | `None`           | Short client app description displayed by `info`.                  |
 | `log_file_rotation`    | `1 week`         | Loguru rotation policy for log files.                              |

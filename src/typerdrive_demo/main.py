@@ -13,6 +13,7 @@ from typerdrive_demo.helpers import get_demo_functions, run_demo
 
 
 class Feature(StrEnum):
+    config_commands = auto()
     attach_settings = auto()
     settings_commands = auto()
     attach_cache = auto()

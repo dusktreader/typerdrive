@@ -2,6 +2,7 @@ import pytest
 import snick
 from pytest_mock import MockerFixture
 
+from typerdrive.config import TyperdriveConfig
 from typerdrive.format import simple_message, status_message, terminal_message, _to_clipboard
 
 
@@ -48,6 +49,14 @@ class TestTerminalMessage:
             ╰──────────────────────────────────────────────────────────────────────────────╯
         """,
         )
+
+    def test__uses_configured_console_width(self, mocker: MockerFixture):
+        mocker.patch("typerdrive.format.get_typerdrive_config", return_value=TyperdriveConfig(console_width=90))
+        mock_console = mocker.patch("typerdrive.format.Console")
+
+        terminal_message("Hello, world!")
+
+        mock_console.assert_called_once_with(stderr=False, width=90)
 
     def test__formats_subject__default_alignment(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"

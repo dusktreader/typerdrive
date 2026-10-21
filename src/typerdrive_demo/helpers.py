@@ -17,6 +17,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.prompt import Confirm
 from rich.rule import Rule
+from typerdrive.config import get_typerdrive_config, set_typerdrive_config
 from typerdrive.env import tweak_env
 
 
@@ -150,7 +151,11 @@ def run_demo(demo: types.FunctionType, console: Console, override_label: str | N
     pseudo_clear(console)
 
     decomposed = decompose(demo)
-    cap: Captured = capture(demo)
+    original_config = get_typerdrive_config()
+    try:
+        cap: Captured = capture(demo)
+    finally:
+        set_typerdrive_config(**original_config.model_dump())
 
     parts: list[RenderableType] = [
         Markdown(decomposed.docstring),

@@ -93,9 +93,7 @@ def terminal_message(
         # console_kwargs["force_terminal"] = False
         panel_kwargs["box"] = box.ASCII
 
-    console = Console(
-        stderr=error,
-    )
+    console = Console(**console_kwargs)
     console.print()
     console.print(Panel(message, **panel_kwargs))
     console.print()

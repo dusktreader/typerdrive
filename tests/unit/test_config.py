@@ -11,6 +11,8 @@ class TestTyperdriveConfig:
 
         # Should have default values
         assert config.app_name == "test_app"
+        assert config.version is None
+        assert config.description is None
         assert config.log_file_rotation == "1 week"
         assert config.log_file_retention == "1 month"
         assert config.log_file_compression == "tar.gz"
@@ -78,6 +80,21 @@ class TestTyperdriveConfig:
             assert first.database_path != first.cache_dir
             assert first.database_path != first.files_dir
 
+    def test_custom_home_overrides(self):
+        config = TyperdriveConfig(
+            app_name="test_app",
+            state_home=Path("/custom/state"),
+            cache_home=Path("/custom/cache"),
+        )
+
+        assert config.state_home == Path("/custom/state")
+        assert config.cache_home == Path("/custom/cache")
+        assert config.log_dir == Path("/custom/state/test_app/logs")
+        assert config.settings_path == Path("/custom/state/test_app/settings.json")
+        assert config.files_dir == Path("/custom/state/test_app/files")
+        assert config.database_path == Path("/custom/state/test_app/db.sqlite")
+        assert config.cache_dir == Path("/custom/cache/test_app")
+
     def test_custom_app_name(self):
         config = TyperdriveConfig(app_name="my_custom_app")
 
@@ -99,11 +116,22 @@ class TestConfigGettersAndSetters:
         original = get_typerdrive_config()
 
         try:
-            set_typerdrive_config(app_name="new_test_app", console_width=120)
+            set_typerdrive_config(
+                app_name="new_test_app",
+                version="1.2.3",
+                description="A test app",
+                console_width=120,
+                state_home=Path("/custom/state"),
+                cache_home=Path("/custom/cache"),
+            )
             updated = get_typerdrive_config()
 
             assert updated.app_name == "new_test_app"
+            assert updated.version == "1.2.3"
+            assert updated.description == "A test app"
             assert updated.console_width == 120
+            assert updated.state_home == Path("/custom/state")
+            assert updated.cache_home == Path("/custom/cache")
         finally:
             # Restore original config
             set_typerdrive_config(**original.model_dump())
@@ -120,6 +148,8 @@ class TestConfigGettersAndSetters:
 
             # Preserved values
             assert updated.app_name == original.app_name
+            assert updated.state_home == original.state_home
+            assert updated.cache_home == original.cache_home
             assert updated.log_file_rotation == original.log_file_rotation
             assert updated.log_file_retention == original.log_file_retention
         finally:

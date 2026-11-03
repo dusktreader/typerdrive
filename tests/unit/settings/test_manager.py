@@ -364,3 +364,31 @@ class TestSettingsManager:
         manager.unset("username")
         assert cast(SecretSettingsModel, manager.settings_instance).username == "leia"
         assert cast(SecretSettingsModel, manager.settings_instance).api_token.get_secret_value() == "s3cr3t"
+
+    def test_nested_secret_str__is_masked_in_display_and_persisted_as_plaintext(self, fake_settings_path: Path):
+        class NestedSettingsModel(BaseModel):
+            api_token: SecretStr = SecretStr("nested-secret")
+
+        class ParentSettingsModel(BaseModel):
+            child: NestedSettingsModel = NestedSettingsModel()
+
+        manager = SettingsManager(ParentSettingsModel)
+        console = Console()
+        with console.capture() as snag:
+            console.print(manager.pretty())
+        output = snag.get()
+        assert "nested-secret" not in output
+        assert "**********" in output
+
+        manager.update()
+        assert cast(ParentSettingsModel, manager.settings_instance).child.api_token.get_secret_value() == (
+            "nested-secret"
+        )
+        manager.save()
+        data = json.loads(fake_settings_path.read_text())
+        assert data == {"child": {"api_token": "nested-secret"}}
+
+        reloaded_manager = SettingsManager(ParentSettingsModel)
+        assert cast(ParentSettingsModel, reloaded_manager.settings_instance).child.api_token.get_secret_value() == (
+            "nested-secret"
+        )

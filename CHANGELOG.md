@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and
 this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## v0.12.1 - 2026-11-03
+
+- Mask secrets in nested settings models
+
+
 ## v0.12.0 - 2026-10-21
 
 - Added `DatabaseSession` for scoped query, transaction, and sync/async lifecycle management

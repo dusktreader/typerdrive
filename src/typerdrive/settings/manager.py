@@ -73,6 +73,26 @@ class SettingsManager:
             message = data["msg"]
             self.invalid_warnings[key] = message
 
+    def _dump_value(self, value: Any, annotation: Any = None) -> Any:
+        if annotation is SecretStr and isinstance(value, str):
+            value = SecretStr(value)
+        if isinstance(value, SecretStr):
+            return value.get_secret_value()
+        if isinstance(value, BaseModel):
+            result: dict[str, Any] = {}
+            for field_name, field_info in value.__class__.model_fields.items():
+                try:
+                    field_value = getattr(value, field_name)
+                except AttributeError:
+                    continue
+                result[field_name] = self._dump_value(field_value, field_info.annotation)
+            return result
+        if isinstance(value, dict):
+            return {key: self._dump_value(item) for key, item in value.items()}
+        if isinstance(value, (list, tuple, set, frozenset)):
+            return [self._dump_value(item) for item in value]
+        return value
+
     def _dump(self) -> dict[str, Any]:
         """
         Dump the settings instance to a plain dict, unwrapping any `SecretStr` values to bare strings
@@ -84,14 +104,7 @@ class SettingsManager:
                 val = getattr(self.settings_instance, k)
             except AttributeError:
                 continue
-            if field_info.annotation is SecretStr and isinstance(val, str):
-                val = SecretStr(val)
-            if isinstance(val, SecretStr):
-                result[k] = val.get_secret_value()
-            elif isinstance(val, BaseModel):
-                result[k] = val.model_dump(mode="json")
-            else:
-                result[k] = val
+            result[k] = self._dump_value(val, field_info.annotation)
         return result
 
     def update(self, **settings_values: Any):

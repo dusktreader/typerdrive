@@ -144,12 +144,12 @@ class TestAttachSettings:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(
-            name="hutt",
-            planet="nal hutta",
-            is_humanoid=False,
-            alignment="evil",
-        )
+        assert data == {
+            "name": "hutt",
+            "planet": "nal hutta",
+            "is_humanoid": False,
+            "alignment": "evil",
+        }
 
     def test_attach_settings__loads_settings_from_disk_if_file_exists(
         self,
@@ -158,12 +158,12 @@ class TestAttachSettings:
     ):
         fake_settings_path.write_text(
             json.dumps(
-                dict(
-                    name="jawa",
-                    planet="tatooine",
-                    is_humanoid=True,
-                    alignment="neutral",
-                )
+                {
+                    "name": "jawa",
+                    "planet": "tatooine",
+                    "is_humanoid": True,
+                    "alignment": "neutral",
+                }
             )
         )
         cli = typer.Typer()

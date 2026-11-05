@@ -2,8 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/) and
-this project adheres to [Semantic Versioning](http://semver.org/).
+The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic
+Versioning](http://semver.org/).
+
+
+## v0.13.0 - 2026-11-04
+
+- Added settings support for nested models in list, set, frozenset, tuple, and dict fields
+- Preserved existing boolean settings when updates omit them
+- Reported clipboard integration failures in formatted message footers
 
 
 ## v0.12.1 - 2026-11-03
@@ -34,13 +41,13 @@ this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## v0.10.0 - 2026-10-09
 
-- Added an async-first SQLite `DatabaseManager` with async SQL, synchronous
-  wrappers backed by AnyIO, transaction isolation, and WAL by default
-- Added client-registered SQL migrations with generated identifiers,
-  checksums, integrity validation, and atomic application
+- Added an async-first SQLite `DatabaseManager` with async SQL, synchronous wrappers backed by AnyIO, transaction
+  isolation, and WAL by default
+- Added client-registered SQL migrations with generated identifiers, checksums, integrity validation, and atomic
+  application
 - Added `@attach_database` with typed injection, context lookup, and automatic database creation and migration
-- Added `db setup` for an empty database, `db migrate` for pending migrations,
-  read-only inspection/status, and confirmed transactional `db reset`
+- Added `db setup` for an empty database, `db migrate` for pending migrations, read-only inspection/status, and
+  confirmed transactional `db reset`
 - Coordinated concurrent app instances through SQLite transactions and busy handling without process lock files
 - Added database documentation, runnable examples, and demos showing inline migrations and setup/migrate/reset behavior
 
@@ -54,12 +61,12 @@ this project adheres to [Semantic Versioning](http://semver.org/).
 - Added Python 3.14 string-annotation regression tests for all `attach_*` decorators and `handle_errors`
   - Each decorator now has a `string_annotation_module.py` with `from __future__ import annotations` in effect
   - `TestStringAnnotations` test classes verify commands can be built and invoked without `NameError`
-- Removed `@wraps` from all `attach_*` decorators; metadata copying
-  is handled exclusively by `SignatureRewriter.apply()`
-  - `@wraps` copied `__annotate__` from the original function onto the
-    wrapper, triggering Python 3.14 lazy evaluation in the wrong scope
-- Re-exported `Context` and `Annotated` in `settings/commands.py` so `build_command`
-  (from `typer-repyt`) resolves them in the correct scope
+- Removed `@wraps` from all `attach_*` decorators; metadata copying is handled exclusively by
+  `SignatureRewriter.apply()`
+  - `@wraps` copied `__annotate__` from the original function onto the wrapper, triggering Python 3.14 lazy evaluation
+    in the wrong scope
+- Re-exported `Context` and `Annotated` in `settings/commands.py` so `build_command` (from `typer-repyt`) resolves them
+  in the correct scope
 - Updated `typer-repyt` requirement to `>=0.9.2` to include the upstream Python 3.14 `Context` scope fix
 - Fixed cache test isolation: `fake_cache_path` and `tmp_home` fixtures now set `XDG_CACHE_HOME` explicitly
 - Bumped `.python-version` to `3.14`
@@ -68,10 +75,10 @@ this project adheres to [Semantic Versioning](http://semver.org/).
 ## v0.9.7 - 2026-05-05
 - Fixed `NameError: name 'Context' is not defined` crash on Python 3.14+ when using any `attach_*` decorator
   - Root cause: Python 3.14 `inspect.signature()` on a plain function bypasses `__signature__` and calls
-    `get_annotations()`, which triggers the lazy `__annotate__` closure
-    — evaluated in the wrong scope where `Context` is not defined
-  - Fix: `SignatureRewriter.apply()` now also replaces `wrapper.__annotations__` with
-    a pre-resolved dict matching the rewritten signature, preventing lazy evaluation
+    `get_annotations()`, which triggers the lazy `__annotate__` closure — evaluated in the wrong scope where `Context`
+    is not defined
+  - Fix: `SignatureRewriter.apply()` now also replaces `wrapper.__annotations__` with a pre-resolved dict matching the
+    rewritten signature, preventing lazy evaluation
 
 
 ## v0.9.6 - 2026-05-04
@@ -96,8 +103,8 @@ this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## v0.9.3 - 2026-03-26
-- Added startup benchmark suite (`tests/benchmarks/test_startup.py`) measuring import-time and
-  `--help` wall-clock cost across three CLI variants (baseline, settings-only, full)
+- Added startup benchmark suite (`tests/benchmarks/test_startup.py`) measuring import-time and `--help` wall-clock cost
+  across three CLI variants (baseline, settings-only, full)
 - Added `src/typerdrive_benchmarks/` package with fixture CLIs used by the benchmark suite
 - Added `pytest-benchmark>=5.0` dev dependency
 - Added `benchmark` pytest marker; benchmark tests are excluded from normal test runs via `-m "not benchmark"`
@@ -106,8 +113,8 @@ this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## v0.9.2 - 2026-03-19
-- Fixed `attach_settings` crashing with `NameError` when the decorated function uses
-  string annotations (i.e. `from __future__ import annotations` or Python 3.14+)
+- Fixed `attach_settings` crashing with `NameError` when the decorated function uses string annotations (i.e. `from
+  __future__ import annotations` or Python 3.14+)
 - `attach_settings` now resolves annotations with `typing.get_type_hints()` before comparing them against
   `settings_model` and `SettingsManager`, so string and evaluated annotations are handled identically
 
@@ -123,8 +130,8 @@ this project adheres to [Semantic Versioning](http://semver.org/).
 - Added `padding` parameter to `simple_message` (default `True`) to allow suppressing blank-line padding
 - Added `invoke_without_command=True, no_args_is_help=True` to all four subcommand groups (settings, cache, files, logs)
   so invoking a subcommand with no arguments shows help instead of silently exiting
-- Fixed `issubclass` crash in settings `bind` and `update` commands
-  when a field annotation is not a plain type (e.g. `AutoNameEnum`)
+- Fixed `issubclass` crash in settings `bind` and `update` commands when a field annotation is not a plain type (e.g.
+  `AutoNameEnum`)
 - Bumped `typer-repyt` dependency to `>=0.9.1`
 - Added `auto-name-enum` as a dev dependency for tests
 - Added documentation section for secret settings values

@@ -5,18 +5,18 @@ Provide commands that can be added to a `typer` app to manage settings.
 from typing import Annotated, Any  # noqa: F401 -- Annotated must be in __globals__ for Python 3.14 lazy annotation eval
 
 import typer
-from typer import Context as Context  # re-exported so bind/__globals__ resolves 'Context' on Python 3.14
 from pydantic import BaseModel, SecretStr
 from pydantic_core import PydanticUndefined
+from typer import Context as Context  # noqa: PLC0414 -- needed for dynamic annotation globals
 from typer_repyt.build_command import DecDef, OptDef, build_command
 from typer_repyt.constants import Sentinel
 
 from typerdrive.constants import Validation
+from typerdrive.format import pretty_annotation, pretty_model
 from typerdrive.handle_errors import handle_errors
-from typerdrive.model_parser import make_parser
+from typerdrive.model_parser import is_model_collection, is_model_type, make_parser
 from typerdrive.settings.attach import attach_settings, get_settings_manager
 from typerdrive.settings.exceptions import SettingsError
-from typerdrive.format import pretty_model
 from typerdrive.settings.manager import SettingsManager
 
 
@@ -37,26 +37,25 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
     opt_defs: list[OptDef] = []
     for name, field_info in settings_model.model_fields.items():
         default = field_info.default if field_info.default is not PydanticUndefined else Sentinel.NOT_GIVEN
-        param_type: type[Any] = SettingsError.enforce_defined(
-            field_info.annotation, "Option type may not be `None`"
-        )
+        annotation: Any = SettingsError.enforce_defined(field_info.annotation, "Option type may not be `None`")
 
         # Typer does not support SecretStr; use str with hidden input instead.
         # SettingsManager handles wrapping bare str values back into SecretStr on update.
-        is_secret = isinstance(param_type, type) and issubclass(param_type, SecretStr)
+        is_secret = isinstance(annotation, type) and issubclass(annotation, SecretStr)
+        is_collection = is_model_collection(annotation)
+        is_nested_model = is_model_type(annotation)
 
-        opt_kwargs: dict[str, Any] = dict(
-            name=name,
-            param_type=str if is_secret else param_type,
-            default=default.get_secret_value() if isinstance(default, SecretStr) else default,
-            help=field_info.description,
-            show_default=True,
-            hide_input=is_secret,
-        )
-        if not is_secret and isinstance(param_type, type) and issubclass(param_type, BaseModel):
-            model_type = param_type
-            opt_kwargs["parser"] = make_parser(model_type)
-            opt_kwargs["metavar"] = pretty_model(model_type)
+        opt_kwargs: dict[str, Any] = {
+            "name": name,
+            "param_type": str if is_secret or is_collection else annotation,
+            "default": default.get_secret_value() if isinstance(default, SecretStr) else default,
+            "help": field_info.description,
+            "show_default": True,
+            "hide_input": is_secret,
+        }
+        if not is_secret and (is_nested_model or is_collection):
+            opt_kwargs["parser"] = make_parser(annotation)
+            opt_kwargs["metavar"] = pretty_model(annotation) if is_nested_model else pretty_annotation(annotation)
 
         opt_defs.append(OptDef(**opt_kwargs))
     build_command(
@@ -67,17 +66,17 @@ def add_bind(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=handle_errors,
                 dec_args=["Failed to bind settings"],
-                dec_kwargs=dict(
-                    handle_exc_class=SettingsError,
-                    unwrap_message=False,
-                    debug=True,
-                ),
+                dec_kwargs={
+                    "handle_exc_class": SettingsError,
+                    "unwrap_message": False,
+                    "debug": True,
+                },
                 is_simple=False,
             ),
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.AFTER, persist=True, show=True),
+                dec_kwargs={"validation": Validation.AFTER, "persist": True, "show": True},
                 is_simple=False,
             ),
         ],
@@ -101,26 +100,25 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
     """
     opt_defs: list[OptDef] = []
     for name, field_info in settings_model.model_fields.items():
-        param_type: type[Any] = SettingsError.enforce_defined(field_info.annotation, "Option type may not be `None`")
+        annotation: Any = SettingsError.enforce_defined(field_info.annotation, "Option type may not be `None`")
         default: None | bool = None
         # Typer does not support SecretStr; use str with hidden input instead.
         # SettingsManager handles wrapping bare str values back into SecretStr on update.
-        is_secret = isinstance(param_type, type) and issubclass(param_type, SecretStr)
-        cli_type = str if is_secret else param_type
-        opt_kwargs: dict[str, Any] = dict(
-            name=name,
-            param_type=cli_type | None,
-            default=default,
-            help=field_info.description,
-            show_default=True,
-            hide_input=is_secret,
-        )
-        if param_type is bool:
-            default = field_info.default
-        elif not is_secret and isinstance(param_type, type) and issubclass(param_type, BaseModel):
-            model_type = param_type
-            opt_kwargs["parser"] = make_parser(model_type)
-            opt_kwargs["metavar"] = pretty_model(model_type)
+        is_secret = isinstance(annotation, type) and issubclass(annotation, SecretStr)
+        is_collection = is_model_collection(annotation)
+        is_nested_model = is_model_type(annotation)
+        cli_type = str if is_secret or is_collection else annotation
+        opt_kwargs: dict[str, Any] = {
+            "name": name,
+            "param_type": cli_type | None,
+            "default": default,
+            "help": field_info.description,
+            "show_default": True,
+            "hide_input": is_secret,
+        }
+        if not is_secret and (is_nested_model or is_collection):
+            opt_kwargs["parser"] = make_parser(annotation)
+            opt_kwargs["metavar"] = pretty_model(annotation) if is_nested_model else pretty_annotation(annotation)
 
         opt_defs.append(OptDef(**opt_kwargs))
     build_command(
@@ -131,17 +129,17 @@ def add_update(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=handle_errors,
                 dec_args=["Failed to update settings"],
-                dec_kwargs=dict(
-                    handle_exc_class=SettingsError,
-                    unwrap_message=False,
-                    debug=True,
-                ),
+                dec_kwargs={
+                    "handle_exc_class": SettingsError,
+                    "unwrap_message": False,
+                    "debug": True,
+                },
                 is_simple=False,
             ),
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.NEVER, persist=True, show=True),
+                dec_kwargs={"validation": Validation.NEVER, "persist": True, "show": True},
                 is_simple=False,
             ),
         ],
@@ -183,17 +181,17 @@ def add_unset(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=handle_errors,
                 dec_args=["Failed to unset settings"],
-                dec_kwargs=dict(
-                    handle_exc_class=SettingsError,
-                    unwrap_message=False,
-                    debug=True,
-                ),
+                dec_kwargs={
+                    "handle_exc_class": SettingsError,
+                    "unwrap_message": False,
+                    "debug": True,
+                },
                 is_simple=False,
             ),
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.NEVER, persist=True, show=True),
+                dec_kwargs={"validation": Validation.NEVER, "persist": True, "show": True},
                 is_simple=False,
             ),
         ],
@@ -218,17 +216,17 @@ def add_show(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=handle_errors,
                 dec_args=["Failed to show settings"],
-                dec_kwargs=dict(
-                    handle_exc_class=SettingsError,
-                    unwrap_message=False,
-                    debug=True,
-                ),
+                dec_kwargs={
+                    "handle_exc_class": SettingsError,
+                    "unwrap_message": False,
+                    "debug": True,
+                },
                 is_simple=False,
             ),
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.NEVER, persist=False, show=True),
+                dec_kwargs={"validation": Validation.NEVER, "persist": False, "show": True},
                 is_simple=False,
             ),
         ],
@@ -256,17 +254,17 @@ def add_reset(cli: typer.Typer, settings_model: type[BaseModel]):
             DecDef(
                 dec_func=handle_errors,
                 dec_args=["Failed to reset settings"],
-                dec_kwargs=dict(
-                    handle_exc_class=SettingsError,
-                    unwrap_message=False,
-                    debug=True,
-                ),
+                dec_kwargs={
+                    "handle_exc_class": SettingsError,
+                    "unwrap_message": False,
+                    "debug": True,
+                },
                 is_simple=False,
             ),
             DecDef(
                 dec_func=attach_settings,
                 dec_args=[settings_model],
-                dec_kwargs=dict(validation=Validation.NEVER, persist=True, show=True),
+                dec_kwargs={"validation": Validation.NEVER, "persist": True, "show": True},
                 is_simple=False,
             ),
         ],

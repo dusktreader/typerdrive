@@ -68,7 +68,7 @@ class TestSettingsManager:
         settings_path = fake_settings_path
         settings_path.write_text(
             json.dumps(
-                dict(name="hutt", planet="nal hutta", is_humanoid=False, alignment="evil"),
+                {"name": "hutt", "planet": "nal hutta", "is_humanoid": False, "alignment": "evil"},
             )
         )
 
@@ -88,10 +88,10 @@ class TestSettingsManager:
         manager = SettingsManager(RequiredFieldsModel)
         assert manager.settings_model == RequiredFieldsModel
         assert manager.settings_path == get_typerdrive_config().settings_path
-        assert manager.invalid_warnings == dict(
-            name="Field required",
-            planet="Field required",
-        )
+        assert manager.invalid_warnings == {
+            "name": "Field required",
+            "planet": "Field required",
+        }
 
         assert isinstance(manager.settings_instance, RequiredFieldsModel)
         assert not hasattr(manager.settings_instance, "name")
@@ -101,15 +101,15 @@ class TestSettingsManager:
 
     def test_init__loads_invalid_model_from_disk(self, fake_settings_path: Path):
         settings_path = fake_settings_path
-        settings_path.write_text(json.dumps(dict(name="hutt")))
+        settings_path.write_text(json.dumps({"name": "hutt"}))
 
         manager = SettingsManager(RequiredFieldsModel)
 
         assert manager.settings_model == RequiredFieldsModel
         assert manager.settings_path == settings_path
-        assert manager.invalid_warnings == dict(
-            planet="Field required",
-        )
+        assert manager.invalid_warnings == {
+            "planet": "Field required",
+        }
 
         assert isinstance(manager.settings_instance, RequiredFieldsModel)
         assert manager.settings_instance.name == "hutt"
@@ -130,21 +130,21 @@ class TestSettingsManager:
                 {
                     "type": "missing",
                     "loc": ("name",),
-                    "input": dict(),
+                    "input": {},
                 },
                 {
                     "type": "missing",
                     "loc": ("planet",),
-                    "input": dict(),
+                    "input": {},
                 },
             ],
         )
         manager.set_warnings(err)
 
-        assert manager.invalid_warnings == dict(
-            name="Field required",
-            planet="Field required",
-        )
+        assert manager.invalid_warnings == {
+            "name": "Field required",
+            "planet": "Field required",
+        }
 
     def test_update__updates_valid_to_valid_settings(self):
         manager = SettingsManager(DefaultSettingsModel)
@@ -175,9 +175,9 @@ class TestSettingsManager:
         assert manager.settings_instance.planet == "nevarro"
         assert manager.settings_instance.is_humanoid
         assert manager.settings_instance.alignment == "negative"
-        assert manager.invalid_warnings == dict(
-            alignment="Value error, negative is an invalid alignment",
-        )
+        assert manager.invalid_warnings == {
+            "alignment": "Value error, negative is an invalid alignment",
+        }
 
     def test_update__raises_error_on_failure(self, mocker: MockerFixture):
         manager = SettingsManager(DefaultSettingsModel)
@@ -209,9 +209,9 @@ class TestSettingsManager:
         assert not hasattr(manager.settings_instance, "planet")
         assert manager.settings_instance.is_humanoid
         assert manager.settings_instance.alignment == "neutral"
-        assert manager.invalid_warnings == dict(
-            planet="Field required",
-        )
+        assert manager.invalid_warnings == {
+            "planet": "Field required",
+        }
 
     def test_reset__returns_all_fields_to_default(self):
         manager = SettingsManager(DefaultSettingsModel)
@@ -242,10 +242,10 @@ class TestSettingsManager:
         assert not hasattr(manager.settings_instance, "planet")
         assert manager.settings_instance.is_humanoid
         assert manager.settings_instance.alignment == "neutral"
-        assert manager.invalid_warnings == dict(
-            name="Field required",
-            planet="Field required",
-        )
+        assert manager.invalid_warnings == {
+            "name": "Field required",
+            "planet": "Field required",
+        }
 
     def test_pretty__provides_string_reflecting_settings_instance(self):
         manager = SettingsManager(RequiredFieldsModel)
@@ -308,9 +308,9 @@ class TestSettingsManager:
         manager = SettingsManager(DefaultSettingsModel)
         manager.save()
 
-        assert json.loads(fake_settings_path.read_text()) == dict(
-            name="jawa", planet="tatooine", is_humanoid=True, alignment="neutral"
-        )
+        assert json.loads(fake_settings_path.read_text()) == {
+            "name": "jawa", "planet": "tatooine", "is_humanoid": True, "alignment": "neutral"
+        }
 
     def test_save__raises_error_on_failure(self, mocker: MockerFixture):
         manager = SettingsManager(DefaultSettingsModel)
@@ -340,7 +340,7 @@ class TestSettingsManager:
         manager.save()
 
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(username="leia", api_token="s3cr3t")
+        assert data == {"username": "leia", "api_token": "s3cr3t"}
 
         manager2 = SettingsManager(SecretSettingsModel)
         assert cast(SecretSettingsModel, manager2.settings_instance).api_token.get_secret_value() == "s3cr3t"

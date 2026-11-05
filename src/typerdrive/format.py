@@ -2,12 +2,11 @@
 Provide methods for formatted output for the user.
 """
 
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any, Generator, Literal
+from typing import Any, Literal, get_args, get_origin
 
-import pyperclip
 import snick
-from loguru import logger
 from pydantic import BaseModel
 from pydantic.fields import FieldInfo
 from rich import box
@@ -17,19 +16,8 @@ from rich.panel import Panel
 from rich.text import Text
 
 from typerdrive.config import get_typerdrive_config
-from typerdrive.exceptions import DisplayError
-
-
-def _to_clipboard(text: str | RenderableType) -> bool:
-    """
-    Copy the text to the clipboard if possible.
-    """
-    try:
-        pyperclip.copy(str(text))
-        return True
-    except Exception as exc:
-        logger.debug(f"Could not copy letter to clipboard: {exc}")
-        return False
+from typerdrive.exceptions import DisplayError, IntegrationError
+from typerdrive.tools import send_to_clipboard
 
 
 def terminal_message(
@@ -52,13 +40,13 @@ def terminal_message(
         subject:       An optional heading for the panel to show to the user.
         subject_align: The alignment for the `subject`.
         subject_color: The color to render the `subject` in.
-        footer:        An optional footer to show to the user. If `to_clipboard` results in a successful copy, this will
-                       include a message indicating that the message was copied to the clipboard.
+        footer:        An optional footer to show to the user. When `to_clipboard` is enabled, this includes a message
+                       indicating that the message was copied to the clipboard.
         footer_align:  The alignment for the `footer`.
         indent:        If `True`, indent all lines of the message by 2 spaces.
         markdown:      If `True`, render the text with `rich.markdown`.
         error:         If `True`, print the output to stderr instead of stdout.
-        to_clipboard:  If `True`, attempt to copy the output to the user's clipboard. The text copied to the clipboard
+        to_clipboard:  If `True`, copy the output to the user's clipboard and propagate copy errors. The text copied
                        will not include the `rich.panel` decoration including the header and footer.
 
     Example:
@@ -69,13 +57,16 @@ def terminal_message(
         )
     """
     if to_clipboard:
-        if _to_clipboard(message):
+        try:
+            send_to_clipboard(message)
             if not footer:
                 footer = "Copied to clipboard!"
             else:
                 footer = f"{footer} -- Copied to clipboard!"
+        except IntegrationError:
+            footer = "Could not copy to clipboard"
 
-    panel_kwargs: dict[str, Any] = dict(padding=1, title_align=subject_align, subtitle_align=footer_align)
+    panel_kwargs: dict[str, Any] = {"padding": 1, "title_align": subject_align, "subtitle_align": footer_align}
 
     if subject is not None:
         panel_kwargs["title"] = f"[{subject_color}]{subject}"
@@ -91,7 +82,7 @@ def terminal_message(
             message = Markdown(message)
 
     config = get_typerdrive_config()
-    console_kwargs: dict[str, Any] = dict(stderr=error)
+    console_kwargs: dict[str, Any] = {"stderr": error}
 
     if config.console_width:
         console_kwargs["width"] = config.console_width
@@ -122,7 +113,7 @@ def simple_message(
         indent:       If `True`, indent all lines of the message by 2 spaces.
         markdown:     If `True`, render the text with `rich.markdown`.
         error:        If `True`, print the output to stderr instead of stdout.
-        to_clipboard: If `True`, attempt to copy the output to the user's clipboard.
+        to_clipboard: If `True`, copy the output to the user's clipboard and propagate copy errors.
         padding:      If `True` (default), print a blank line before and after the message.
 
     Example:
@@ -131,7 +122,7 @@ def simple_message(
     text: str = snick.dedent(message)
 
     if to_clipboard:
-        _to_clipboard(text)
+        send_to_clipboard(text)
 
     if indent:
         text = snick.indent(text, prefix="  ")
@@ -196,14 +187,25 @@ def pretty_model(model_class: type[BaseModel]) -> str:
     return f"{model_class.__name__}({' '.join(parts)})"
 
 
+def pretty_annotation(annotation: Any) -> str:
+    """Format built-in collection annotations and their type arguments for display."""
+    origin = get_origin(annotation)
+    if origin in (list, set, frozenset, tuple, dict):
+        args = get_args(annotation)
+        arg_names = ["..." if arg is Ellipsis else pretty_annotation(arg) for arg in args]
+        return f"{origin.__name__}[{', '.join(arg_names)}]"
+    if isinstance(annotation, type):
+        return annotation.__name__
+    return str(annotation)
+
+
 def pretty_field_info(field_info: FieldInfo) -> str:
     """
-    Format a pydantic FieldInfo.
+    Format a Pydantic FieldInfo.
     """
     annotation = DisplayError.enforce_defined(
         field_info.annotation, f"The field info annotation for {field_info} was not defined!"
     )
-    if issubclass(annotation, BaseModel):
+    if isinstance(annotation, type) and issubclass(annotation, BaseModel):
         return pretty_model(annotation)
-    else:
-        return annotation.__name__
+    return pretty_annotation(annotation)

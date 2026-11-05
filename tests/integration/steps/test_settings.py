@@ -125,12 +125,12 @@ def _given_settings_file_with_truthy_humanoid(
     settings_path.parent.mkdir(parents=True, exist_ok=True)
     settings_path.write_text(
         json.dumps(
-            dict(
-                name=name,
-                planet=planet,
-                is_humanoid=True,
-                alignment=alignment,
-            )
+            {
+                "name": name,
+                "planet": planet,
+                "is_humanoid": True,
+                "alignment": alignment,
+            }
         )
     )
     ctx.settings_path = settings_path
@@ -149,12 +149,12 @@ def _given_settings_file_with_falsy_humanoid(
     settings_path.parent.mkdir(parents=True, exist_ok=True)
     settings_path.write_text(
         json.dumps(
-            dict(
-                name=name,
-                planet=planet,
-                is_humanoid=False,
-                alignment=alignment,
-            )
+            {
+                "name": name,
+                "planet": planet,
+                "is_humanoid": False,
+                "alignment": alignment,
+            }
         )
     )
     ctx.settings_path = settings_path

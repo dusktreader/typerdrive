@@ -22,11 +22,11 @@ def demo_1__show__basic():
     manager.set("ewok", b"Yub Nub!")
     manager.set(
         "hutt/jabba",
-        dict(
-            full_name="Jabba Desilijic Tiure",
-            age=604,
-            quote="beeska chata wnow kong bantha poodoo!",
-        ),
+        {
+            "full_name": "Jabba Desilijic Tiure",
+            "age": 604,
+            "quote": "beeska chata wnow kong bantha poodoo!",
+        },
         group="characters",
     )
 
@@ -123,11 +123,11 @@ def demo_5__clear__full_cache():
     manager.set("ewok", b"Yub Nub!")
     manager.set(
         "hutt/jabba",
-        dict(
-            full_name="Jabba Desilijic Tiure",
-            age=604,
-            quote="beeska chata wnow kong bantha poodoo!",
-        ),
+        {
+            "full_name": "Jabba Desilijic Tiure",
+            "age": 604,
+            "quote": "beeska chata wnow kong bantha poodoo!",
+        },
     )
 
     cli = typer.Typer()

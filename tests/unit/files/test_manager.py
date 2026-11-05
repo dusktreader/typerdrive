@@ -124,7 +124,7 @@ class TestFilesManager:
     def test_store_json__basic(self, fake_files_path: Path):
         test_path = Path("config/settings.json")
         manager = FilesManager()
-        data = dict(name="myapp", version="1.0.0")
+        data = {"name": "myapp", "version": "1.0.0"}
         manager.store_json(data, test_path)
         full_path = fake_files_path / test_path
         assert json.loads(full_path.read_text()) == data
@@ -169,7 +169,7 @@ class TestFilesManager:
     def test_load_json__basic(self, fake_files_path: Path):
         test_path = Path("config/app.json")
         manager = FilesManager()
-        data = dict(debug=True, timeout=30)
+        data = {"debug": True, "timeout": 30}
         full_path = fake_files_path / test_path
         full_path.parent.mkdir(parents=True, exist_ok=True)
         full_path.write_bytes(json.dumps(data).encode("utf-8"))

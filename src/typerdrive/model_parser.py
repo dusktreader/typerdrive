@@ -6,35 +6,48 @@ provided as JSON strings that need to be deserialized into pydantic model instan
 """
 
 import json
+import re
 from collections.abc import Callable
 from functools import partial
-from typing import Any
+from typing import Any, get_args, get_origin
 
-from pydantic import BaseModel
+from pydantic import BaseModel, TypeAdapter
+
+_SUPPORTED_COLLECTIONS = (list, set, frozenset, tuple, dict)
 
 
-def _validating_parser(model_type: type[BaseModel], val: str) -> dict[str, Any]:
+def is_model_type(annotation: Any) -> bool:
+    return isinstance(annotation, type) and issubclass(annotation, BaseModel)
+
+
+def is_model_collection(annotation: Any) -> bool:
+    origin = get_origin(annotation)
+    if origin not in _SUPPORTED_COLLECTIONS:
+        return False
+    args = get_args(annotation)
+    value_args = args[1:] if origin is dict else args
+    return any(is_model_type(arg) or is_model_collection(arg) for arg in value_args)
+
+
+def validating_parser(annotation: Any, val: str) -> Any:
     """
-    Provide a parser that converts a string into a dict after validating the values.
+    Validate JSON input for a model or supported collection of models.
 
-    This is needed for the settings commands to be able to use nested pydantic models.
-    Note that it _does not_ return an instance of the model. This is because it is simplest to let the model be
-    constructed from a plain dictionary.
+    Return plain Python data so the settings model can construct the model instances.
     """
-    model_type.model_validate_json(val)
+    TypeAdapter(annotation).validate_json(val)
     return json.loads(val)
 
 
-def make_parser(model_type: type[BaseModel]) -> Callable[[str], dict[str, Any]]:
+def make_parser(annotation: Any) -> Callable[[str], Any]:
     """
     Construct a partial that wraps `model_parser` and gives it a `__name__`.
 
     This is needed because `typer_repyt` requires the callable to have a `__name__` attribute to bind it to the
     namespace of a dynamically generated command function.
     """
-    parser = partial(_validating_parser, model_type)
-
-    # This works fine, but pyright/basedpyright does not like it!
-    parser.__name__ = f"parse_{model_type.__name__}"  # type: ignore[attr-defined]  # ty: ignore[unresolved-attribute]
+    parser = partial(validating_parser, annotation)
+    annotation_name = re.sub(r"\W+", "_", str(annotation))
+    parser.__name__ = f"parse_{annotation_name}"  # type: ignore[attr-defined]  # ty: ignore[unresolved-attribute]
 
     return parser

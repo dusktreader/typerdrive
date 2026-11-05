@@ -32,7 +32,7 @@ class TestRequestX:
 
         mock_route = respx_mock.get("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
-                status_code=200, json=dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+                status_code=200, json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
             )
         )
 
@@ -40,7 +40,7 @@ class TestRequestX:
 
         assert mock_route.called
         assert isinstance(response, dict)
-        assert response == dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+        assert response == {"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
 
     def test_request_x__with_param_obj(self, respx_mock: respx.MockRouter):
         client = TyperdriveClient(base_url="https://the.force.io")
@@ -48,13 +48,13 @@ class TestRequestX:
         mock_route = respx_mock.get("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
                 status_code=200,
-                json=dict(speed="quicker", difficulty="easier", attractiveness="seductive"),
+                json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"},
             )
         )
         client.request_x("GET", "the-dark-side", param_obj=QueryParams(anger=True, fear=True, aggression=True))
 
         assert mock_route.called
-        assert dict(mock_route.calls.last.request.url.params) == dict(anger="true", fear="true", aggression="true")
+        assert dict(mock_route.calls.last.request.url.params) == {"anger": "true", "fear": "true", "aggression": "true"}
 
     def test_request_x__raises_exception_when_params_provided_with_param_obj(self, respx_mock: respx.MockRouter):
         client = TyperdriveClient(base_url="https://the.force.io")
@@ -64,7 +64,7 @@ class TestRequestX:
             client.request_x(
                 "GET",
                 "the-dark-side",
-                params=dict(anger=True),
+                params={"anger": True},
                 param_obj=QueryParams(anger=True, fear=True, aggression=True),
             )
 
@@ -85,18 +85,18 @@ class TestRequestX:
         mock_route = respx_mock.post("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
                 status_code=200,
-                json=dict(speed="quicker", difficulty="easier", attractiveness="seductive"),
+                json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"},
             )
         )
         client.request_x("POST", "the-dark-side", body_obj=RequestBody(anger=True, fear=True, aggression=True))
 
         assert mock_route.called
         assert mock_route.calls.last.request.headers["Content-Type"] == "application/json"
-        assert json.loads(mock_route.calls.last.request.content.decode("utf-8")) == dict(
-            anger=True,
-            fear=True,
-            aggression=True,
-        )
+        assert json.loads(mock_route.calls.last.request.content.decode("utf-8")) == {
+            "anger": True,
+            "fear": True,
+            "aggression": True,
+        }
 
     def test_request_x__raises_exception_when_body_provided_with_body_obj(self, respx_mock: respx.MockRouter):
         client = TyperdriveClient(base_url="https://the.force.io")
@@ -104,14 +104,14 @@ class TestRequestX:
         mock_route = respx_mock.post("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
                 status_code=200,
-                json=dict(speed="quicker", difficulty="easier", attractiveness="seductive"),
+                json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"},
             )
         )
         with pytest.raises(ClientError, match="'data', 'json' and 'content' not allowed"):
             client.request_x(
                 "POST",
                 "the-dark-side",
-                json=dict(anger=True),
+                json={"anger": True},
                 body_obj=RequestBody(anger=True, fear=True, aggression=True),
             )
 
@@ -178,7 +178,7 @@ class TestRequestX:
 
         mock_route = respx_mock.get("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
-                status_code=200, json=dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+                status_code=200, json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
             )
         )
 
@@ -186,14 +186,14 @@ class TestRequestX:
 
         assert mock_route.called
         assert isinstance(response, dict)
-        assert response == dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+        assert response == {"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
 
     def test_request_x__deserializes_to_response_model_if_provided(self, respx_mock: respx.MockRouter):
         client = TyperdriveClient(base_url="https://the.force.io")
 
         mock_route = respx_mock.get("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
-                status_code=200, json=dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+                status_code=200, json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
             )
         )
 
@@ -213,7 +213,7 @@ class TestRequestX:
 
         mock_route = respx_mock.get("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
-                status_code=200, json=dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+                status_code=200, json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
             )
         )
 
@@ -229,7 +229,7 @@ class TestGetX:
 
         mock_route = respx_mock.get("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
-                status_code=200, json=dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+                status_code=200, json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
             )
         )
 
@@ -250,7 +250,7 @@ class TestPostX:
 
         mock_route = respx_mock.post("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
-                status_code=200, json=dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+                status_code=200, json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
             )
         )
 
@@ -271,7 +271,7 @@ class TestPutX:
 
         mock_route = respx_mock.put("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
-                status_code=200, json=dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+                status_code=200, json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
             )
         )
 
@@ -292,7 +292,7 @@ class TestPatchX:
 
         mock_route = respx_mock.patch("https://the.force.io/the-dark-side").mock(
             return_value=httpx.Response(
-                status_code=200, json=dict(speed="quicker", difficulty="easier", attractiveness="seductive")
+                status_code=200, json={"speed": "quicker", "difficulty": "easier", "attractiveness": "seductive"}
             )
         )
 

@@ -13,7 +13,8 @@ from rich.console import Group, RenderableType
 from rich.table import Table
 
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config
-from typerdrive.format import pretty_field_info
+from typerdrive.format import pretty_annotation, pretty_field_info
+from typerdrive.model_parser import is_model_collection, is_model_type
 from typerdrive.settings.exceptions import (
     SettingsDisplayError,
     SettingsInitError,
@@ -186,8 +187,8 @@ class SettingsManager:
             annotation = SettingsDisplayError.enforce_defined(
                 field_info.annotation, f"The field info annotation for {field_info} was not defined!"
             )
-            field_type: str = f"{italic_}{annotation.__name__}{_italic}"
-            if issubclass(annotation, BaseModel):
+            field_type: str = f"{italic_}{pretty_annotation(annotation)}{_italic}"
+            if is_model_type(annotation) or is_model_collection(annotation):
                 field_type = f"{blue_}{field_type}*{_blue}"
                 nested.append(pretty_field_info(field_info))
             values_table.add_row(dasherize(field_name), field_type, "->", field_string)

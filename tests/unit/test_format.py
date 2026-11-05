@@ -3,7 +3,8 @@ import snick
 from pytest_mock import MockerFixture
 
 from typerdrive.config import TyperdriveConfig
-from typerdrive.format import simple_message, status_message, terminal_message, _to_clipboard
+from typerdrive.exceptions import IntegrationError
+from typerdrive.format import simple_message, status_message, terminal_message
 
 
 def compare_capsys_output(capsys: pytest.CaptureFixture[str], expected_text: str, use_stderr: bool = False):
@@ -16,22 +17,6 @@ def compare_capsys_output(capsys: pytest.CaptureFixture[str], expected_text: str
     computed_text = snick.strip_ansi_escape_sequences(computed_text)
     expected_text = snick.dedent(expected_text)
     assert computed_text == expected_text
-
-
-class TestToClipboard:
-    def test__sends_text_to_clipboard(self, mocker: MockerFixture):
-        mock_copy = mocker.patch("typerdrive.format.pyperclip.copy")
-        message = "Hello, world!"
-        assert _to_clipboard(message)
-        mock_copy.assert_called_once_with(message)
-
-    def test__returns_false_on_copy_fail(self, mocker: MockerFixture, caplog: pytest.LogCaptureFixture):
-        mock_copy = mocker.patch("typerdrive.format.pyperclip.copy")
-        mock_copy.side_effect = RuntimeError("Boom!")
-        message = "Hello, world!"
-        assert not _to_clipboard(message)
-        mock_copy.assert_called_once_with(message)
-        assert "Could not copy letter to clipboard: Boom!" in caplog.text
 
 
 class TestTerminalMessage:
@@ -180,13 +165,36 @@ class TestTerminalMessage:
             use_stderr=True,
         )
 
-    def test__sends_text_to_clipboard(self, mocker: MockerFixture):
-        mock__to_clipboard = mocker.patch("typerdrive.format._to_clipboard")
-        mock__to_clipboard.return_value = True
+    def test__shows_clipboard_success_in_footer(self, mocker: MockerFixture, capsys: pytest.CaptureFixture[str]):
+        mock_send = mocker.patch("typerdrive.format.send_to_clipboard")
         message = "Hello, world!"
         terminal_message(message, to_clipboard=True)
 
-        mock__to_clipboard.assert_called_once_with(message)
+        mock_send.assert_called_once_with(message)
+        output = snick.strip_ansi_escape_sequences(capsys.readouterr().out)
+        assert "Copied to clipboard!" in output
+
+    def test__appends_clipboard_success_to_existing_footer(
+        self, mocker: MockerFixture, capsys: pytest.CaptureFixture[str]
+    ):
+        mocker.patch("typerdrive.format.send_to_clipboard")
+        terminal_message("Hello, world!", footer="Existing footer", to_clipboard=True)
+
+        output = snick.strip_ansi_escape_sequences(capsys.readouterr().out)
+        assert "Existing footer -- Copied to clipboard!" in output
+
+    def test__shows_clipboard_failure_in_footer(self, mocker: MockerFixture, capsys: pytest.CaptureFixture[str]):
+        mocker.patch("typerdrive.format.send_to_clipboard", side_effect=IntegrationError("Boom!"))
+        terminal_message("Hello, world!", footer="Existing footer", to_clipboard=True)
+
+        output = snick.strip_ansi_escape_sequences(capsys.readouterr().out)
+        assert "Could not copy to clipboard" in output
+        assert "Existing footer" not in output
+
+    def test__propagates_unhandled_clipboard_errors(self, mocker: MockerFixture):
+        mocker.patch("typerdrive.format.send_to_clipboard", side_effect=RuntimeError("Boom!"))
+        with pytest.raises(RuntimeError, match="Boom!"):
+            terminal_message("Hello, world!", to_clipboard=True)
 
 
 class TestSimpleMessage:
@@ -251,12 +259,11 @@ class TestSimpleMessage:
         )
 
     def test__sends_text_to_clipboard(self, mocker: MockerFixture):
-        mock__to_clipboard = mocker.patch("typerdrive.format._to_clipboard")
-        mock__to_clipboard.return_value = True
+        mock_send = mocker.patch("typerdrive.format.send_to_clipboard")
         message = "Hello, world!"
         simple_message(message, to_clipboard=True)
 
-        mock__to_clipboard.assert_called_once_with(message)
+        mock_send.assert_called_once_with(message)
 
     def test__no_padding_when_disabled(self, capsys: pytest.CaptureFixture[str]):
         message = "Hello, world!"

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import typer
 from auto_name_enum import AutoNameEnum, LowerCaseMixin, auto
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typerdrive.constants import ExitCode
 from typerdrive.settings.commands import add_bind, add_reset, add_settings_subcommand, add_show, add_unset, add_update
 
@@ -48,12 +48,12 @@ class TestBind:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(
-            name="hutt",
-            planet="nal hutta",
-            is_humanoid=False,
-            alignment="neutral",
-        )
+        assert data == {
+            "name": "hutt",
+            "planet": "nal hutta",
+            "is_humanoid": False,
+            "alignment": "neutral",
+        }
 
     def test_bind__raises_exception_if_final_config_is_not_valid(self):
         cli = typer.Typer()
@@ -121,13 +121,13 @@ class TestBind:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(
-            name="jawa",
-            planet=dict(
-                name="tatooine",
-                climate="desert",
-            ),
-        )
+        assert data == {
+            "name": "jawa",
+            "planet": {
+                "name": "tatooine",
+                "climate": "desert",
+            },
+        }
 
     def test_bind__with_multiple_nested_pydantic_models(self, fake_settings_path: Path):
         cli = typer.Typer()
@@ -164,17 +164,52 @@ class TestBind:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(
-            name="jawa",
-            planet=dict(
-                name="tatooine",
-                climate="desert",
-            ),
-            coloration=dict(
-                eyes="yellow",
-                hair="black",
-            ),
+        assert data == {
+            "name": "jawa",
+            "planet": {
+                "name": "tatooine",
+                "climate": "desert",
+            },
+            "coloration": {
+                "eyes": "yellow",
+                "hair": "black",
+            },
+        }
+
+    def test_bind__with_nested_models_in_supported_collections(self, fake_settings_path: Path):
+        cli = typer.Typer()
+
+        class Planet(BaseModel):
+            model_config = ConfigDict(frozen=True)
+
+            name: str
+
+        class Settings(BaseModel):
+            planets: list[Planet]
+            planet_set: set[Planet]
+            planet_frozenset: frozenset[Planet]
+            planet_tuple: tuple[Planet, ...]
+            planets_by_name: dict[str, Planet]
+
+        add_bind(cli, Settings)
+        match_output(
+            cli,
+            '--planets=[{"name":"tatooine"}]',
+            '--planet-set=[{"name":"naboo"}]',
+            '--planet-frozenset=[{"name":"mustafar"}]',
+            '--planet-tuple=[{"name":"jakku"}]',
+            '--planets-by-name={"home":{"name":"tatooine"}}',
+            expected_pattern=[f"saved to {str(fake_settings_path)[:40]}"],
+            prog_name="test",
         )
+
+        assert json.loads(fake_settings_path.read_text()) == {
+            "planets": [{"name": "tatooine"}],
+            "planet_set": [{"name": "naboo"}],
+            "planet_frozenset": [{"name": "mustafar"}],
+            "planet_tuple": [{"name": "jakku"}],
+            "planets_by_name": {"home": {"name": "tatooine"}},
+        }
 
     def test_bind__with_auto_name_enum_default(self, fake_settings_path: Path):
         class Settings(BaseModel):
@@ -198,7 +233,7 @@ class TestBind:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(name="jawa", faction="rebel")
+        assert data == {"name": "jawa", "faction": "rebel"}
 
 
 class TestUpdate:
@@ -223,12 +258,35 @@ class TestUpdate:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(
-            name="hutt",
-            planet="tatooine",
-            is_humanoid=True,
-            alignment="neutral",
+        assert data == {
+            "name": "hutt",
+            "planet": "tatooine",
+            "is_humanoid": True,
+            "alignment": "neutral",
+        }
+
+    def test_update__preserves_omitted_boolean_settings(self, fake_settings_path: Path):
+        fake_settings_path.write_text(
+            json.dumps(
+                {
+                    "name": "jawa",
+                    "planet": "tatooine",
+                    "is_humanoid": False,
+                    "alignment": "neutral",
+                }
+            )
         )
+        cli = typer.Typer()
+        add_update(cli, DefaultSettingsModel)
+
+        match_output(
+            cli,
+            "--name=hutt",
+            expected_pattern=["is-humanoid.*False"],
+            prog_name="test",
+        )
+
+        assert json.loads(fake_settings_path.read_text())["is_humanoid"] is False
 
     def test_update__does_not_fail_with_invalid_settings(self, fake_settings_path: Path):
         cli = typer.Typer()
@@ -294,24 +352,59 @@ class TestUpdate:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(
-            nested=dict(
-                name="jawa",
-                planet="tatooine",
-            ),
+        assert data == {
+            "nested": {
+                "name": "jawa",
+                "planet": "tatooine",
+            },
+        }
+
+    def test_update__with_nested_models_in_supported_collections(self, fake_settings_path: Path):
+        cli = typer.Typer()
+
+        class Planet(BaseModel):
+            model_config = ConfigDict(frozen=True)
+
+            name: str
+
+        class Settings(BaseModel):
+            planets: list[Planet]
+            planet_set: set[Planet]
+            planet_frozenset: frozenset[Planet]
+            planet_tuple: tuple[Planet, ...]
+            planets_by_name: dict[str, Planet]
+
+        add_update(cli, Settings)
+        match_output(
+            cli,
+            '--planets=[{"name":"tatooine"}]',
+            '--planet-set=[{"name":"naboo"}]',
+            '--planet-frozenset=[{"name":"mustafar"}]',
+            '--planet-tuple=[{"name":"jakku"}]',
+            '--planets-by-name={"home":{"name":"tatooine"}}',
+            expected_pattern=[f"saved to {str(fake_settings_path)[:40]}"],
+            prog_name="test",
         )
+
+        assert json.loads(fake_settings_path.read_text()) == {
+            "planets": [{"name": "tatooine"}],
+            "planet_set": [{"name": "naboo"}],
+            "planet_frozenset": [{"name": "mustafar"}],
+            "planet_tuple": [{"name": "jakku"}],
+            "planets_by_name": {"home": {"name": "tatooine"}},
+        }
 
 
 class TestUnset:
     def test_unset__unsets_fields_with_cli_args(self, fake_settings_path: Path):
         fake_settings_path.write_text(
             json.dumps(
-                dict(
-                    name="pyke",
-                    planet="oba diah",
-                    is_humanoid=True,
-                    alignment="evil",
-                ),
+                {
+                    "name": "pyke",
+                    "planet": "oba diah",
+                    "is_humanoid": True,
+                    "alignment": "evil",
+                },
             ),
         )
 
@@ -335,22 +428,22 @@ class TestUnset:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(
-            name="pyke",
-            planet="oba diah",
-            is_humanoid=True,
-            alignment="neutral",
-        )
+        assert data == {
+            "name": "pyke",
+            "planet": "oba diah",
+            "is_humanoid": True,
+            "alignment": "neutral",
+        }
 
     def test_unset__does_not_fail_with_invalid_settings(self, fake_settings_path: Path):
         fake_settings_path.write_text(
             json.dumps(
-                dict(
-                    name="pyke",
-                    planet="oba diah",
-                    is_humanoid=True,
-                    alignment="evil",
-                ),
+                {
+                    "name": "pyke",
+                    "planet": "oba diah",
+                    "is_humanoid": True,
+                    "alignment": "evil",
+                },
             ),
         )
 
@@ -435,12 +528,12 @@ class TestReset:
     def test_reset__resets_all_fields_to_defaults(self, fake_settings_path: Path):
         fake_settings_path.write_text(
             json.dumps(
-                dict(
-                    name="pyke",
-                    planet="oba diah",
-                    is_humanoid=True,
-                    alignment="evil",
-                ),
+                {
+                    "name": "pyke",
+                    "planet": "oba diah",
+                    "is_humanoid": True,
+                    "alignment": "evil",
+                },
             ),
         )
 
@@ -467,10 +560,10 @@ class TestReset:
 
         assert fake_settings_path.exists()
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(
-            is_humanoid=True,
-            alignment="neutral",
-        )
+        assert data == {
+            "is_humanoid": True,
+            "alignment": "neutral",
+        }
 
     def test_reset__help_text(self):
         cli = typer.Typer()
@@ -586,7 +679,7 @@ class TestSecretFields:
         )
 
         data = json.loads(fake_settings_path.read_text())
-        assert data == dict(name="han", api_key="s3cr3t", token="tok123")
+        assert data == {"name": "han", "api_key": "s3cr3t", "token": "tok123"}
 
     def test_bind__secretstr_default_does_not_crash_registration(self):
         """A SecretStr field with a default value must not crash CLI registration."""
@@ -602,7 +695,7 @@ class TestSecretFields:
 
     def test_update__saves_updated_secret_as_plain_text_on_disk(self, fake_settings_path: Path):
         """Updating a single secret field must persist the new plain-text value while leaving others intact."""
-        fake_settings_path.write_text(json.dumps(dict(name="han", api_key="old-key", token="old-tok")))
+        fake_settings_path.write_text(json.dumps({"name": "han", "api_key": "old-key", "token": "old-tok"}))
 
         cli = typer.Typer()
         add_update(cli, SecretFieldsModel)

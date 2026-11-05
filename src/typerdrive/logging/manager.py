@@ -5,10 +5,13 @@ Provide a class for managing the `typerdrive` logging feature.
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Optional
 
 from loguru import logger
 from rich.console import Console
+
+if TYPE_CHECKING:
+    from loguru import HandlerConfig
 
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config
 from typerdrive.dirs import clear_directory, show_directory
@@ -31,26 +34,25 @@ class LoggingManager:
         self.log_dir = config.log_dir
         self.log_file = config.log_dir / config.log_file_name
 
-        handlers: list[dict[str, Any]] = [
-            dict(
-                sink=str(self.log_file),
-                level="DEBUG",
-                rotation=config.log_file_rotation,
-                retention=config.log_file_retention,
-                compression=config.log_file_compression,
-            ),
+        handlers: list[HandlerConfig] = [
+            {
+                "sink": str(self.log_file),
+                "level": "DEBUG",
+                "rotation": config.log_file_rotation,
+                "retention": config.log_file_retention,
+                "compression": config.log_file_compression,
+            },
         ]
         if verbose:
             handlers.append(
-                dict(
-                    sink=sys.stdout,
-                    level="DEBUG",
-                    format="<green>{time:HH:mm:ss}</green> | <level>{level}</level> | <level>{message}</level>"
-                ),
+                {
+                    "sink": sys.stdout,
+                    "level": "DEBUG",
+                    "format": "<green>{time:HH:mm:ss}</green> | <level>{level}</level> | <level>{message}</level>"
+                },
             )
 
-        # Having a hell of a time getting the typing right for `configure()`
-        logger.configure(handlers=handlers)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
+        logger.configure(handlers=handlers)
         logger.enable("typerdrive")
 
     def show(self, *, follow: bool = False, lines: Optional[int] = None):

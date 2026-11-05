@@ -134,12 +134,12 @@ def demo_06__unset():
     settings_path = Path.home() / ".local/share/demo_06__unset/settings.json"
     settings_path.write_text(
         json.dumps(
-            dict(
-                name="hutt",
-                planet="nal hutta",
-                is_humanoid=False,
-                alignment="evil",
-            ),
+            {
+                "name": "hutt",
+                "planet": "nal hutta",
+                "is_humanoid": False,
+                "alignment": "evil",
+            },
         ),
     )
 
@@ -206,12 +206,12 @@ def demo_09__reset():
     settings_path = Path.home() / ".local/share/demo_09__reset/settings.json"
     settings_path.write_text(
         json.dumps(
-            dict(
-                name="hutt",
-                planet="nal hutta",
-                is_humanoid=False,
-                alignment="evil",
-            ),
+            {
+                "name": "hutt",
+                "planet": "nal hutta",
+                "is_humanoid": False,
+                "alignment": "evil",
+            },
         ),
     )
 

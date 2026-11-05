@@ -5,6 +5,7 @@ Provide a specialized HTTP client for making requests to APIs.
 from typing import Any
 
 import pydantic
+import snick
 from httpx import URL, Client, RequestError
 from loguru import logger
 
@@ -87,12 +88,19 @@ class TyperdriveClient(Client):
 
         if expected_status is not None:
             logger.debug(f"Checking response for {expected_status=}")
+            err_message = snick.unwrap(
+                f"""
+                Got an unexpected status code:
+                Expected {expected_status},
+                got {response.status_code}
+                --
+                {response.reason_phrase}",
+                """
+            )
             ClientError.require_condition(
                 expected_status == response.status_code,
-                "Got an unexpected status code: Expected {}, got {} -- {}".format(
-                    expected_status, response.status_code, response.reason_phrase
-                ),
-                raise_kwargs=dict(details=response.text),
+                err_message,
+                raise_kwargs={"details": response.text},
             )
 
         if not expect_response:

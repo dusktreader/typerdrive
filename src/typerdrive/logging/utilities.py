@@ -3,6 +3,7 @@ Provide utility functions useful for logging.
 """
 
 from traceback import format_tb
+
 from buzz import DoExceptParams
 from loguru import logger
 

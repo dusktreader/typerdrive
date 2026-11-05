@@ -11,8 +11,8 @@ cli = typer.Typer()
 add_cache_subcommand(cli)
 set_typerdrive_config(app_name="cache-commands-example")
 
-speeches = dict(
-    yoda=unwrap(
+speeches = {
+    "yoda": unwrap(
         """
         Size matters not. Look at me. Judge me by my size, do you? Hmm? Hmm. And well you should not. For my ally is the
         Force, and a powerful ally it is. Life creates it, makes it grow. Its energy surrounds us and binds us. Luminous
@@ -20,7 +20,7 @@ speeches = dict(
         rock, everywhere, yes. Even between the land and the ship.
         """
     ),
-    leia=unwrap(
+    "leia": unwrap(
         """
         General Kenobi. Years ago you served my father in the Clone Wars. Now he begs you to help him in his struggle
         against the Empire. I regret that I am unable to present my father's request to you in person, but my ship has
@@ -30,14 +30,14 @@ speeches = dict(
         hour. Help me, Obi-Wan Kenobi. You're my only hope.
         """
     ),
-    han=unwrap(
+    "han": unwrap(
         """
         Kid, I've flown from one side of this galaxy to the other; I've seen a lot of strange stuff. But I've never seen
         anything to make me believe that there's one all-powerful Force controlling everything. There's no mystical
         energy field that controls my destiny. Anyway, it's all a lot of simple tricks and nonsense.
         """
     ),
-)
+}
 
 
 @cli.command()

@@ -42,11 +42,11 @@ def demo_1__attach_cache__storing_data():
         # Store dict with group
         manager.set(
             "hutt/jabba",
-            dict(
-                full_name="Jabba Desilijic Tiure",
-                age=604,
-                quote="beeska chata wnow kong bantha poodoo!",
-            ),
+            {
+                "full_name": "Jabba Desilijic Tiure",
+                "age": 604,
+                "quote": "beeska chata wnow kong bantha poodoo!",
+            },
             group="characters",
         )
 
@@ -66,11 +66,11 @@ def demo_2__attach_cache__loading_data():
     manager.set("ewok", b"Yub Nub!")
     manager.set(
         "hutt/jabba",
-        dict(
-            full_name="Jabba Desilijic Tiure",
-            age=604,
-            quote="beeska chata wnow kong bantha poodoo!",
-        ),
+        {
+            "full_name": "Jabba Desilijic Tiure",
+            "age": 604,
+            "quote": "beeska chata wnow kong bantha poodoo!",
+        },
     )
 
     cli = typer.Typer()
@@ -140,11 +140,11 @@ def demo_4__attach_cache__access_through_context():
         manager.set("ewok", b"Yub Nub!")
         manager.set(
             "hutt/jabba",
-            dict(
-                full_name="Jabba Desilijic Tiure",
-                age=604,
-                quote="beeska chata wnow kong bantha poodoo!",
-            ),
+            {
+                "full_name": "Jabba Desilijic Tiure",
+                "age": 604,
+                "quote": "beeska chata wnow kong bantha poodoo!",
+            },
         )
 
     cli()

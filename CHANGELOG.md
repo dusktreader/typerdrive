@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 Versioning](http://semver.org/).
 
 
+## v0.15.0 - 2026-11-05
+
+- Added glob pattern filtering to recursive file listings, including `**` zero-or-more-directory matching
+- Added pattern-matching examples and an interactive demo
+
+
 ## v0.14.0 - 2026-11-05
 
 - Added recursive file listing with storage-root-relative keys and optional handling for missing directories

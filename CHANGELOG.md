@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 Versioning](http://semver.org/).
 
 
+## v0.14.0 - 2026-11-05
+
+- Added recursive file listing with storage-root-relative keys and optional handling for missing directories
+- Excluded symlinks from directory displays and file listings, and rejected symlink paths in file storage
+- Made directory clearing unlink symlinks without following them
+- Added a file listing example and interactive demo
+
+
 ## v0.13.0 - 2026-11-04
 
 - Added settings support for nested models in list, set, frozenset, tuple, and dict fields

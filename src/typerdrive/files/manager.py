@@ -8,6 +8,8 @@ from typing import Any
 
 from loguru import logger
 
+from typerdrive.config import TyperdriveConfig, get_typerdrive_config
+from typerdrive.dirs import is_child
 from typerdrive.files.exceptions import (
     FilesClearError,
     FilesError,
@@ -15,8 +17,6 @@ from typerdrive.files.exceptions import (
     FilesLoadError,
     FilesStoreError,
 )
-from typerdrive.config import TyperdriveConfig, get_typerdrive_config
-from typerdrive.dirs import is_child
 
 
 class FilesManager:
@@ -53,41 +53,86 @@ class FilesManager:
         if isinstance(path, str):
             path = Path(path)
         full_path = self.files_dir / path
+        resolved_files_dir = self.files_dir.resolve()
+        try:
+            relative_path = full_path.relative_to(self.files_dir)
+            component_root = self.files_dir
+        except ValueError:
+            try:
+                relative_path = full_path.relative_to(resolved_files_dir)
+                component_root = resolved_files_dir
+            except ValueError:
+                relative_path = None
+                component_root = self.files_dir
+        if relative_path is not None:
+            component_path = component_root
+            for part in relative_path.parts:
+                if part in ("", "."):
+                    continue
+                component_path /= part
+                FilesError.require_condition(
+                    not component_path.is_symlink(),
+                    f"File path {str(path)} contains a symlink component at {str(component_path)}",
+                )
         full_path = full_path.resolve()
         FilesError.require_condition(
-            is_child(full_path, self.files_dir),
+            is_child(full_path, resolved_files_dir),
             f"Resolved file path {str(full_path)} is not within files directory {str(self.files_dir)}",
         )
         FilesError.require_condition(
-            full_path != self.files_dir,
+            full_path != resolved_files_dir,
             f"Resolved file path {str(full_path)} must not be the same as files directory {str(self.files_dir)}",
         )
         if mkdir:
             full_path.parent.mkdir(parents=True, exist_ok=True)
         return full_path
 
-    def list_items(self, path: Path | str) -> list[str]:
+    def list_items(self, path: Path | str, recursive: bool = False, missing_ok: bool = False) -> list[str]:
         """
-        List files at a given path.
+        List files in a directory below the configured files directory.
 
-        Items will be all non-directory entries in the given path.
+        Nonrecursive listing returns immediate file names. Recursive listing returns keys relative to the configured files
+        directory, including files nested below the requested directory. Symlink entries are omitted and never traversed.
+        The configured files directory itself cannot be listed.
 
-        If the path doesn't exist or is not a directory, an exception will be raised.
+        Parameters:
+            path: The directory key to list
+            recursive: If set, include files from nested directories
+            missing_ok: If set, return an empty list when the requested directory is missing
+
+        Raises:
+            FilesError: If the requested directory is missing and missing_ok is false, is not a directory, is unreadable,
+                is the configured root, or contains a symlink component
         """
         full_path = self.resolve_path(path)
-        FilesError.require_condition(
-            full_path.exists(),
-            f"Resolved file path {str(full_path)} does not exist",
-        )
+        if not full_path.exists():
+            if missing_ok:
+                return []
+            FilesError.require_condition(
+                False,
+                f"Resolved file path {str(full_path)} does not exist",
+            )
         FilesError.require_condition(
             full_path.is_dir(),
             f"Resolved file path {str(full_path)} is not a directory",
         )
         items: list[str] = []
-        for path in full_path.iterdir():
-            if path.is_dir():
-                continue
-            items.append(str(path.name))
+
+        def collect(directory: Path):
+            with FilesError.handle_errors(f"Failed to list directory {str(directory)}"):
+                entries = list(directory.iterdir())
+            for entry in entries:
+                if entry.is_symlink():
+                    continue
+                if entry.is_dir():
+                    if recursive:
+                        collect(entry)
+                elif recursive:
+                    items.append(entry.relative_to(self.files_dir.resolve()).as_posix())
+                else:
+                    items.append(entry.name)
+
+        collect(full_path)
         return items
 
     def store_bytes(self, data: bytes, path: Path | str, mode: int | None = None):

@@ -147,3 +147,39 @@ def demo_5__attach_files__access_through_context():
         print("[green]Files stored using context-retrieved manager![/green]")
 
     cli()
+
+
+def demo_6__attach_files__recursive_listing():
+    """
+    This function demonstrates recursively listing files in a directory
+    and loading them using the returned file keys. It also shows how to
+    return an empty list when the directory does not exist.
+    """
+
+    manager = FilesManager()
+    manager.store_text("Quarterly report", "reports/2025/q1.txt")
+    manager.store_text("Planning notes", "reports/2025/planning/notes.txt")
+    manager.store_text("Reports index", "reports/index.txt")
+
+    cli = typer.Typer()
+
+    @cli.command()
+    @attach_files()
+    def list_reports(ctx: typer.Context, manager: FilesManager):
+        immediate_items = sorted(manager.list_items("reports"))
+        recursive_items = sorted(manager.list_items("reports", recursive=True))
+        missing_items = manager.list_items("reports/archive", recursive=True, missing_ok=True)
+
+        print("Immediate items:")
+        for key in immediate_items:
+            print(f"  {key}: {manager.load_text(f'reports/{key}')}")
+        print()
+        print("Recursive items:")
+        for key in recursive_items:
+            print(f"  {key}: {manager.load_text(key)}")
+        print()
+        print("Missing items:")
+        for key in missing_items:
+            print(f"  {key}")
+
+    cli()

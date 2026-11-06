@@ -36,10 +36,32 @@ Feature: File storage management via CLI
     And the output contains "debug"
 
   Scenario: Files show command displays stored files
-    Given the file "quotes/yoda.txt" contains pre-stored text "Do or do not"
+    Given the file "root.txt" contains pre-stored text "Stay"
+    And the file "quotes/yoda.txt" contains pre-stored text "Do or do not"
     When I run the files show command
     Then the command succeeds
+    And the output contains "Current files"
+    And the output contains the configured files directory
+    And the output contains "root.txt"
+    And the output contains "quotes"
     And the output contains "yoda.txt"
+    And the output contains "Storing 16 Bytes in 2 files"
+
+  Scenario: Files show command omits symlinks
+    Given the file "root.txt" contains pre-stored text "Stay"
+    And the file "quotes/yoda.txt" contains pre-stored text "Do or do not"
+    And the files directory contains symlinks to external targets
+    When I run the files show command
+    Then the command succeeds
+    And the output contains "Current files"
+    And the output contains the configured files directory
+    And the output contains "root.txt"
+    And the output contains "quotes"
+    And the output contains "yoda.txt"
+    And the output contains "Storing 16 Bytes in 2 files"
+    And the output does not contain "linked.txt"
+    And the output does not contain "linked-dir"
+    And the output does not contain "target-only.txt"
 
   Scenario: Files manager is accessible via context
     When a command accesses the files manager through the typer context

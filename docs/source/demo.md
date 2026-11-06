@@ -38,7 +38,7 @@ If you want to run the demo but not include its dependencies in your system pyth
 or an activated virtual environment, you can execute the demo with uv:
 
 ```bash
-uvx --from=typerdrive[demo] typerdrive-demo
+uvx --from='typerdrive[demo]' typerdrive-demo
 ```
 
 

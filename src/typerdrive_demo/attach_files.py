@@ -183,3 +183,26 @@ def demo_6__attach_files__recursive_listing():
             print(f"  {key}")
 
     cli()
+
+
+def demo_7__attach_files__list_items_with_patterns():
+    """
+    This function demonstrates filtering recursive listings with glob patterns.
+    A single-star pattern matches files directly in the requested directory,
+    while a double-star pattern also matches files in nested directories.
+    """
+
+    manager = FilesManager()
+    manager.store_text("Reports overview", "reports/index.md")
+    manager.store_text("Release notes", "reports/2025/release.md")
+    manager.store_text("Old report", "reports/archive/old.txt")
+
+    root_markdown = sorted(manager.list_items("reports", recursive=True, pattern="*.md"))
+    all_markdown = sorted(manager.list_items("reports", recursive=True, pattern="**/*.md"))
+
+    print("Markdown files directly in reports:")
+    for key in root_markdown:
+        print(f"  {key}")
+    print("Markdown files at any depth:")
+    for key in all_markdown:
+        print(f"  {key}")

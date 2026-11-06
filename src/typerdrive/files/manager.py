@@ -3,6 +3,8 @@ Provide a class for managing the `typerdrive` files feature.
 """
 
 import json
+from fnmatch import fnmatchcase
+from functools import cache
 from pathlib import Path
 from typing import Any
 
@@ -38,6 +40,33 @@ class FilesManager:
 
         with FilesInitError.handle_errors("Failed to initialize files storage"):
             self.files_dir.mkdir(parents=True, exist_ok=True)
+
+    @staticmethod
+    def matches_glob(path: str, pattern: str) -> bool:
+        """
+        Checks if a given path matches a supplied glob pattern.
+
+        Note:
+            Replace with `glob.translate` once Python 3.12 support is dropped; it is unavailable in Python 3.12.
+        """
+        path_parts = path.split("/")
+        pattern_parts = pattern.split("/")
+
+        @cache
+        def matches(path_index: int, pattern_index: int) -> bool:
+            if pattern_index == len(pattern_parts):
+                return path_index == len(path_parts)
+            if pattern_parts[pattern_index] == "**":
+                return matches(path_index, pattern_index + 1) or (
+                    path_index < len(path_parts) and matches(path_index + 1, pattern_index)
+                )
+            return (
+                path_index < len(path_parts)
+                and fnmatchcase(path_parts[path_index], pattern_parts[pattern_index])
+                and matches(path_index + 1, pattern_index + 1)
+            )
+
+        return matches(0, 0)
 
     def resolve_path(self, path: Path | str, mkdir: bool = False) -> Path:
         """
@@ -87,7 +116,13 @@ class FilesManager:
             full_path.parent.mkdir(parents=True, exist_ok=True)
         return full_path
 
-    def list_items(self, path: Path | str, recursive: bool = False, missing_ok: bool = False) -> list[str]:
+    def list_items(
+        self,
+        path: Path | str,
+        recursive: bool = False,
+        missing_ok: bool = False,
+        pattern: str | None = None,
+    ) -> list[str]:
         """
         List files in a directory below the configured files directory.
 
@@ -95,10 +130,16 @@ class FilesManager:
         directory, including files nested below the requested directory. Symlink entries are omitted and never traversed.
         The configured files directory itself cannot be listed.
 
+        A glob pattern filters files relative to the requested directory. Patterns support `*`, `?`, and bracket
+        expressions within path components, with `/` as the path separator. A `**` path component matches zero or more
+        directories, so `*.md.j2` matches only immediate files while `**/*.md.j2` also matches nested files. Wildcards
+        can match dot-prefixed names. Only one pattern is supported.
+
         Parameters:
             path: The directory key to list
             recursive: If set, include files from nested directories
             missing_ok: If set, return an empty list when the requested directory is missing
+            pattern: If set, include only files matching this glob pattern
 
         Raises:
             FilesError: If the requested directory is missing and missing_ok is false, is not a directory, is unreadable,
@@ -127,10 +168,14 @@ class FilesManager:
                 if entry.is_dir():
                     if recursive:
                         collect(entry)
-                elif recursive:
-                    items.append(entry.relative_to(self.files_dir.resolve()).as_posix())
                 else:
-                    items.append(entry.name)
+                    relative_path = entry.relative_to(full_path).as_posix()
+                    if pattern is not None and not self.matches_glob(relative_path, pattern):
+                        continue
+                    if recursive:
+                        items.append(entry.relative_to(self.files_dir.resolve()).as_posix())
+                    else:
+                        items.append(entry.name)
 
         collect(full_path)
         return items

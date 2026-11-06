@@ -294,14 +294,21 @@ print(f"Deleted: {deleted_path}")
 ```
 
 
-#### `list_items(path, recursive=False, missing_ok=False)`
+#### `list_items(path, recursive=False, missing_ok=False, pattern=None)`
 
-List files directly inside a directory or recursively below it.
+List files directly inside a directory or recursively below it, optionally filtering them with one glob pattern relative
+to the requested directory.
 
 **Parameters:**
 - `path` (Path | str): The directory key
 - `recursive` (bool): Include files nested below the requested directory
 - `missing_ok` (bool): Return an empty list when the requested directory is missing
+- `pattern` (str | None): Include only files matching this glob pattern
+
+Patterns support `*`, `?`, and bracket expressions within path components. Use `/` as the path separator. A `**` path
+component matches zero or more directories, so `*.md.j2` matches immediate files only and `**/*.md.j2` also matches
+nested files. Pattern matching does not make listing recursive; `recursive=False` still returns only immediate files.
+Wildcards can match dot-prefixed names. Only one pattern is supported.
 
 **Returns:**
 - `list[str]`: Immediate file names by default, or storage-root-relative keys when recursive
@@ -323,9 +330,10 @@ python examples/files/listing.py
 ```
 
 The single-command Typer app runs without a subcommand argument. It uses a temporary state directory that is deleted on
-exit, so it cannot overwrite application files. The immediate result is `['index.txt']`; the recursive result contains
-`reports/2025/planning/notes.txt`, `reports/2025/q1.txt`, and `reports/index.txt`. Recursive keys are relative to the
-configured files root, so they can be passed directly to `load_text`. The example sorts them for stable display;
+exit, so it cannot overwrite application files. The immediate listing contains `index.txt` and `index.md`; the recursive
+listing also includes files below `reports/2025`. With `pattern="*.md"`, recursive listing matches only
+`reports/index.md`; with `pattern="**/*.md"`, it also matches `reports/2025/release.md`. Recursive keys are relative to
+the configured files root, so they can be passed directly to `load_text`. The example sorts results for stable display;
 `list_items` does not guarantee result ordering. The missing-directory call returns `[]`; without `missing_ok=True`, it
 raises `FilesError`.
 

@@ -28,7 +28,7 @@ class TestFilesManager:
         manager = FilesManager()
         full_path = fake_files_path / test_path
         with pytest.raises(
-            FilesError, match=f"Resolved file path .* is not within files directory {str(fake_files_path)}"
+            FilesError, match=f"Resolved file path .* is not within files directory {fake_files_path!s}"
         ):
             manager.resolve_path(full_path)
 
@@ -38,7 +38,7 @@ class TestFilesManager:
         full_path = fake_files_path / test_path
         with pytest.raises(
             FilesError,
-            match=f"Resolved file path .* must not be the same as files directory {str(fake_files_path)}",
+            match=f"Resolved file path .* must not be the same as files directory {fake_files_path!s}",
         ):
             manager.resolve_path(full_path)
 
@@ -163,6 +163,41 @@ class TestFilesManager:
             "documents/nested/child.txt",
             "documents/nested/deep/grandchild.txt",
         }
+
+    def test_list_items__pattern_matches_from_requested_directory(self, fake_files_path: Path):
+        (fake_files_path / "documents/nested/deep").mkdir(parents=True)
+        (fake_files_path / "documents/root.md.j2").touch()
+        (fake_files_path / "documents/nested/nested.md.j2").touch()
+        (fake_files_path / "documents/nested/deep/deep.md.j2").touch()
+        (fake_files_path / "documents/root.yaml").touch()
+        manager = FilesManager()
+
+        assert set(manager.list_items("documents", recursive=True, pattern="*.md.j2")) == {
+            "documents/root.md.j2"
+        }
+        assert set(manager.list_items("documents", recursive=True, pattern="**/*.md.j2")) == {
+            "documents/root.md.j2",
+            "documents/nested/nested.md.j2",
+            "documents/nested/deep/deep.md.j2",
+        }
+        assert manager.list_items("documents", pattern="**/*.md.j2") == ["root.md.j2"]
+
+    def test_list_items__pattern_preserves_missing_and_symlink_behavior(
+        self, fake_files_path: Path, tmp_path: Path
+    ):
+        (fake_files_path / "documents").mkdir()
+        (fake_files_path / "documents/visible.txt").touch()
+        (fake_files_path / "documents/linked.txt").symlink_to(fake_files_path / "documents/visible.txt")
+        external = tmp_path / "external"
+        external.mkdir()
+        (external / "hidden.txt").touch()
+        (fake_files_path / "documents/linked-dir").symlink_to(external, target_is_directory=True)
+        manager = FilesManager()
+
+        assert manager.list_items("missing", pattern="**/*.txt", missing_ok=True) == []
+        with pytest.raises(FilesError, match="does not exist"):
+            manager.list_items("missing", pattern="**/*.txt")
+        assert manager.list_items("documents", recursive=True, pattern="**/*.txt") == ["documents/visible.txt"]
 
     @pytest.mark.parametrize("recursive", [False, True])
     def test_list_items__missing_ok(self, recursive: bool):

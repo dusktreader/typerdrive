@@ -683,10 +683,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#list_itemspath-recursivefalse-missing_okfalse" class="md-nav__link">
+  <a href="#list_itemspath-recursivefalse-missing_okfalse-patternnone" class="md-nav__link">
     <span class="md-ellipsis">
       
-        list_items(path, recursive=False, missing_ok=False)
+        list_items(path, recursive=False, missing_ok=False, pattern=None)
       
     </span>
   </a>
@@ -1542,10 +1542,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#list_itemspath-recursivefalse-missing_okfalse" class="md-nav__link">
+  <a href="#list_itemspath-recursivefalse-missing_okfalse-patternnone" class="md-nav__link">
     <span class="md-ellipsis">
       
-        list_items(path, recursive=False, missing_ok=False)
+        list_items(path, recursive=False, missing_ok=False, pattern=None)
       
     </span>
   </a>
@@ -1910,12 +1910,18 @@ parameter or via <code>get_files_manager()</code>.</p>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Deleted: </span><span class="si">{</span><span class="n">deleted_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Deleted: </span><span class="si">{</span><span class="n">deleted_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div></p>
-<h4 id="list_itemspath-recursivefalse-missing_okfalse"><code>list_items(path, recursive=False, missing_ok=False)</code></h4>
-<p>List files directly inside a directory or recursively below it.</p>
+<h4 id="list_itemspath-recursivefalse-missing_okfalse-patternnone"><code>list_items(path, recursive=False, missing_ok=False, pattern=None)</code></h4>
+<p>List files directly inside a directory or recursively below it, optionally filtering them with one glob pattern relative
+to the requested directory.</p>
 <p><strong>Parameters:</strong>
 - <code>path</code> (Path | str): The directory key
 - <code>recursive</code> (bool): Include files nested below the requested directory
-- <code>missing_ok</code> (bool): Return an empty list when the requested directory is missing</p>
+- <code>missing_ok</code> (bool): Return an empty list when the requested directory is missing
+- <code>pattern</code> (str | None): Include only files matching this glob pattern</p>
+<p>Patterns support <code>*</code>, <code>?</code>, and bracket expressions within path components. Use <code>/</code> as the path separator. A <code>**</code> path
+component matches zero or more directories, so <code>*.md.j2</code> matches immediate files only and <code>**/*.md.j2</code> also matches
+nested files. Pattern matching does not make listing recursive; <code>recursive=False</code> still returns only immediate files.
+Wildcards can match dot-prefixed names. Only one pattern is supported.</p>
 <p><strong>Returns:</strong>
 - <code>list[str]</code>: Immediate file names by default, or storage-root-relative keys when recursive</p>
 <p><strong>Raises:</strong>
@@ -1962,7 +1968,13 @@ parameter or via <code>get_files_manager()</code>.</p>
 <span class="normal"><a href="#__codelineno-12-38">38</a></span>
 <span class="normal"><a href="#__codelineno-12-39">39</a></span>
 <span class="normal"><a href="#__codelineno-12-40">40</a></span>
-<span class="normal"><a href="#__codelineno-12-41">41</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="normal"><a href="#__codelineno-12-41">41</a></span>
+<span class="normal"><a href="#__codelineno-12-42">42</a></span>
+<span class="normal"><a href="#__codelineno-12-43">43</a></span>
+<span class="normal"><a href="#__codelineno-12-44">44</a></span>
+<span class="normal"><a href="#__codelineno-12-45">45</a></span>
+<span class="normal"><a href="#__codelineno-12-46">46</a></span>
+<span class="normal"><a href="#__codelineno-12-47">47</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3"></a>
 </span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
@@ -1978,39 +1990,46 @@ parameter or via <code>get_files_manager()</code>.</p>
 </span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">store_text</span><span class="p">(</span><span class="s2">&quot;Q1 report&quot;</span><span class="p">,</span> <span class="s2">&quot;reports/2025/q1.txt&quot;</span><span class="p">)</span>
 </span><span id="__span-12-15"><a id="__codelineno-12-15" name="__codelineno-12-15"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">store_text</span><span class="p">(</span><span class="s2">&quot;Planning notes&quot;</span><span class="p">,</span> <span class="s2">&quot;reports/2025/planning/notes.txt&quot;</span><span class="p">)</span>
 </span><span id="__span-12-16"><a id="__codelineno-12-16" name="__codelineno-12-16"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">store_text</span><span class="p">(</span><span class="s2">&quot;Reports index&quot;</span><span class="p">,</span> <span class="s2">&quot;reports/index.txt&quot;</span><span class="p">)</span>
-</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17"></a>
-</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18"></a>    <span class="n">immediate_names</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_items</span><span class="p">(</span><span class="s2">&quot;reports&quot;</span><span class="p">)</span>
-</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19"></a>    <span class="n">recursive_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">list_items</span><span class="p">(</span><span class="s2">&quot;reports&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20"></a>
-</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Immediate names: </span><span class="si">{</span><span class="n">immediate_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recursive keys: </span><span class="si">{</span><span class="n">recursive_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23"></a>    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">recursive_keys</span><span class="p">:</span>
-</span><span id="__span-12-24"><a id="__codelineno-12-24" name="__codelineno-12-24"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">manager</span><span class="o">.</span><span class="n">load_text</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-12-25"><a id="__codelineno-12-25" name="__codelineno-12-25"></a>
-</span><span id="__span-12-26"><a id="__codelineno-12-26" name="__codelineno-12-26"></a>    <span class="n">missing_keys</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_items</span><span class="p">(</span><span class="s2">&quot;reports/archive&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="__span-12-27"><a id="__codelineno-12-27" name="__codelineno-12-27"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing directory: </span><span class="si">{</span><span class="n">missing_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-12-28"><a id="__codelineno-12-28" name="__codelineno-12-28"></a>
-</span><span id="__span-12-29"><a id="__codelineno-12-29" name="__codelineno-12-29"></a>
-</span><span id="__span-12-30"><a id="__codelineno-12-30" name="__codelineno-12-30"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-</span><span id="__span-12-31"><a id="__codelineno-12-31" name="__codelineno-12-31"></a>    <span class="n">original_config</span> <span class="o">=</span> <span class="n">get_typerdrive_config</span><span class="p">()</span>
-</span><span id="__span-12-32"><a id="__codelineno-12-32" name="__codelineno-12-32"></a>    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">state_home</span><span class="p">:</span>
-</span><span id="__span-12-33"><a id="__codelineno-12-33" name="__codelineno-12-33"></a>        <span class="n">set_typerdrive_config</span><span class="p">(</span><span class="n">app_name</span><span class="o">=</span><span class="s2">&quot;files-listing-example&quot;</span><span class="p">,</span> <span class="n">state_home</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">state_home</span><span class="p">))</span>
-</span><span id="__span-12-34"><a id="__codelineno-12-34" name="__codelineno-12-34"></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="__span-12-35"><a id="__codelineno-12-35" name="__codelineno-12-35"></a>            <span class="n">cli</span><span class="p">()</span>
-</span><span id="__span-12-36"><a id="__codelineno-12-36" name="__codelineno-12-36"></a>        <span class="k">finally</span><span class="p">:</span>
-</span><span id="__span-12-37"><a id="__codelineno-12-37" name="__codelineno-12-37"></a>            <span class="n">set_typerdrive_config</span><span class="p">(</span><span class="o">**</span><span class="n">original_config</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
-</span><span id="__span-12-38"><a id="__codelineno-12-38" name="__codelineno-12-38"></a>
-</span><span id="__span-12-39"><a id="__codelineno-12-39" name="__codelineno-12-39"></a>
-</span><span id="__span-12-40"><a id="__codelineno-12-40" name="__codelineno-12-40"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-</span><span id="__span-12-41"><a id="__codelineno-12-41" name="__codelineno-12-41"></a>    <span class="n">main</span><span class="p">()</span>
+</span><span id="__span-12-17"><a id="__codelineno-12-17" name="__codelineno-12-17"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">store_text</span><span class="p">(</span><span class="s2">&quot;Reports overview&quot;</span><span class="p">,</span> <span class="s2">&quot;reports/index.md&quot;</span><span class="p">)</span>
+</span><span id="__span-12-18"><a id="__codelineno-12-18" name="__codelineno-12-18"></a>    <span class="n">manager</span><span class="o">.</span><span class="n">store_text</span><span class="p">(</span><span class="s2">&quot;Release notes&quot;</span><span class="p">,</span> <span class="s2">&quot;reports/2025/release.md&quot;</span><span class="p">)</span>
+</span><span id="__span-12-19"><a id="__codelineno-12-19" name="__codelineno-12-19"></a>
+</span><span id="__span-12-20"><a id="__codelineno-12-20" name="__codelineno-12-20"></a>    <span class="n">immediate_names</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_items</span><span class="p">(</span><span class="s2">&quot;reports&quot;</span><span class="p">)</span>
+</span><span id="__span-12-21"><a id="__codelineno-12-21" name="__codelineno-12-21"></a>    <span class="n">recursive_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">list_items</span><span class="p">(</span><span class="s2">&quot;reports&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</span><span id="__span-12-22"><a id="__codelineno-12-22" name="__codelineno-12-22"></a>    <span class="n">immediate_markdown</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">list_items</span><span class="p">(</span><span class="s2">&quot;reports&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;*.md&quot;</span><span class="p">))</span>
+</span><span id="__span-12-23"><a id="__codelineno-12-23" name="__codelineno-12-23"></a>    <span class="n">all_markdown</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">manager</span><span class="o">.</span><span class="n">list_items</span><span class="p">(</span><span class="s2">&quot;reports&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;**/*.md&quot;</span><span class="p">))</span>
+</span><span id="__span-12-24"><a id="__codelineno-12-24" name="__codelineno-12-24"></a>
+</span><span id="__span-12-25"><a id="__codelineno-12-25" name="__codelineno-12-25"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Immediate names: </span><span class="si">{</span><span class="n">immediate_names</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-12-26"><a id="__codelineno-12-26" name="__codelineno-12-26"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Recursive keys: </span><span class="si">{</span><span class="n">recursive_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-12-27"><a id="__codelineno-12-27" name="__codelineno-12-27"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Immediate Markdown matches: </span><span class="si">{</span><span class="n">immediate_markdown</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-12-28"><a id="__codelineno-12-28" name="__codelineno-12-28"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Markdown matches at all depths: </span><span class="si">{</span><span class="n">all_markdown</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-12-29"><a id="__codelineno-12-29" name="__codelineno-12-29"></a>    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">recursive_keys</span><span class="p">:</span>
+</span><span id="__span-12-30"><a id="__codelineno-12-30" name="__codelineno-12-30"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">manager</span><span class="o">.</span><span class="n">load_text</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-12-31"><a id="__codelineno-12-31" name="__codelineno-12-31"></a>
+</span><span id="__span-12-32"><a id="__codelineno-12-32" name="__codelineno-12-32"></a>    <span class="n">missing_keys</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list_items</span><span class="p">(</span><span class="s2">&quot;reports/archive&quot;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-12-33"><a id="__codelineno-12-33" name="__codelineno-12-33"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing directory: </span><span class="si">{</span><span class="n">missing_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-12-34"><a id="__codelineno-12-34" name="__codelineno-12-34"></a>
+</span><span id="__span-12-35"><a id="__codelineno-12-35" name="__codelineno-12-35"></a>
+</span><span id="__span-12-36"><a id="__codelineno-12-36" name="__codelineno-12-36"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+</span><span id="__span-12-37"><a id="__codelineno-12-37" name="__codelineno-12-37"></a>    <span class="n">original_config</span> <span class="o">=</span> <span class="n">get_typerdrive_config</span><span class="p">()</span>
+</span><span id="__span-12-38"><a id="__codelineno-12-38" name="__codelineno-12-38"></a>    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">state_home</span><span class="p">:</span>
+</span><span id="__span-12-39"><a id="__codelineno-12-39" name="__codelineno-12-39"></a>        <span class="n">set_typerdrive_config</span><span class="p">(</span><span class="n">app_name</span><span class="o">=</span><span class="s2">&quot;files-listing-example&quot;</span><span class="p">,</span> <span class="n">state_home</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">state_home</span><span class="p">))</span>
+</span><span id="__span-12-40"><a id="__codelineno-12-40" name="__codelineno-12-40"></a>        <span class="k">try</span><span class="p">:</span>
+</span><span id="__span-12-41"><a id="__codelineno-12-41" name="__codelineno-12-41"></a>            <span class="n">cli</span><span class="p">()</span>
+</span><span id="__span-12-42"><a id="__codelineno-12-42" name="__codelineno-12-42"></a>        <span class="k">finally</span><span class="p">:</span>
+</span><span id="__span-12-43"><a id="__codelineno-12-43" name="__codelineno-12-43"></a>            <span class="n">set_typerdrive_config</span><span class="p">(</span><span class="o">**</span><span class="n">original_config</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+</span><span id="__span-12-44"><a id="__codelineno-12-44" name="__codelineno-12-44"></a>
+</span><span id="__span-12-45"><a id="__codelineno-12-45" name="__codelineno-12-45"></a>
+</span><span id="__span-12-46"><a id="__codelineno-12-46" name="__codelineno-12-46"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span id="__span-12-47"><a id="__codelineno-12-47" name="__codelineno-12-47"></a>    <span class="n">main</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Run the example from the repository root:</p>
 <div class="language-shell highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>python<span class="w"> </span>examples/files/listing.py
 </span></code></pre></div>
 <p>The single-command Typer app runs without a subcommand argument. It uses a temporary state directory that is deleted on
-exit, so it cannot overwrite application files. The immediate result is <code>['index.txt']</code>; the recursive result contains
-<code>reports/2025/planning/notes.txt</code>, <code>reports/2025/q1.txt</code>, and <code>reports/index.txt</code>. Recursive keys are relative to the
-configured files root, so they can be passed directly to <code>load_text</code>. The example sorts them for stable display;
+exit, so it cannot overwrite application files. The immediate listing contains <code>index.txt</code> and <code>index.md</code>; the recursive
+listing also includes files below <code>reports/2025</code>. With <code>pattern="*.md"</code>, recursive listing matches only
+<code>reports/index.md</code>; with <code>pattern="**/*.md"</code>, it also matches <code>reports/2025/release.md</code>. Recursive keys are relative to
+the configured files root, so they can be passed directly to <code>load_text</code>. The example sorts results for stable display;
 <code>list_items</code> does not guarantee result ordering. The missing-directory call returns <code>[]</code>; without <code>missing_ok=True</code>, it
 raises <code>FilesError</code>.</p>
 <p>Symlink entries are omitted and never traversed. A requested path with a symlink component raises <code>FilesError</code>, as do

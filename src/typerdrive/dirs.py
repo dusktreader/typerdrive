@@ -22,7 +22,10 @@ def _clear_dir(path: Path) -> int:
     """
     count = 0
     for sub_path in path.iterdir():
-        if sub_path.is_dir():
+        if sub_path.is_symlink():
+            sub_path.unlink()
+            count += 1
+        elif sub_path.is_dir():
             count += _clear_dir(sub_path)
             sub_path.rmdir()
         else:
@@ -35,8 +38,9 @@ def clear_directory(path: Path) -> int:
     """
     Delete all files and directories in the directory at the given path.
 
-    If the target path is not a directory, an exception will be raised.
-    If the target path does not exist, an exception will be raised.
+    If the target path does not exist or is not a directory, an exception will be raised. A symlink supplied as the root
+    path is followed to clear its target directory, and the root symlink is preserved. Symlinks found inside the target
+    directory are unlinked without following them or modifying their targets.
     """
     TyperdriveError.require_condition(path.exists(), f"Target {path=} does not exist")
     TyperdriveError.require_condition(path.is_dir(), f"Target {path=} is not a directory")
@@ -59,7 +63,7 @@ def render_directory(path: Path, is_root: bool = True) -> DirInfo:
     """
     Render a visualization of the directory at the given path using `rich.tree`.
 
-    This is a recursive function. If calling this function, you should call it with `is_root=True`.
+    Omit symlink entries and never traverse their targets. Call this recursive function with `is_root=True`.
     """
     root_label: str
     if is_root:
@@ -76,7 +80,7 @@ def render_directory(path: Path, is_root: bool = True) -> DirInfo:
     )
 
     child_paths = sorted(
-        path.iterdir(),
+        (child_path for child_path in path.iterdir() if not child_path.is_symlink()),
         key=lambda p: (
             p.is_file(),
             p.name.lower(),
@@ -102,7 +106,9 @@ def render_directory(path: Path, is_root: bool = True) -> DirInfo:
 
 def show_directory(path: Path, subject: str | None = None):
     """
-    Print the visualization of a target directory retrieved with `render_directory()` using `terminal_message`.
+    Print a directory visualization using `terminal_message`.
+
+    Symlink entries and their targets are omitted, as in `render_directory()`.
     """
     dir_info = render_directory(path)
     human_size = humanize.naturalsize(dir_info.total_size)

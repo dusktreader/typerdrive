@@ -45,5 +45,5 @@ The complete documentation can be found at the
 To see the features in action, you can run the demo in an isolated environment with `uv`:
 
 ```text
-uvx --from=typerdrive[demo] typerdrive-demo
+uvx --from='typerdrive[demo]' typerdrive-demo
 ```

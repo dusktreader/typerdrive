@@ -7,18 +7,17 @@ typer's CliRunner.
 """
 
 import json
+from pathlib import Path
 
 import pytest
 import typer
 from click.testing import Result
 from pytest_bdd import given, parsers, scenario, then, when
 from typer.testing import CliRunner
-
-from typerdrive.config import get_typerdrive_config
+from typerdrive.config import get_typerdrive_config, set_typerdrive_config
 from typerdrive.files.attach import attach_files, get_files_manager
 from typerdrive.files.commands import add_files_subcommand
 from typerdrive.files.manager import FilesManager
-
 
 # ---------------------------------------------------------------------------
 # Scenario bindings
@@ -52,6 +51,11 @@ def test_load_json_data():
 
 @scenario("../features/files.feature", "Files show command displays stored files")
 def test_files_show_displays_stored_files():
+    pass
+
+
+@scenario("../features/files.feature", "Files show command omits symlinks")
+def test_files_show_omits_symlinks():
     pass
 
 
@@ -100,6 +104,16 @@ def _given_file_contains_json(path: str, key: str, value: str):
     full_path = files_dir / path
     full_path.parent.mkdir(parents=True, exist_ok=True)
     full_path.write_text(json.dumps({key: value}))
+
+
+@given("the files directory contains symlinks to external targets")
+def _given_symlinks_to_external_targets(tmp_home: Path):
+    files_dir = get_typerdrive_config().files_dir
+    external_dir = tmp_home / "external-target"
+    external_dir.mkdir()
+    (external_dir / "target-only.txt").write_text("hidden")
+    (files_dir / "linked.txt").symlink_to(files_dir / "root.txt")
+    (files_dir / "linked-dir").symlink_to(external_dir, target_is_directory=True)
 
 
 # ---------------------------------------------------------------------------
@@ -169,7 +183,10 @@ def _when_load_json(ctx: FilesContext, runner: CliRunner, path: str):
 
 @when("I run the files show command")
 def _when_files_show(ctx: FilesContext, runner: CliRunner):
+    previous_width = get_typerdrive_config().console_width
+    set_typerdrive_config(console_width=300)
     ctx.result = runner.invoke(ctx.cli, ["files", "show"], prog_name="test")
+    set_typerdrive_config(console_width=previous_width)
 
 
 @when("a command accesses the files manager through the typer context")
@@ -208,6 +225,18 @@ def _then_command_fails(ctx: FilesContext, code: int):
 @then(parsers.parse('the output contains "{text}"'))
 def _then_output_contains(ctx: FilesContext, text: str):
     assert text in ctx.result.output, f"Expected {text!r} in output.\nActual output:\n{ctx.result.output}"
+
+
+@then("the output contains the configured files directory")
+def _then_output_contains_files_directory(ctx: FilesContext):
+    files_dir = "".join(str(get_typerdrive_config().files_dir).split())
+    output = "".join(ctx.result.output.split())
+    assert files_dir in output, f"Expected {files_dir!r} in output.\nActual output:\n{ctx.result.output}"
+
+
+@then(parsers.parse('the output does not contain "{text}"'))
+def _then_output_does_not_contain(ctx: FilesContext, text: str):
+    assert text not in ctx.result.output, f"Did not expect {text!r} in output.\nActual output:\n{ctx.result.output}"
 
 
 @then(parsers.parse('the file "{path}" exists in the files directory'))

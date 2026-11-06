@@ -7,11 +7,11 @@ from typing import Annotated, Any, Concatenate, ParamSpec, TypeVar, cast
 
 import typer
 
-from typerdrive.files.exceptions import FilesError
-from typerdrive.files.manager import FilesManager
 from typerdrive.cloaked import CloakingDevice
 from typerdrive.context import from_context, to_context
 from typerdrive.dirs import show_directory
+from typerdrive.files.exceptions import FilesError
+from typerdrive.files.manager import FilesManager
 from typerdrive.signature import SignatureRewriter
 
 

@@ -75,7 +75,7 @@ add_files_subcommand(cli)
 
 You can view the files directory structure using the `files show` command:
 
-```bash
+```shell
 $ python my_app.py files show
 
 ╭─ Current files ──────────────────────────────────────────────────╮
@@ -106,7 +106,7 @@ The `files` command provides a sub-command to manage files.
 
 Display the files directory structure and statistics.
 
-```bash
+```shell
 $ python my_app.py files show
 ```
 
@@ -148,7 +148,6 @@ def my_command(ctx: typer.Context, manager: FilesManager):
 
 
 ### FilesManager Methods
-
 
 #### `store_bytes(data, path, mode=None)`
 
@@ -295,26 +294,44 @@ print(f"Deleted: {deleted_path}")
 ```
 
 
-#### `list_items(path)`
+#### `list_items(path, recursive=False, missing_ok=False)`
 
-List all files (not directories) at the given path.
+List files directly inside a directory or recursively below it.
 
 **Parameters:**
-- `path` (Path | str): The directory path
+- `path` (Path | str): The directory key
+- `recursive` (bool): Include files nested below the requested directory
+- `missing_ok` (bool): Return an empty list when the requested directory is missing
 
 **Returns:**
-- `list[str]`: List of file names (not full paths)
+- `list[str]`: Immediate file names by default, or storage-root-relative keys when recursive
 
 **Raises:**
-- `FilesError`: If the path doesn't exist or isn't a directory
+- `FilesError`: If the directory is missing and `missing_ok` is false, is not a directory, is unreadable, contains a
+  symlink component, or resolves to the configured files root
 
 **Example:**
-```python
-# List all templates
-templates = manager.list_items("templates")
-for template_name in templates:
-    print(f"Template: {template_name}")
+
+```python {linenums="1"}
+--8<-- "examples/files/listing.py"
 ```
+
+Run the example from the repository root:
+
+```shell
+python examples/files/listing.py
+```
+
+The single-command Typer app runs without a subcommand argument. It uses a temporary state directory that is deleted on
+exit, so it cannot overwrite application files. The immediate result is `['index.txt']`; the recursive result contains
+`reports/2025/planning/notes.txt`, `reports/2025/q1.txt`, and `reports/index.txt`. Recursive keys are relative to the
+configured files root, so they can be passed directly to `load_text`. The example sorts them for stable display;
+`list_items` does not guarantee result ordering. The missing-directory call returns `[]`; without `missing_ok=True`, it
+raises `FilesError`.
+
+Symlink entries are omitted and never traversed. A requested path with a symlink component raises `FilesError`, as do
+non-directories and unreadable directories; `missing_ok=True` only changes the behavior for a missing directory. The
+configured files root cannot be listed.
 
 
 #### `resolve_path(path, mkdir=False)`
@@ -339,7 +356,6 @@ print(f"Full path: {full_path}")
 
 
 ## Use Cases
-
 
 ### Application Settings
 
@@ -423,7 +439,6 @@ def save_profile(ctx: typer.Context, manager: FilesManager, username: str):
 
 ## Security Considerations
 
-
 ### File Permissions
 
 Use the `mode` parameter to set restrictive permissions on sensitive files:
@@ -453,11 +468,11 @@ manager.store_text("bad", Path("/etc/passwd"))
 
 ## Differences from Cache
 
-| Feature        | Files                              | Cache                              |
-|----------------|------------------------------------|------------------------------------|
-| **Purpose**    | Persistent storage                 | Temporary storage                  |
-| **Durability** | Data persists indefinitely         | Data may expire or be evicted      |
-| **Structure**  | File-based (can inspect manually)  | Database (opaque)                  |
-| **Size limits**| No automatic limits                | Configurable size limits           |
-| **Eviction**   | Manual deletion only               | Automatic eviction policies        |
-| **Use for**    | Config, templates, assets          | Tokens, sessions, API responses    |
+| Feature         | Files                             | Cache                           |
+| --------------- | --------------------------------- | ------------------------------- |
+| **Purpose**     | Persistent storage                | Temporary storage               |
+| **Durability**  | Data persists indefinitely        | Data may expire or be evicted   |
+| **Structure**   | File-based (can inspect manually) | Database (opaque)               |
+| **Size limits** | No automatic limits               | Configurable size limits        |
+| **Eviction**    | Manual deletion only              | Automatic eviction policies     |
+| **Use for**     | Config, templates, assets         | Tokens, sessions, API responses |

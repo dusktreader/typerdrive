@@ -884,14 +884,14 @@ wheels = [
 
 [[package]]
 name = "py-buzz"
-version = "8.2.1"
+version = "9.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/84/81/e390eac7b96e25dadc00c31c6bd3d45ff2f69a4b6a21c05daa156bb4bed2/py_buzz-8.2.1.tar.gz", hash = "sha256:58776541367e9c93af8d5252606a0e2a02ac30677fba7850e159a5082a2dde89", size = 22886, upload-time = "2026-10-13T00:05:32.695Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/da/10/e18d4b02d049484460dd1d1aa9a1a84761e49f9d4f85ae1d1b03d3fd77bf/py_buzz-9.0.1.tar.gz", hash = "sha256:972c062b23a2369397c3172ab3f87a6429888ff2fdf280ec4c637f5420c20a54", size = 23575, upload-time = "2026-10-22T06:13:54.399Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8d/06/878eb0400dd15dbc457ec52b1f7508334359c2b6ff46bba41d08fd6d33b0/py_buzz-8.2.1-py3-none-any.whl", hash = "sha256:7bec983ee0d88e6f4804afc0f28d4c1704303b0c82e70b0aa08ae69b0d6e0615", size = 30488, upload-time = "2026-10-13T00:05:31.533Z" },
+    { url = "https://files.pythonhosted.org/packages/17/4b/5120a5954cb13a9c624b0f4bdc50c0f8f95e49e7997ee6f829a6fc8c0970/py_buzz-9.0.1-py3-none-any.whl", hash = "sha256:5b4f5bef281a5f8ce4ab788099ce59042e2cd94864d5ecc8a5508fec366277c1", size = 31106, upload-time = "2026-10-22T06:13:53.212Z" },
 ]
 
 [[package]]
@@ -1388,7 +1388,7 @@ wheels = [
 
 [[package]]
 name = "typerdrive"
-version = "0.15.0"
+version = "0.15.1"
 source = { editable = "." }
 dependencies = [
     { name = "aiosqlite" },
@@ -1441,7 +1441,7 @@ requires-dist = [
     { name = "humanize", specifier = ">=4.12" },
     { name = "inflection", specifier = ">=0.5" },
     { name = "loguru", specifier = ">=0.7" },
-    { name = "py-buzz", specifier = "==8.2.1" },
+    { name = "py-buzz", specifier = ">=9.0" },
     { name = "pydantic", specifier = ">=2.11" },
     { name = "pyperclip", specifier = ">=1.9" },
     { name = "rich", specifier = ">=14.0" },

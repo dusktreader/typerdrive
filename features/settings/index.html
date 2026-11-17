@@ -8,7 +8,8 @@
       
       
       
-        <link rel="canonical" href="http://dusktreader.github.io/typerdrive/features/settings/">
+        <link rel="canonical" href="https://dusktreader.github.io/typerdrive/features/settings/">
+      
       
       
         <link rel="prev" href="../../quickstart/">
@@ -21,7 +22,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="zensical-0.0.74">
     
     
       
@@ -29,10 +30,15 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      <link rel="stylesheet" href="../../assets/stylesheets/classic/main.94dd801d.min.css">
+      
+        
+          
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/classic/palette.813d4b3f.min.css">
       
       
 
@@ -46,23 +52,20 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
-    
       <link rel="stylesheet" href="../../css/fonts.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
     
       
 
     
     
-  <style>.highlight .gp { user-select: none; color: #89b0c2; }</style>
-</head>
+  </head>
   
   
     
@@ -77,14 +80,11 @@
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
-    <label class="md-overlay" for="__drawer"></label>
+    <label class="md-overlay" for="__drawer" aria-hidden="true"></label>
     <div data-md-component="skip">
-      
-        
-        <a href="#commands-to-manage-application-settings" class="md-skip">
-          Skip to content
-        </a>
-      
+      <a href="#__skip" class="md-skip">
+        Skip to content
+      </a>
     </div>
     <div data-md-component="announce">
       
@@ -106,6 +106,7 @@
     <label class="md-header__button md-icon" for="__drawer">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      <span class="md-visually-hidden">Navigation</span>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -160,54 +161,28 @@
         <label class="md-header__button md-icon" for="__search">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+          <span class="md-visually-hidden">Search</span>
         </label>
-        <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="__search"></label>
-  <div class="md-search__inner" role="search">
-    <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
-      <label class="md-search__icon md-icon" for="__search">
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-      </label>
-      <nav class="md-search__options" aria-label="Search">
-        
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-        </button>
-      </nav>
-      
-    </form>
-    <div class="md-search__output">
-      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
-        <div class="md-search-result" data-md-component="search-result">
-          <div class="md-search-result__meta">
-            Initializing search
-          </div>
-          <ol class="md-search-result__list" role="presentation"></ol>
-        </div>
-      </div>
-    </div>
-  </div>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
 </div>
       
     
-    
-      <div class="md-header__source">
+    <div class="md-header__source">
+      
         <a href="https://github.com/dusktreader/typerdrive" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5v52c0 15 12.5 23.5 27.5 17.5C441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5v-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
   </div>
 </a>
-      </div>
-    
+      
+    </div>
   </nav>
   
 </header>
@@ -246,7 +221,7 @@
       <a href="https://github.com/dusktreader/typerdrive" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5v52c0 15 12.5 23.5 27.5 17.5C441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5v-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -270,8 +245,7 @@
   <span class="md-ellipsis">
     
   
-    Home
-  
+  Home
 
     
   </span>
@@ -297,8 +271,7 @@
   <span class="md-ellipsis">
     
   
-    Quickstart
-  
+  Quickstart
 
     
   </span>
@@ -337,8 +310,7 @@
   <span class="md-ellipsis">
     
   
-    Features
-  
+  Features
 
     
   </span>
@@ -348,19 +320,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+            <label class="md-nav__title" for="__nav_3">
+              <span class="md-nav__icon md-icon"></span>
+              
   
-    Features
-  
+  Features
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
     
@@ -369,7 +341,9 @@
   
     <li class="md-nav__item md-nav__item--active">
       
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
       
       
         
@@ -382,8 +356,7 @@
   <span class="md-ellipsis">
     
   
-    Settings
-  
+  Settings
 
     
   </span>
@@ -393,15 +366,14 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="./" class="md-nav__link md-nav__link--active">
+      <a href="././" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Settings
-  
+  Settings
 
     
   </span>
@@ -412,7 +384,8 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
   
@@ -421,16 +394,16 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Overview
-      
+      </span>
     </span>
   </a>
   
@@ -439,9 +412,9 @@
         <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Usage
-      
+      </span>
     </span>
   </a>
   
@@ -450,9 +423,9 @@
         <li class="md-nav__item">
   <a href="#details" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Details
-      
+      </span>
     </span>
   </a>
   
@@ -462,9 +435,9 @@
           <li class="md-nav__item">
   <a href="#bind" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        bind
-      
+      <span class="md-typeset">
+        <code>bind</code>
+      </span>
     </span>
   </a>
   
@@ -473,9 +446,9 @@
           <li class="md-nav__item">
   <a href="#update" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        update
-      
+      <span class="md-typeset">
+        <code>update</code>
+      </span>
     </span>
   </a>
   
@@ -484,9 +457,9 @@
           <li class="md-nav__item">
   <a href="#unset" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        unset
-      
+      <span class="md-typeset">
+        <code>unset</code>
+      </span>
     </span>
   </a>
   
@@ -495,9 +468,9 @@
           <li class="md-nav__item">
   <a href="#show" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        show
-      
+      <span class="md-typeset">
+        <code>show</code>
+      </span>
     </span>
   </a>
   
@@ -506,9 +479,9 @@
           <li class="md-nav__item">
   <a href="#reset" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        reset
-      
+      <span class="md-typeset">
+        <code>reset</code>
+      </span>
     </span>
   </a>
   
@@ -522,9 +495,9 @@
         <li class="md-nav__item">
   <a href="#nested-settings-models" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Nested settings models
-      
+      </span>
     </span>
   </a>
   
@@ -533,9 +506,9 @@
         <li class="md-nav__item">
   <a href="#secret-settings-values" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Secret settings values
-      
+      </span>
     </span>
   </a>
   
@@ -545,9 +518,20 @@
           <li class="md-nav__item">
   <a href="#annotating-a-field-as-secret" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Annotating a field as secret
-      
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plaintext-vs-encrypted-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Plaintext vs encrypted secrets
+      </span>
     </span>
   </a>
   
@@ -556,9 +540,9 @@
           <li class="md-nav__item">
   <a href="#display-masking" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Display masking
-      
+      </span>
     </span>
   </a>
   
@@ -567,9 +551,9 @@
           <li class="md-nav__item">
   <a href="#persistence" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Persistence
-      
+      </span>
     </span>
   </a>
   
@@ -578,22 +562,94 @@
           <li class="md-nav__item">
   <a href="#accessing-the-value-in-your-commands" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Accessing the value in your commands
-      
+      </span>
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#pydantic-default-coercion-caveat" class="md-nav__link">
+  <a href="#encrypting-secret-settings-values" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Pydantic default coercion caveat
-      
+      <span class="md-typeset">
+        Encrypting secret settings values
+      </span>
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Encrypting secret settings values">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How it works
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Setup
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passwordless-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Passwordless identity
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identity-cache-and-security-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Identity cache and security limits
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validating-encrypted-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Validating encrypted secrets
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encryption-constraints-and-platforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Encryption constraints and platforms
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -605,9 +661,9 @@
         <li class="md-nav__item">
   <a href="#the-get_settings-functions" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        The get_settings() functions
-      
+      <span class="md-typeset">
+        The <code>get_settings()</code> functions
+      </span>
     </span>
   </a>
   
@@ -616,9 +672,9 @@
         <li class="md-nav__item">
   <a href="#the-add_-functions" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        The add_.*() functions
-      
+      <span class="md-typeset">
+        The <code>add_.*()</code> functions
+      </span>
     </span>
   </a>
   
@@ -628,9 +684,9 @@
           <li class="md-nav__item">
   <a href="#add_bind" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_bind()
-      
+      <span class="md-typeset">
+        <code>add_bind()</code>
+      </span>
     </span>
   </a>
   
@@ -639,9 +695,9 @@
           <li class="md-nav__item">
   <a href="#add_update" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_update()
-      
+      <span class="md-typeset">
+        <code>add_update()</code>
+      </span>
     </span>
   </a>
   
@@ -650,9 +706,9 @@
           <li class="md-nav__item">
   <a href="#add_unset" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_unset()
-      
+      <span class="md-typeset">
+        <code>add_unset()</code>
+      </span>
     </span>
   </a>
   
@@ -661,9 +717,9 @@
           <li class="md-nav__item">
   <a href="#add_show" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_show()
-      
+      <span class="md-typeset">
+        <code>add_show()</code>
+      </span>
     </span>
   </a>
   
@@ -672,9 +728,9 @@
           <li class="md-nav__item">
   <a href="#add_reset" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_reset()
-      
+      <span class="md-typeset">
+        <code>add_reset()</code>
+      </span>
     </span>
   </a>
   
@@ -683,9 +739,9 @@
           <li class="md-nav__item">
   <a href="#add_settings_subcommand" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_settings_subcommand()
-      
+      <span class="md-typeset">
+        <code>add_settings_subcommand()</code>
+      </span>
     </span>
   </a>
   
@@ -703,10 +759,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -719,8 +775,7 @@
   <span class="md-ellipsis">
     
   
-    Cache
-  
+  Cache
 
     
   </span>
@@ -731,10 +786,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -747,8 +802,7 @@
   <span class="md-ellipsis">
     
   
-    Files
-  
+  Files
 
     
   </span>
@@ -759,10 +813,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -775,8 +829,7 @@
   <span class="md-ellipsis">
     
   
-    Database
-  
+  Database
 
     
   </span>
@@ -787,10 +840,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -803,8 +856,7 @@
   <span class="md-ellipsis">
     
   
-    Logging
-  
+  Logging
 
     
   </span>
@@ -815,10 +867,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -831,8 +883,7 @@
   <span class="md-ellipsis">
     
   
-    Error Handling
-  
+  Error Handling
 
     
   </span>
@@ -843,10 +894,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -859,8 +910,7 @@
   <span class="md-ellipsis">
     
   
-    Formatted Messages
-  
+  Formatted Messages
 
     
   </span>
@@ -871,10 +921,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -887,8 +937,7 @@
   <span class="md-ellipsis">
     
   
-    API Clients
-  
+  API Clients
 
     
   </span>
@@ -899,10 +948,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -922,8 +972,7 @@
   <span class="md-ellipsis">
     
   
-    Typerdrive Configuration
-  
+  Typerdrive Configuration
 
     
   </span>
@@ -949,8 +998,7 @@
   <span class="md-ellipsis">
     
   
-    Runnable Demo
-  
+  Runnable Demo
 
     
   </span>
@@ -976,8 +1024,7 @@
   <span class="md-ellipsis">
     
   
-    Developer Guide
-  
+  Developer Guide
 
     
   </span>
@@ -1016,8 +1063,7 @@
   <span class="md-ellipsis">
     
   
-    Reference
-  
+  Reference
 
     
   </span>
@@ -1027,19 +1073,19 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7">
-            <span class="md-nav__icon md-icon"></span>
-            
+        
+          <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+            <label class="md-nav__title" for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+              
   
-    Reference
-  
+  Reference
 
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
+            </label>
+            <ul class="md-nav__list" data-md-scrollfix>
               
                 
+                  
   
   
   
@@ -1052,8 +1098,7 @@
   <span class="md-ellipsis">
     
   
-    Base Modules
-  
+  Base Modules
 
     
   </span>
@@ -1064,10 +1109,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1080,8 +1125,7 @@
   <span class="md-ellipsis">
     
   
-    Cache
-  
+  Cache
 
     
   </span>
@@ -1092,10 +1136,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1108,8 +1152,7 @@
   <span class="md-ellipsis">
     
   
-    Database
-  
+  Database
 
     
   </span>
@@ -1120,10 +1163,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1136,8 +1179,7 @@
   <span class="md-ellipsis">
     
   
-    Files
-  
+  Files
 
     
   </span>
@@ -1148,10 +1190,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1164,8 +1206,7 @@
   <span class="md-ellipsis">
     
   
-    Client
-  
+  Client
 
     
   </span>
@@ -1176,10 +1217,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1192,8 +1233,7 @@
   <span class="md-ellipsis">
     
   
-    Logging
-  
+  Logging
 
     
   </span>
@@ -1204,10 +1244,10 @@
     </li>
   
 
-              
-            
+                
               
                 
+                  
   
   
   
@@ -1220,8 +1260,7 @@
   <span class="md-ellipsis">
     
   
-    Settings
-  
+  Settings
 
     
   </span>
@@ -1232,10 +1271,11 @@
     </li>
   
 
+                
               
-            
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        
       
     </li>
   
@@ -1251,10 +1291,12 @@
               
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
+                  
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
   
   
   
@@ -1263,16 +1305,16 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      On this page
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
   <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Overview
-      
+      </span>
     </span>
   </a>
   
@@ -1281,9 +1323,9 @@
         <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Usage
-      
+      </span>
     </span>
   </a>
   
@@ -1292,9 +1334,9 @@
         <li class="md-nav__item">
   <a href="#details" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Details
-      
+      </span>
     </span>
   </a>
   
@@ -1304,9 +1346,9 @@
           <li class="md-nav__item">
   <a href="#bind" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        bind
-      
+      <span class="md-typeset">
+        <code>bind</code>
+      </span>
     </span>
   </a>
   
@@ -1315,9 +1357,9 @@
           <li class="md-nav__item">
   <a href="#update" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        update
-      
+      <span class="md-typeset">
+        <code>update</code>
+      </span>
     </span>
   </a>
   
@@ -1326,9 +1368,9 @@
           <li class="md-nav__item">
   <a href="#unset" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        unset
-      
+      <span class="md-typeset">
+        <code>unset</code>
+      </span>
     </span>
   </a>
   
@@ -1337,9 +1379,9 @@
           <li class="md-nav__item">
   <a href="#show" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        show
-      
+      <span class="md-typeset">
+        <code>show</code>
+      </span>
     </span>
   </a>
   
@@ -1348,9 +1390,9 @@
           <li class="md-nav__item">
   <a href="#reset" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        reset
-      
+      <span class="md-typeset">
+        <code>reset</code>
+      </span>
     </span>
   </a>
   
@@ -1364,9 +1406,9 @@
         <li class="md-nav__item">
   <a href="#nested-settings-models" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Nested settings models
-      
+      </span>
     </span>
   </a>
   
@@ -1375,9 +1417,9 @@
         <li class="md-nav__item">
   <a href="#secret-settings-values" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Secret settings values
-      
+      </span>
     </span>
   </a>
   
@@ -1387,9 +1429,20 @@
           <li class="md-nav__item">
   <a href="#annotating-a-field-as-secret" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Annotating a field as secret
-      
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plaintext-vs-encrypted-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Plaintext vs encrypted secrets
+      </span>
     </span>
   </a>
   
@@ -1398,9 +1451,9 @@
           <li class="md-nav__item">
   <a href="#display-masking" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Display masking
-      
+      </span>
     </span>
   </a>
   
@@ -1409,9 +1462,9 @@
           <li class="md-nav__item">
   <a href="#persistence" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Persistence
-      
+      </span>
     </span>
   </a>
   
@@ -1420,22 +1473,94 @@
           <li class="md-nav__item">
   <a href="#accessing-the-value-in-your-commands" class="md-nav__link">
     <span class="md-ellipsis">
-      
+      <span class="md-typeset">
         Accessing the value in your commands
-      
+      </span>
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#pydantic-default-coercion-caveat" class="md-nav__link">
+  <a href="#encrypting-secret-settings-values" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Pydantic default coercion caveat
-      
+      <span class="md-typeset">
+        Encrypting secret settings values
+      </span>
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Encrypting secret settings values">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How it works
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Setup
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passwordless-identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Passwordless identity
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identity-cache-and-security-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Identity cache and security limits
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validating-encrypted-secrets" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Validating encrypted secrets
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encryption-constraints-and-platforms" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Encryption constraints and platforms
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1447,9 +1572,9 @@
         <li class="md-nav__item">
   <a href="#the-get_settings-functions" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        The get_settings() functions
-      
+      <span class="md-typeset">
+        The <code>get_settings()</code> functions
+      </span>
     </span>
   </a>
   
@@ -1458,9 +1583,9 @@
         <li class="md-nav__item">
   <a href="#the-add_-functions" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        The add_.*() functions
-      
+      <span class="md-typeset">
+        The <code>add_.*()</code> functions
+      </span>
     </span>
   </a>
   
@@ -1470,9 +1595,9 @@
           <li class="md-nav__item">
   <a href="#add_bind" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_bind()
-      
+      <span class="md-typeset">
+        <code>add_bind()</code>
+      </span>
     </span>
   </a>
   
@@ -1481,9 +1606,9 @@
           <li class="md-nav__item">
   <a href="#add_update" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_update()
-      
+      <span class="md-typeset">
+        <code>add_update()</code>
+      </span>
     </span>
   </a>
   
@@ -1492,9 +1617,9 @@
           <li class="md-nav__item">
   <a href="#add_unset" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_unset()
-      
+      <span class="md-typeset">
+        <code>add_unset()</code>
+      </span>
     </span>
   </a>
   
@@ -1503,9 +1628,9 @@
           <li class="md-nav__item">
   <a href="#add_show" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_show()
-      
+      <span class="md-typeset">
+        <code>add_show()</code>
+      </span>
     </span>
   </a>
   
@@ -1514,9 +1639,9 @@
           <li class="md-nav__item">
   <a href="#add_reset" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_reset()
-      
+      <span class="md-typeset">
+        <code>add_reset()</code>
+      </span>
     </span>
   </a>
   
@@ -1525,9 +1650,9 @@
           <li class="md-nav__item">
   <a href="#add_settings_subcommand" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        add_settings_subcommand()
-      
+      <span class="md-typeset">
+        <code>add_settings_subcommand()</code>
+      </span>
     </span>
   </a>
   
@@ -1550,9 +1675,9 @@
             <div class="md-content" data-md-component="content">
               
               <article class="md-content__inner md-typeset">
+                <a id="__skip" tabindex="-1"></a>
                 
                   
-
 
   
   
@@ -1689,7 +1814,7 @@ doesn't know how to handle the argument.</p>
 </span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│                                                                              │
 </span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>╰──────────────────────────────────────────────────────────────────────────────╯
 </span></code></pre></div>
-<p>As you can see, our settings initially just matches the defaults provided in the settings model.  The fields that still
+<p>As you can see, our settings initially just matches the defaults provided in the settings model. The fields that still
 need to be defined are clearly identified and the settings are shown to be invalid.</p>
 <p>Next, let's make the settings valid by setting the missing values with <code>bind</code>:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>$ python examples/settings/commands.py settings bind --name=jawa --planet=tatooine
@@ -1824,14 +1949,15 @@ then the corresponding setting value will be unset.</p>
 </span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 </span></code></pre></div>
 <h3 id="show"><code>show</code></h3>
-<p>The <code>show</code> command just shows the current value of the settings. That's it!</p>
+<p>The <code>show</code> command displays the current settings. It validates settings while loading them, so validators that inspect
+an encrypted secret may prompt for the passphrase.</p>
 <h3 id="reset"><code>reset</code></h3>
 <p>The <code>reset</code> command returns <em>all</em> settings values to their initial state. It allows the settings to be in an invalid
 state when it is finished. It will also show the new settings values when it is done. The <code>reset</code> subcommand takes no
 arguments.</p>
 <h2 id="nested-settings-models">Nested settings models</h2>
-<p>It is possible to have your settings model include nested pydantic models for the settings values. If the settings
-model has nested models, the arguments to <code>bind</code> and <code>update</code> should be JSON strings.</p>
+<p>It is possible to have your settings model include nested pydantic models for the settings values. If the settings model
+has nested models, the arguments to <code>bind</code> and <code>update</code> should be JSON strings.</p>
 <p>Consider this example:</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
@@ -1973,92 +2099,292 @@ model has nested models, the arguments to <code>bind</code> and <code>update</co
 <p>You can see that the nested model types are noted at the bottom including the expected types for each field.</p>
 <h2 id="secret-settings-values">Secret settings values</h2>
 <p>Some settings values are sensitive — API tokens, passwords, private keys — and should not be displayed in plain text
-when running <code>settings show</code>. <code>typerdrive</code> supports this through Pydantic's built-in
-<a href="https://docs.pydantic.dev/latest/concepts/types/#secret-types"><code>SecretStr</code></a> type.</p>
+when running <code>settings show</code>. <code>typerdrive</code> provides two types for these values, both of which are subclasses of
+Pydantic's <a href="https://docs.pydantic.dev/latest/concepts/types/#secret-types"><code>SecretStr</code></a>:</p>
+<ul>
+<li><code>PlaintextSecretStr</code>: masked for display, and stored as plaintext in the settings file</li>
+<li><code>EncryptedSecretStr</code>: masked for display, and encrypted at rest</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Do not use Pydantic's <code>SecretStr</code> in settings models</p>
+<p>Pydantic serializes <code>SecretStr</code> to a mask (<code>**********</code>) in JSON, so a settings file saved with a plain <code>SecretStr</code>
+field would contain the mask instead of the value, and the real value would be lost. <code>typerdrive</code> does not detect
+this, and <code>SecretStr</code> is not supported in settings models. Always use <code>PlaintextSecretStr</code> or <code>EncryptedSecretStr</code>
+instead.</p>
+</div>
 <h3 id="annotating-a-field-as-secret">Annotating a field as secret</h3>
-<p>Simply annotate the field with <code>SecretStr</code> instead of <code>str</code>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">SecretStr</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">AppSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Your username&quot;</span><span class="p">)</span>
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">api_token</span><span class="p">:</span> <span class="n">SecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Your API token&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-<p>That's all that's required. <code>typerdrive</code> takes care of the rest.</p>
-<h3 id="display-masking">Display masking</h3>
-<p>When <code>settings show</code> (or any other settings subcommand) renders the settings table, <code>SecretStr</code> fields are
-automatically masked:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>$ myapp settings show
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>╭─ Current settings ───────────────────────────────────────────────────────────╮
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>│                                                                               │
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>│ Settings Values                                                               │
-</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>│                                                                               │
-</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>│    username  str        -&gt;  leia                                              │
-</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>│   api-token  SecretStr  -&gt;  **********                                        │
-</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>│                                                                               │
-</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>╰───────────────────────────────────────────────────────────────────────────────╯
-</span></code></pre></div>
-<h3 id="persistence">Persistence</h3>
-<p><code>SecretStr</code> values are stored in plain text in the settings JSON file on disk. This is intentional — the file is
-local to the user's machine and the value must be recoverable across invocations. Protect the file with appropriate
-filesystem permissions if required.</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leia&quot;</span><span class="p">,</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">&quot;api_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-secret-token&quot;</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="p">}</span>
+<p>Use <code>PlaintextSecretStr</code> for a value that should be masked in settings output, or <code>EncryptedSecretStr</code> for a value that
+should also be encrypted at rest:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">Field</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">EncryptedSecretStr</span><span class="p">,</span> <span class="n">PlaintextSecretStr</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">AppSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">validate_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Your username&quot;</span><span class="p">)</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="n">password</span><span class="p">:</span> <span class="n">PlaintextSecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>        <span class="n">default</span><span class="o">=</span><span class="n">PlaintextSecretStr</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Masked but stored as plaintext&quot;</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>    <span class="p">)</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="n">api_token</span><span class="p">:</span> <span class="n">EncryptedSecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a>        <span class="n">default</span><span class="o">=</span><span class="n">EncryptedSecretStr</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Masked and encrypted at rest&quot;</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>    <span class="p">)</span>
 </span></code></pre></div>
 <div class="admonition warning">
-<p class="admonition-title">The settings file is not encrypted</p>
-<p><code>typerdrive</code> stores settings in a plain JSON file under <code>~/.local/state/&lt;app-name&gt;/settings.json</code>. Anyone with
-read access to that file can see the raw secret value. If your threat model requires encryption at rest, you
-should manage the secret outside of <code>typerdrive</code> (e.g. via a system keychain or environment variable) and not
-store it in the settings file at all.</p>
+<p class="admonition-title">Always validate defaults for secret fields</p>
+<p>Pydantic does not validate field defaults by default, so a bare string default stays a plain <code>str</code> instead of
+being converted to a secret type. A bare <code>str</code> has no <code>.get_secret_value()</code> which typerdrive uses to get the
+unmasked value of the secret. So, if you use a normal <code>str</code> as the default for a secret, the value is not masked in
+output and is persisted as-is. An <code>EncryptedSecretStr</code> field with a bare string default would be written to disk
+<strong>unencrypted</strong>.</p>
+<p>There are three ways to avoid this issue:</p>
+<ol>
+<li>
+<p>Set <code>validate_default=True</code> in the model config so that defaults are converted to the secret type:
+   <div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">AppSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">validate_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>    <span class="n">password</span><span class="p">:</span> <span class="n">PlaintextSecretStr</span> <span class="o">=</span> <span class="s2">&quot;changeme&quot;</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p>Set <code>validate_default=True</code> on the secret field itself:
+   <div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">AppSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    <span class="n">password</span><span class="p">:</span> <span class="n">PlaintextSecretStr</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;changeme&quot;</span><span class="p">,</span> <span class="n">validate_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></code></pre></div></p>
+</li>
+<li>
+<p>Declare the default explicitly as <code>PlaintextSecretStr("...")</code> or <code>EncryptedSecretStr("...")</code>:
+   <div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">AppSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">password</span><span class="p">:</span> <span class="n">PlaintextSecretStr</span> <span class="o">=</span> <span class="n">PlaintextSecretStr</span><span class="p">(</span><span class="s2">&quot;changeme&quot;</span><span class="p">)</span>
+</span></code></pre></div></p>
+</li>
+</ol>
+<p>To avoid overriding <code>pydantic</code> behaviors, <code>typerdrive</code> does not enforce any of these, so applications are
+responsible for choosing one approach.</p>
 </div>
-<h3 id="accessing-the-value-in-your-commands">Accessing the value in your commands</h3>
-<p>Because the field is a <code>SecretStr</code>, you must call <code>.get_secret_value()</code> to obtain the raw string when using it in
-your application code:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_settings</span>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">AppSettings</span><span class="p">)</span>
-</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">call_api</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">AppSettings</span><span class="p">):</span>
-</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="n">token</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">api_token</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">()</span>
-</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>    <span class="c1"># use token with your HTTP client ...</span>
+<p>Both types mask their values in settings output. <code>PlaintextSecretStr</code> only masks display; its value remains plaintext
+on disk. <code>EncryptedSecretStr</code> also encrypts the field at rest and requires configured encryption material.</p>
+<h3 id="plaintext-vs-encrypted-secrets">Plaintext vs encrypted secrets</h3>
+<p>The two types differ only in how the value is handled on disk:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>PlaintextSecretStr</code></th>
+<th><code>EncryptedSecretStr</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Masked in <code>settings show</code>, <code>str()</code>, and <code>repr()</code></td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Value read with <code>.get_secret_value()</code></td>
+<td>yes</td>
+<td>yes (may prompt for a passphrase)</td>
+</tr>
+<tr>
+<td>Written to the settings file as</td>
+<td>plaintext</td>
+<td>age ciphertext (<code>age:...</code>)</td>
+</tr>
+<tr>
+<td>Requires the <code>encrypt-secrets</code> extra and encryption setup</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>PlaintextSecretStr</code> when masking the value in output is enough, since the settings file is only accessible to the
+current user. Use <code>EncryptedSecretStr</code> when the value must not be readable from the settings file; see
+<a href="#encrypting-secret-settings-values">Encrypting secret settings values</a> for setup and how it works.</p>
+<h3 id="display-masking">Display masking</h3>
+<p>When <code>settings show</code> (or any other settings subcommand) renders the settings table, both <code>PlaintextSecretStr</code> and
+<code>EncryptedSecretStr</code> fields are automatically masked:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>$ myapp settings show
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>╭─ Current settings ────────────────────────────────────────────────────────────╮
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>│                                                                               │
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>│ Settings Values                                                               │
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>│                                                                               │
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>│   username   str                 -&gt;  leia                                     │
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>│   password   PlaintextSecretStr  -&gt;  **********                               │
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>│   api-token  EncryptedSecretStr  -&gt;  **********                               │
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>│                                                                               │
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>╰───────────────────────────────────────────────────────────────────────────────╯
 </span></code></pre></div>
-<h3 id="pydantic-default-coercion-caveat">Pydantic default coercion caveat</h3>
-<p>Pydantic does not coerce a bare string <em>default value</em> to <code>SecretStr</code> automatically — it only coerces values that
-pass through model validation (i.e. values supplied to the constructor). This means that if the field is never
-explicitly set, the internal value may be a plain <code>str</code>. <code>typerdrive</code> handles this transparently, so masking and
-persistence always behave correctly regardless. However, in your own code you should always use
-<code>.get_secret_value()</code> rather than treating the attribute as a plain string, to be safe.</p>
+<h3 id="persistence">Persistence</h3>
+<p><code>PlaintextSecretStr</code> values are stored in plain text. The settings file is protected with appropriate filesystem
+permissions: it is written so that it is readable and writable only by the current user. Fields annotated <code>EncryptedSecretStr</code> are encrypted instead; see
+<a href="#encrypting-secret-settings-values">Encrypting secret settings values</a>.</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="p">{</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;leia&quot;</span><span class="p">,</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my-secret-password&quot;</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>The settings file is typically <code>~/.local/state/&lt;app-name&gt;/settings.json</code>, though the location follows <code>XDG_STATE_HOME</code>
+and can be changed in the <a href="../../config/">config</a>. Because it is only accessible to the current user, other users cannot read it, but anything running as that user (including backups of the
+file) can see <code>PlaintextSecretStr</code> values and other unencrypted settings in plaintext. Use <code>EncryptedSecretStr</code>, or manage
+secrets outside <code>typerdrive</code> (such as in a system keychain or environment variable), if this does not meet your
+security requirements.</p>
+<h3 id="accessing-the-value-in-your-commands">Accessing the value in your commands</h3>
+<p>Because both types inherit from Pydantic's <code>SecretStr</code>, call <code>.get_secret_value()</code> to obtain the raw string when using
+either value in your application code:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">typer</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">attach_settings</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">AppSettings</span><span class="p">)</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">call_api</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">AppSettings</span><span class="p">):</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>    <span class="n">token</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">api_token</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">()</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>    <span class="c1"># use token with your HTTP client ...</span>
+</span></code></pre></div>
+<h3 id="encrypting-secret-settings-values">Encrypting secret settings values</h3>
+<p>There are some finer details for <code>EncryptedSecretStr</code> covered in this section. Encrypted secrets protect values on disk
+by encrypting them at rest with an age X25519 recipient. See
+<a href="#plaintext-vs-encrypted-secrets">Plaintext vs encrypted secrets</a> for how it compares to <code>PlaintextSecretStr</code>.</p>
+<h4 id="how-it-works">How it works</h4>
+<p>Encryption uses <a href="https://age-encryption.org">age</a>. An age key pair has two halves:</p>
+<ul>
+<li>The <strong>recipient</strong> is the public half. It can only be used to encrypt, so it is safe to have around.</li>
+<li>The <strong>identity</strong> is the private half. It is required to decrypt, so it must be kept secret.</li>
+</ul>
+<p>When settings are saved, each <code>EncryptedSecretStr</code> value is encrypted for the recipient and written to the settings
+file as a string that starts with <code>age:</code>. The settings file never contains the plaintext. Saving only needs the
+recipient, but reading a value back needs the identity.</p>
+<p>The identity is stored by typerdrive, and there are two ways to protect it:</p>
+<ul>
+<li><strong>Passphrase protected</strong> (the default): the identity is itself encrypted with a passphrase that you choose. Your
+  secrets are never encrypted with the passphrase directly. Instead, the passphrase unlocks the identity, and the identity
+  decrypts your secrets. This means that changing the passphrase only re-protects the identity; the encrypted settings
+  values stay exactly as they are.</li>
+<li><strong>Passwordless</strong>: the identity is stored without protection, so it never prompts. See
+  <a href="#passwordless-identity">Passwordless identity</a> for the tradeoffs.</li>
+</ul>
+<p>To avoid prompting for the passphrase on every access, an unlocked identity is remembered for a short time. See
+<a href="#identity-cache-and-security-limits">Identity cache and security limits</a>.</p>
+<h4 id="setup">Setup</h4>
+<p>Install the optional dependency:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;typerdrive[encrypt-secrets]&#39;</span>
+</span></code></pre></div>
+<p>Encryption is selected by the field type: <code>EncryptedSecretStr</code> fields are encrypted separately using an age X25519
+recipient, while <code>PlaintextSecretStr</code> fields remain plaintext. Set the cache lifetime during app startup if needed:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">set_typerdrive_config</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">set_typerdrive_config</span><span class="p">(</span><span class="n">encryption_cache_ttl</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</span></code></pre></div>
+<p>Encryption also requires setup of the app's encryption material. Existing plaintext values in an <code>EncryptedSecretStr</code>
+field are read as before and migrate to encrypted values on the next settings save. Previously created files and backups
+may still contain plaintext. Loading encrypted settings without the appropriate encryption material fails rather than
+silently exposing or overwriting them.</p>
+<p>Every settings save containing encrypted secrets verifies access to the matching identity before writing. A locked
+passphrase-protected identity prompts for its passphrase; a valid cached unlock avoids repeat prompts. The save verifies
+retained ciphertext too, even when the encrypted value was not changed. Passwordless identities require the same
+verification but do not prompt for a passphrase.</p>
+<p>Use the settings commands registered by <code>add_settings_subcommand()</code> to manage the encryption material:</p>
+<ul>
+<li><code>myapp settings encryption setup</code>: create encryption material with a passphrase by default.</li>
+<li><code>myapp settings encryption setup --no-passphrase</code>: create material with an unprotected identity instead.</li>
+<li><code>myapp settings encryption change-passphrase</code>: rewrap a passphrase-protected identity with a new passphrase.</li>
+<li><code>myapp settings encryption lock</code>: remove the cached identity.</li>
+<li><code>myapp settings encryption unlock</code>: verify the passphrase and cache the identity when caching is enabled.</li>
+<li><code>myapp settings encryption reset</code>: remove the identity and reset all encrypted settings values to their defaults, so
+  that you can start over (asks for confirmation).</li>
+</ul>
+<p>The encryption identity is created and managed by typerdrive; you never need to handle it directly. By default, it is
+protected by the passphrase you choose, so keep that passphrase safe. Changing the passphrase does not re-encrypt the
+settings values. Setup never replaces an existing identity.</p>
+<p>If the passphrase or the identity is lost, the encrypted values cannot be recovered. To start over, run
+<code>myapp settings encryption reset</code>. This removes the identity and resets every encrypted settings value to its default
+(other settings are untouched). Then run <code>myapp settings encryption setup</code> again and re-enter the secrets. The
+<code>myapp settings reset</code> command also removes the identity, since it removes all settings.</p>
+<p>Encrypted secrets decrypt lazily when application code or a validator calls <code>get_secret_value()</code>. For a
+passphrase-protected identity, the call prompts if no usable cached identity exists. Display masking itself does not
+require decryption, but <code>settings show</code> can prompt if a validator inspects an encrypted secret while loading settings.</p>
+<h4 id="passwordless-identity">Passwordless identity</h4>
+<p>As an explicit alternative to passphrase protection, create a passwordless identity during initial setup:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>myapp<span class="w"> </span>settings<span class="w"> </span>encryption<span class="w"> </span>setup<span class="w"> </span>--no-passphrase
+</span></code></pre></div>
+<p>This stores the private identity without any passphrase protection, readable only by the current user. Encrypted
+settings saves still verify the identity, but a passwordless identity needs no passphrase prompt. Anyone who can read
+the identity can decrypt your secrets, including other processes running as the same user and anyone with access to
+file or account backups. You are responsible for protecting your backups.</p>
+<h4 id="identity-cache-and-security-limits">Identity cache and security limits</h4>
+<p>For passphrase-protected material, <code>encryption_cache_ttl</code> is the identity cache lifetime in seconds and defaults to
+<code>300</code>. Set it to <code>0</code> to disable caching; unlocking then verifies the passphrase but does not retain the identity for
+later access. When caching is enabled, the unwrapped identity is stored in plaintext under the app's cache directory, typically
+<code>~/.cache/&lt;app-name&gt;/secret-encryption-identity.json</code> (the location follows <code>XDG_CACHE_HOME</code> and can be changed in the
+<a href="../../config/">config</a>). This file is separate from the app cache managed by the
+<code>cache</code> commands, and is only readable by the current user.</p>
+<p>Expiration is checked on access, not by a background process: an expired plaintext cache file remains on disk until the
+next access removes it. <code>encryption lock</code> removes the cache file. File deletion does not guarantee secure erasure from
+the filesystem, snapshots, backups, or memory, and interrupted writes can leave private temporary files. Restrict
+filesystem access and consider these limits when deciding whether to enable caching.</p>
+<h4 id="validating-encrypted-secrets">Validating encrypted secrets</h4>
+<p>Pydantic validators can inspect an encrypted secret with <code>get_secret_value()</code> and return the original secret object:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">field_validator</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typerdrive</span><span class="w"> </span><span class="kn">import</span> <span class="n">EncryptedSecretStr</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">AppSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">validate_default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>    <span class="n">api_token</span><span class="p">:</span> <span class="n">EncryptedSecretStr</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;api_token&quot;</span><span class="p">)</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>    <span class="nd">@classmethod</span>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">validate_token</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">EncryptedSecretStr</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EncryptedSecretStr</span><span class="p">:</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="o">.</span><span class="n">get_secret_value</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;token_&quot;</span><span class="p">):</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid token format&quot;</span><span class="p">)</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a>        <span class="k">return</span> <span class="n">value</span>
+</span></code></pre></div>
+<p>Normal settings loads, updates, and explicit validation can run validators and prompt for a passphrase when an encrypted
+secret is inspected. This includes <code>settings show</code> during loading. Saves independently verify the identity, even when no
+validator inspects a secret. A usable cached identity avoids the prompt; with a zero TTL, each save or decryption can
+prompt. Passwordless identities require no passphrase. Avoid including plaintext secrets in validation errors or logs.
+Validators that replace or discard encrypted secret objects can change persistence behavior; applications are responsible
+for preserving the intended encryption path.</p>
+<h4 id="encryption-constraints-and-platforms">Encryption constraints and platforms</h4>
+<p>On settings saves, <code>SettingsManager</code> serializes the model with Pydantic and passes a serialization context that tells
+each secret type how to write itself: <code>EncryptedSecretStr</code> values are written as ciphertext and <code>PlaintextSecretStr</code>
+values as plaintext. Because the types serialize themselves, this works for secrets in nested models and collections.
+Outside of a settings save, both types are masked when serialized to JSON.</p>
+<p>Custom serializers, aliases, untyped or extra fields, and copying or transforming model values may change or bypass
+that path. <code>typerdrive</code> does not reject every such pattern; applications are responsible for ensuring that sensitive
+values reach persistence through the intended encrypted field and for checking their serialized output.</p>
+<p>The optional <code>pyrage</code> dependency has wheels for macOS and for Linux on x64 and arm64. Windows x64 wheels are also
+available, but the settings feature does not currently support Windows.</p>
 <h2 id="the-get_settings-functions">The <code>get_settings()</code> functions</h2>
 <p>In order for <code>typerdrive</code> to provide the settings through an argument to the command function, we have to tap into a bit
 of Python and Typer's "mystical energy field". If you want to use something more direct, you can access the settings
 object using the <code>get_settings()</code> function to extract it from the <code>typer.Context</code> instead. Rewriting the <code>report()</code>
 command to use the <code>get_settings()</code> function would look like this:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">SettingsModel</span><span class="p">)</span>
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">):</span>
-</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">SettingsModel</span><span class="p">)</span>
-</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="nb">print</span><span class="p">(</span>
-</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>        <span class="n">unwrap</span><span class="p">(</span>
-</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="s2">            Look at this </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">alignment</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">planet</span><span class="si">}</span>
-</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="s2">            </span><span class="si">{</span><span class="s1">&#39;walking&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">cfg</span><span class="o">.</span><span class="n">is_humanoid</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;slithering&#39;</span><span class="si">}</span><span class="s2"> by.</span>
-</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="s2">            &quot;&quot;&quot;</span>
-</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>        <span class="p">)</span>
-</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>    <span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="nd">@attach_settings</span><span class="p">(</span><span class="n">SettingsModel</span><span class="p">)</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">):</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>    <span class="n">cfg</span> <span class="o">=</span> <span class="n">get_settings</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">SettingsModel</span><span class="p">)</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>    <span class="nb">print</span><span class="p">(</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>        <span class="n">unwrap</span><span class="p">(</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="s2">            Look at this </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">alignment</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">planet</span><span class="si">}</span>
+</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="s2">            </span><span class="si">{</span><span class="s1">&#39;walking&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">cfg</span><span class="o">.</span><span class="n">is_humanoid</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;slithering&#39;</span><span class="si">}</span><span class="s2"> by.</span>
+</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="s2">            &quot;&quot;&quot;</span>
+</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>        <span class="p">)</span>
+</span><span id="__span-22-12"><a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>    <span class="p">)</span>
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">The <code>type_hint</code> argument to <code>get_settings()</code></p>
-<p>Because the model is bound to the settings commands <em>dynamically</em>, the <code>get_settings()</code> function needs a type hint
-to cast it to the appropriate model type. This <code>type_hint</code> argument must match with the settings model that was
-attached or an exception will be raised.</p>
 </div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>Because the model is bound to the settings commands _dynamically_, the `get_settings()` function needs a type hint
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>to cast it to the appropriate model type. This `type_hint` argument must match with the settings model that was
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>attached or an exception will be raised.
+</span></code></pre></div>
 <h2 id="the-add_-functions">The <code>add_.*()</code> functions</h2>
-<p>The <code>typerdrive.settings.commands</code> module has several <code>add_.*()</code> functions. These work by adding a subcommand to the
-CLI app that is passed in. In general, you only need to use the <code>add_settings_subcommand()</code> in your app. However, if you
+<p>The <code>typerdrive.settings.commands</code> module has several <code>add_.*()</code> functions. These work by adding a subcommand to the CLI
+app that is passed in. In general, you only need to use the <code>add_settings_subcommand()</code> in your app. However, if you
 want to customize where the settings subcommands appear, you may call the other <code>add_.*()</code> functions directly</p>
 <h3 id="add_bind"><code>add_bind()</code></h3>
 <p>This method adds the <code>bind</code> subcommand to the provided CLI app. It uses the
@@ -2094,6 +2420,8 @@ and then adds it to the <code>cli</code> argument.</p>
 </ul>
 <p>The result is that all the subcommands are available under one <code>settings</code> subcommand.</p>
 <p><a href="../../reference/settings/#typerdrive.settings.commands.add_settings_subcommand">Function Reference</a></p>
+
+
 
 
 
@@ -2164,8 +2492,8 @@ and then adds it to the <code>cli</code> argument.</p>
   
   
     Made with
-    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-      Material for MkDocs
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
     </a>
   
 </div>
@@ -2175,7 +2503,7 @@ and then adds it to the <code>cli</code> argument.</p>
 </footer>
       
     </div>
-    <div class="md-dialog" data-md-component="dialog">
+    <div class="md-dialog" data-md-component="dialog" role="status" aria-atomic="true">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
@@ -2183,10 +2511,14 @@ and then adds it to the <code>cli</code> argument.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.expand", "navigation.footer", "navigation.tracking", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"../..","features":["navigation.expand","navigation.footer","navigation.tracking","content.code.copy"],"redirect":null,"search":"../../assets/javascripts/workers/search.719e0d91.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","clipboard.error":"Could not copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d31f0ffa.min.js"></script>
       
     
   </body>

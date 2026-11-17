@@ -8,13 +8,13 @@ default: help
 qa: qa/full  ## Shortcut for qa/full
 
 qa/test: qa/test-unit qa/test-integration  ## Run all tests (with combined coverage)
-	@uv run pytest tests/unit tests/integration
+	@uv run --extra encrypt-secrets pytest tests/unit tests/integration
 
 qa/test-unit:  ## Run unit tests only (no coverage enforcement)
-	@uv run pytest tests/unit --no-cov
+	@uv run --extra encrypt-secrets pytest tests/unit --no-cov
 
 qa/test-integration:  ## Run integration tests only (no coverage enforcement)
-	@uv run pytest tests/integration --no-cov
+	@uv run --extra encrypt-secrets pytest tests/integration --no-cov
 
 qa/types:  ## Run static type checks
 	@uv run ty check ${PACKAGE_TARGET} tests src/typerdrive_demo
@@ -39,10 +39,10 @@ qa/benchmark:  ## Run startup benchmarks
 docs: docs/serve  ## Shortcut for docs/serve
 
 docs/build:  ## Build the documentation
-	@uv run mkdocs build --config-file=docs/mkdocs.yaml
+	@uv run zensical build --config-file=docs/zensical.toml
 
 docs/serve:  ## Build the docs and start a local dev server
-	@uv run mkdocs serve --config-file=docs/mkdocs.yaml --dev-addr=localhost:10000
+	@uv run zensical serve --config-file=docs/zensical.toml --dev-addr=localhost:10000
 
 
 ## ==== Demo ===========================================================================================================
@@ -50,10 +50,13 @@ docs/serve:  ## Build the docs and start a local dev server
 demo: demo/run  ## Shortcut for demo/run
 
 demo/run:  ## Run the demo application
-	@uv run typerdrive-demo
+	@uv run --extra demo typerdrive-demo
+
+demo/feature/%:  ## Run the demo application
+	@uv run --extra demo typerdrive-demo --feature=$*
 
 demo/debug:  ## Run the demo application in debug mode
-	@uv run debugpy --listen localhost:5678 --wait-for-client src/typerdrive_demo/main.py
+	@uv run --extra demo debugpy --listen localhost:5678 --wait-for-client src/typerdrive_demo/main.py
 
 
 ## ==== Other Commands =================================================================================================

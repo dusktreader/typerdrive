@@ -10,4 +10,5 @@ class ClientError(TyperdriveError):
     """
     The base exception for client errors.
     """
+
     exit_code: ExitCode = ExitCode.GENERAL_ERROR

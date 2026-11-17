@@ -1,0 +1,83 @@
+[project]
+site_name = "typerdrive documentation"
+site_url = "https://dusktreader.github.io/typerdrive"
+docs_dir = "source"
+site_dir = "site"
+repo_url = "https://github.com/dusktreader/typerdrive"
+watch = ["source", "../src/typerdrive", "../examples"]
+extra_css = ["css/fonts.css"]
+nav = [
+  { Home = "index.md" },
+  { Quickstart = "quickstart.md" },
+  { Features = [
+    { Settings = "features/settings.md" },
+    { Cache = "features/cache.md" },
+    { Files = "features/files.md" },
+    { Database = "features/database.md" },
+    { Logging = "features/logging.md" },
+    { "Error Handling" = "features/exceptions.md" },
+    { "Formatted Messages" = "features/messages.md" },
+    { "API Clients" = "features/client.md" },
+  ] },
+  { "Typerdrive Configuration" = "config.md" },
+  { "Runnable Demo" = "demo.md" },
+  { "Developer Guide" = "dev-guide.md" },
+  { Reference = [
+    { "Base Modules" = "reference/base_modules.md" },
+    { Cache = "reference/cache.md" },
+    { Database = "reference/database.md" },
+    { Files = "reference/files.md" },
+    { Client = "reference/client.md" },
+    { Logging = "reference/logging.md" },
+    { Settings = "reference/settings.md" },
+  ] },
+]
+
+[project.theme]
+variant = "classic"
+features = ["navigation.expand", "navigation.footer", "navigation.tracking", "content.code.copy"]
+
+[project.theme.icon]
+repo = "fontawesome/brands/github"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle = { icon = "material/brightness-4", name = "Switch to dark mode" }
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle = { icon = "material/brightness-7", name = "Switch to light mode" }
+
+[project.plugins.mkdocstrings]
+default_handler = "python"
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["../src/typerdrive"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+show_root_heading = true
+separate_signature = true
+show_if_no_docstring = true
+show_signature_annotations = true
+show_source = true
+docstring_style = "google"
+show_category_heading = true
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+line_spans = "__span"
+pygments_lang_class = true
+
+[project.markdown_extensions.pymdownx.inlinehilite]
+
+[project.markdown_extensions.pymdownx.snippets]
+
+[project.markdown_extensions.pymdownx.superfences]
+
+[project.markdown_extensions.pymdownx.details]

@@ -6,7 +6,52 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 Versioning](http://semver.org/).
 
 
-## Unreleased
+## v1.0.0 - 2026-11-17
+
+This is the first stable release. It includes breaking changes to settings secrets and the config.
+
+### Breaking changes
+
+- Pydantic's `SecretStr` is no longer supported in settings models. It serializes to a mask (`**********`) in JSON, so a
+  saved settings file would lose the value. Use `PlaintextSecretStr` (stored as plaintext) or `EncryptedSecretStr`
+  (encrypted at rest) instead. `typerdrive` does not detect plain `SecretStr` fields
+- Renamed the `cache_dir` config value to `app_cache_home`
+- Moved the `cache` feature's data into a `managed` subdirectory (`managed_cache_dir`) so that other internal files
+  can live beside it. Existing cached data is not migrated
+- Raised `TyperdriveConfigError` (rather than `TyperdriveError`) for an invalid config
+- Settings files are now written with private permissions (readable and writable only by the current user)
+- Settings are now serialized by Pydantic, with each secret type serializing itself, instead of by walking the model
+  by hand. As a result, extra fields on a model are not written to the settings file, and already-validated nested
+  models are not re-validated when settings are updated
+
+### Features
+
+- Added `PlaintextSecretStr`, a `SecretStr` that is masked for display but persisted as plaintext, including inside
+  nested models and collections
+- Added `EncryptedSecretStr`, a `SecretStr` that is encrypted at rest with [age](https://age-encryption.org) and
+  decrypted lazily when `get_secret_value()` is called (optional `encrypt-secrets` extra: `typerdrive[encrypt-secrets]`)
+- Added an `encryption` settings subcommand with `setup`, `unlock`, `lock`, `change-passphrase`, and `reset` commands.
+  Identities are passphrase protected by default, with `setup --no-passphrase` for a passwordless identity
+- Added the `encryption_cache_ttl` config option for caching an unlocked passphrase-protected identity
+- Added `app_state_home` and `managed_cache_dir` config properties
+- Made `settings reset` also remove the encryption identity, and `settings encryption reset` also reset encrypted
+  settings values to their defaults
+- Added atomic, private-permission file writes for settings and encryption material
+- Added support for nested model collections in settings
+- Rebuilt the interactive demo on Roadshow, with each demo isolated in a temporary directory, and added encrypted
+  secret demos for `attach_settings` and `settings_commands`
+
+### Fixes
+
+- Fixed saving settings that contain non-JSON types such as `AnyHttpUrl`, `Path`, or `datetime`
+
+### Documentation and tooling
+
+- Documented plaintext vs encrypted secrets, encryption setup and its limits, and validating defaults for secret
+  fields (`validate_default=True`). All settings examples and demos now set `validate_default=True`
+- Moved the docs build from mkdocs to zensical
+- Added a GitHub release step to the deploy workflow, and fixed the docs workflow path filter
+
 
 ## v0.15.1 - 2026-11-10
 

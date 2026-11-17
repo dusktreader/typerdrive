@@ -4,7 +4,6 @@ from contextlib import asynccontextmanager
 from contextvars import ContextVar
 
 import pytest
-
 from typerdrive.async_tools import (
     AsyncBridgeError,
     BlockingAsyncAdapter,

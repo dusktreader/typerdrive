@@ -7,7 +7,7 @@ Typerdrive uses its own config for app identity and the behavior of its built-in
 
 When you build an app with Typerdrive, there are two kinds of configuration to keep straight.
 
-The [`settings` feature](settings.md) is for values that your app uses to control its behavior outside of what
+The [`settings` feature](features/settings.md) is for values that your app uses to control its behavior outside of what
 typerdrive provides out of the box. When you build an app on top of typerdrive, you might need your app to remember the
 user's home planet. In that case, you will use the builtin `settings` feature to remember the planet name. Typerdrive
 knows about log files and storage, but it doesn't know anything about planets; that's part of your app's logic.
@@ -80,7 +80,8 @@ $ python examples/config/info.py info --full
 |   cache_home             /tmp/typerdrive-docs-cache                                              |
 |   log_dir                /tmp/typerdrive-docs-state/config-example/logs                          |
 |   settings_path          /tmp/typerdrive-docs-state/config-example/settings.json                 |
-|   cache_dir              /tmp/typerdrive-docs-cache/config-example                               |
+|   app_cache_home         /tmp/typerdrive-docs-cache/config-example                               |
+|   managed_cache_dir      /tmp/typerdrive-docs-cache/config-example/managed                       |
 |   files_dir              /tmp/typerdrive-docs-state/config-example/files                         |
 |   database_path          /tmp/typerdrive-docs-state/config-example/db.sqlite                     |
 |                                                                                                  |
@@ -131,13 +132,14 @@ $ python examples/config/info.py version --terse
 
 Typerdrive computes storage paths from `app_name`, `state_home`, and `cache_home`:
 
-| Value           | Path                                    |
-| --------------- | --------------------------------------- |
-| `log_dir`       | `<state_home>/<app_name>/logs`          |
-| `settings_path` | `<state_home>/<app_name>/settings.json` |
-| `files_dir`     | `<state_home>/<app_name>/files`         |
-| `database_path` | `<state_home>/<app_name>/db.sqlite`     |
-| `cache_dir`     | `<cache_home>/<app_name>`               |
+| Value               | Path                                    |
+| ------------------- | --------------------------------------- |
+| `log_dir`           | `<state_home>/<app_name>/logs`          |
+| `settings_path`     | `<state_home>/<app_name>/settings.json` |
+| `files_dir`         | `<state_home>/<app_name>/files`         |
+| `database_path`     | `<state_home>/<app_name>/db.sqlite`     |
+| `app_cache_home`    | `<cache_home>/<app_name>`               |
+| `managed_cache_dir` | `<cache_home>/<app_name>/managed`       |
 
 By default, `state_home` uses `XDG_STATE_HOME` (usually `~/.local/state`) and `cache_home` uses `XDG_CACHE_HOME`
 (usually `~/.cache`). Setting either field overrides its corresponding XDG directory. The `settings_path` is where

@@ -1,5 +1,4 @@
 import pytest
-
 from typerdrive.constants import ExitCode
 from typerdrive.database.exceptions import (
     DatabaseError,

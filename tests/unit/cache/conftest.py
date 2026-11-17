@@ -10,7 +10,7 @@ from typerdrive.env import tweak_env
 def fake_cache_path(tmp_path: Path) -> Generator[Path, None, None]:
     state_home = tmp_path / ".local/state"
     cache_home = tmp_path / ".cache"
-    fake_path = cache_home / "test"
+    fake_path = cache_home / "test" / "managed"
     fake_path.mkdir(parents=True)
     original_config = get_typerdrive_config()
 

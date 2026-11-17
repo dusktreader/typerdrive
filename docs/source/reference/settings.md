@@ -7,3 +7,4 @@
 ::: typerdrive.settings.commands
 ::: typerdrive.settings.exceptions
 ::: typerdrive.settings.manager
+::: typerdrive.settings.secrets.models

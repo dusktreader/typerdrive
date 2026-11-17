@@ -2,10 +2,12 @@ import asyncio
 
 import typer
 from typer.testing import CliRunner
-
 from typerdrive import DatabaseManager, MigrationRegistry, add_database_subcommand
 
+from typerdrive_demo.helpers import demo
 
+
+@demo("database_commands")
 def demo_1__database_commands__path_and_status():
     """
     This function demonstrates how to inspect the database location and migration status. `db path` reports the configured
@@ -27,6 +29,7 @@ def demo_1__database_commands__path_and_status():
     cli(["db", "status"], standalone_mode=False)
 
 
+@demo("database_commands")
 def demo_2__database_commands__inspect():
     """
     This function demonstrates how `db inspect` reports SQLite metadata without displaying application rows. It first
@@ -49,6 +52,7 @@ def demo_2__database_commands__inspect():
     cli(["db", "inspect"], standalone_mode=False)
 
 
+@demo("database_commands")
 def demo_3__database_commands__setup_migrate_reset():
     """
     Demonstrate that setup creates an empty database, migrate applies the inline SQL, inspect reports metadata, and a

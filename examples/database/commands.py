@@ -1,12 +1,10 @@
 import tempfile
 
 import typer
-from typer.testing import CliRunner
-
 from attach import cli, registry
+from typer.testing import CliRunner
 from typerdrive import add_database_subcommand
 from typerdrive.env import tweak_env
-
 
 add_database_subcommand(cli, registry)
 

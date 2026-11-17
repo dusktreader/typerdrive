@@ -48,7 +48,7 @@ class LoggingManager:
                 {
                     "sink": sys.stdout,
                     "level": "DEBUG",
-                    "format": "<green>{time:HH:mm:ss}</green> | <level>{level}</level> | <level>{message}</level>"
+                    "format": "<green>{time:HH:mm:ss}</green> | <level>{level}</level> | <level>{message}</level>",
                 },
             )
 

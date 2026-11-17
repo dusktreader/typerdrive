@@ -5,7 +5,10 @@ Demonstrate how to configure Typerdrive and inspect the effective configuration.
 import typer
 from typerdrive import add_info_subcommand, set_typerdrive_config
 
+from typerdrive_demo.helpers import demo
 
+
+@demo("config_commands")
 def demo_01__show_app_info():
     """
     Configure client app metadata, then use the `info` command to display it.
@@ -20,6 +23,7 @@ def demo_01__show_app_info():
     cli(["info"])
 
 
+@demo("config_commands")
 def demo_02__show_app_version():
     """
     Show the app name and version with the `version` command.
@@ -30,6 +34,7 @@ def demo_02__show_app_version():
     cli(["version"])
 
 
+@demo("config_commands")
 def demo_03__show_full_config():
     """
     Use `info --full` to inspect configured values and computed storage paths.

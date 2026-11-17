@@ -10,6 +10,7 @@ class CacheError(TyperdriveError):
     """
     The base exception for cache errors.
     """
+
     exit_code: ExitCode = ExitCode.GENERAL_ERROR
 
 

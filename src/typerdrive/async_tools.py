@@ -9,7 +9,6 @@ import anyio
 from anyio.from_thread import BlockingPortal as AnyIOBlockingPortal
 from anyio.from_thread import start_blocking_portal
 
-
 T = TypeVar("T")
 R = TypeVar("R")
 AsyncCallable = Callable[..., Awaitable[T]]

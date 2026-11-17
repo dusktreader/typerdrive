@@ -6,7 +6,10 @@ import typer
 from buzz import DoExceptParams
 from typerdrive import TyperdriveError, handle_errors
 
+from typerdrive_demo.helpers import demo
 
+
+@demo("handle_errors")
 def demo_1__handle_errors__no_handler():
     """
     This function demonstrates what happens when no handler is installed.
@@ -24,6 +27,7 @@ def demo_1__handle_errors__no_handler():
     cli()
 
 
+@demo("handle_errors")
 def demo_2__handle_errors__basic():
     """
     This function demonstrates how to use the `handle_errors` decorator
@@ -42,6 +46,7 @@ def demo_2__handle_errors__basic():
     cli()
 
 
+@demo("handle_errors")
 def demo_3__handle_errors__handle_specific_errors():
     """
     This function demonstrates how to use the `handle_errors` decorator
@@ -62,6 +67,7 @@ def demo_3__handle_errors__handle_specific_errors():
     cli()
 
 
+@demo("handle_errors")
 def demo_4__handle_errors__ignore_specific_errors():
     """
     This function demonstrates how to use the `handle_errors` decorator
@@ -90,6 +96,7 @@ def demo_4__handle_errors__ignore_specific_errors():
     cli()
 
 
+@demo("handle_errors")
 def demo_5__handle_errors__perform_task_on_error():
     """
     This function demonstrates how to use the `handle_errors` decorator
@@ -114,6 +121,7 @@ def demo_5__handle_errors__perform_task_on_error():
     cli()
 
 
+@demo("handle_errors")
 def demo_6__handle_errors__perform_task_with_no_error():
     """
     This function demonstrates how to use the `handle_errors` decorator
@@ -137,6 +145,7 @@ def demo_6__handle_errors__perform_task_with_no_error():
     cli()
 
 
+@demo("handle_errors")
 def demo_7__handle_errors__always_perform_task():
     """
     This function demonstrates how to use the `handle_errors` decorator
@@ -160,6 +169,7 @@ def demo_7__handle_errors__always_perform_task():
     cli()
 
 
+@demo("handle_errors")
 def demo_8__handle_errors__set_a_subject_and_footer():
     """
     This function demonstrates how to use the `handle_errors` decorator

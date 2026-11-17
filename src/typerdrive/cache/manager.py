@@ -13,8 +13,6 @@ from loguru import logger
 from rich import box
 from rich.table import Table
 
-from typerdrive.cache.typed_cache import TypedCache
-
 from typerdrive.cache.exceptions import (
     CacheClearError,
     CacheError,
@@ -23,6 +21,7 @@ from typerdrive.cache.exceptions import (
     CacheStoreError,
 )
 from typerdrive.cache.models import CacheStats
+from typerdrive.cache.typed_cache import TypedCache
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config
 from typerdrive.constants import EvictionPolicy
 from typerdrive.format import terminal_message
@@ -55,7 +54,7 @@ class CacheManager:
             eviction_policy: Eviction policy to use when size limit is reached
         """
         config: TyperdriveConfig = get_typerdrive_config()
-        self.cache_dir = config.cache_dir
+        self.cache_dir = config.managed_cache_dir
 
         with CacheInitError.handle_errors("Failed to initialize cache"):
             self.cache_dir.mkdir(parents=True, exist_ok=True)

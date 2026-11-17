@@ -1,7 +1,6 @@
 import pytest
 import snick
 from pytest_mock import MockerFixture
-
 from typerdrive.config import TyperdriveConfig
 from typerdrive.exceptions import IntegrationError
 from typerdrive.format import simple_message, status_message, terminal_message

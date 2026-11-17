@@ -3,7 +3,6 @@ from pathlib import Path
 
 import typer
 from typer.testing import CliRunner
-
 from typerdrive import (
     DatabaseManager,
     DatabaseSession,

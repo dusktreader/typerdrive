@@ -8,12 +8,12 @@ from typerdrive import (
     FilesManager,
     attach_files,
     get_files_manager,
-    set_typerdrive_config,
 )
 
-set_typerdrive_config(app_name="attach-files-demo")
+from typerdrive_demo.helpers import demo
 
 
+@demo("attach_files")
 def demo_1__attach_files__storing_data():
     """
     This function demonstrates how to use the `attach_files` decorator
@@ -44,6 +44,7 @@ def demo_1__attach_files__storing_data():
     cli()
 
 
+@demo("attach_files")
 def demo_2__attach_files__loading_data():
     """
     This function demonstrates how to load data from files.
@@ -77,6 +78,7 @@ def demo_2__attach_files__loading_data():
     cli()
 
 
+@demo("attach_files")
 def demo_3__attach_files__with_permissions():
     """
     This function demonstrates storing files with specific permissions.
@@ -98,6 +100,7 @@ def demo_3__attach_files__with_permissions():
     cli()
 
 
+@demo("attach_files")
 def demo_4__attach_files__list_and_manage():
     """
     This function demonstrates listing files in a directory
@@ -125,6 +128,7 @@ def demo_4__attach_files__list_and_manage():
     cli()
 
 
+@demo("attach_files")
 def demo_5__attach_files__access_through_context():
     """
     This function demonstrates how the files manager can also be accessed
@@ -149,6 +153,7 @@ def demo_5__attach_files__access_through_context():
     cli()
 
 
+@demo("attach_files")
 def demo_6__attach_files__recursive_listing():
     """
     This function demonstrates recursively listing files in a directory
@@ -185,6 +190,7 @@ def demo_6__attach_files__recursive_listing():
     cli()
 
 
+@demo("attach_files")
 def demo_7__attach_files__list_items_with_patterns():
     """
     This function demonstrates filtering recursive listings with glob patterns.

@@ -1,5 +1,5 @@
 import typer
-from typerdrive import attach_files, FilesManager, set_typerdrive_config
+from typerdrive import FilesManager, attach_files, set_typerdrive_config
 
 cli = typer.Typer()
 set_typerdrive_config(app_name="files-attach-example")
@@ -13,17 +13,17 @@ def store(ctx: typer.Context, manager: FilesManager):
     # Store text
     greeting = "Hello from the files feature!"
     manager.store_text(greeting, "greeting.txt")
-    print(f"Stored text at greeting.txt")
+    print("Stored text at greeting.txt")
 
     # Store JSON
     config = {"app_name": "My Awesome CLI", "version": "1.0.0", "features": ["auth", "api", "database"]}
     manager.store_json(config, "config/app.json")
-    print(f"Stored JSON at config/app.json")
+    print("Stored JSON at config/app.json")
 
     # Store bytes
     binary_data = b"This is binary data: \x00\x01\x02\x03"
     manager.store_bytes(binary_data, "data/binary.dat")
-    print(f"Stored bytes at data/binary.dat")
+    print("Stored bytes at data/binary.dat")
 
 
 @cli.command()

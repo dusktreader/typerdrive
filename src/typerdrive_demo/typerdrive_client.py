@@ -4,7 +4,10 @@ from typing import cast
 from pydantic import BaseModel
 from typerdrive import TyperdriveClient
 
+from typerdrive_demo.helpers import demo
 
+
+@demo("typerdrive_client")
 def demo_1__typerdrive_client__using_a_query_param_model():
     """
     This function demonstrates how the `_x()` methods of the `TyperdriveClient`
@@ -35,6 +38,7 @@ def demo_1__typerdrive_client__using_a_query_param_model():
     print("People ->", ", ".join(r.name for r in response.results))
 
 
+@demo("typerdrive_client")
 def demo_2__typerdrive_client__using_a_request_body_model():
     """
     This function demonstrates how the `_x()` methods of the `TyperdriveClient`
@@ -68,6 +72,7 @@ def demo_2__typerdrive_client__using_a_request_body_model():
     print("New Person ->", response)
 
 
+@demo("typerdrive_client")
 def demo_3__typerdrive_client__expecting_specific_status():
     """
     This function demonstrates how the `_x()` methods of the `TyperdriveClient`
@@ -79,6 +84,7 @@ def demo_3__typerdrive_client__expecting_specific_status():
     client.get_x("people/1/", expected_status=203)
 
 
+@demo("typerdrive_client")
 def demo_4__typerdrive_client__with_no_expected_response():
     """
     This function demonstrates how the `_x()` methods of the `TyperdriveClient`
@@ -91,6 +97,7 @@ def demo_4__typerdrive_client__with_no_expected_response():
     print("Status Code ->", response)
 
 
+@demo("typerdrive_client")
 def demo_5__typerdrive_client__with_no_response_model():
     """
     This function demonstrates how the `_x()` methods of the `TyperdriveClient`

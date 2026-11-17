@@ -10,12 +10,12 @@ from typerdrive import (
     CacheManager,
     attach_cache,
     get_cache_manager,
-    set_typerdrive_config,
 )
 
-set_typerdrive_config(app_name="attach-cache-demo")
+from typerdrive_demo.helpers import demo
 
 
+@demo("attach_cache")
 def demo_1__attach_cache__storing_data():
     """
     This function demonstrates how to use the `attach_cache` decorator
@@ -53,6 +53,7 @@ def demo_1__attach_cache__storing_data():
     cli()
 
 
+@demo("attach_cache")
 def demo_2__attach_cache__loading_data():
     """
     This function demonstrates how to use the `attach_cache` decorator
@@ -92,6 +93,7 @@ def demo_2__attach_cache__loading_data():
     cli()
 
 
+@demo("attach_cache")
 def demo_3__attach_cache__expiration_and_groups():
     """
     This function demonstrates the use of expiration times and groups
@@ -120,6 +122,7 @@ def demo_3__attach_cache__expiration_and_groups():
     cli()
 
 
+@demo("attach_cache")
 def demo_4__attach_cache__access_through_context():
     """
     This function demonstrates how the cache manager can also be accessed

@@ -10,4 +10,5 @@ class LoggingError(TyperdriveError):
     """
     The base exception for logging errors.
     """
+
     exit_code: ExitCode = ExitCode.GENERAL_ERROR

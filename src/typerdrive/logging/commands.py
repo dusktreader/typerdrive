@@ -18,7 +18,9 @@ def show(
     ctx: typer.Context,
     manager: LoggingManager,
     follow: Annotated[bool, typer.Option("--follow", "-f", help="Follow the log output in real time.")] = False,
-    lines: Annotated[Optional[int], typer.Option("--lines", "-n", help="Number of lines to show from the end of the log.")] = None,
+    lines: Annotated[
+        Optional[int], typer.Option("--lines", "-n", help="Number of lines to show from the end of the log.")
+    ] = None,
 ):
     """
     Show the current log.

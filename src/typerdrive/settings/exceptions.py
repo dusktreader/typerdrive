@@ -10,6 +10,7 @@ class SettingsError(TyperdriveError):
     """
     The base exception for settings errors.
     """
+
     exit_code: ExitCode = ExitCode.GENERAL_ERROR
 
 
@@ -46,4 +47,18 @@ class SettingsSaveError(SettingsError):
 class SettingsDisplayError(SettingsError):
     """
     Indicates that there was a problem showing the settings.
+    """
+
+
+class SecretEncryptionError(SettingsError):
+    """
+    Indicates invalid or unavailable encryption material.
+    """
+
+
+class SecretValueError(SettingsError, ValueError):
+    """
+    Indicates an input value that cannot be an encrypted secret.
+
+    Subclasses `ValueError` so that pydantic reports it as a validation failure.
     """

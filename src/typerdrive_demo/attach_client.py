@@ -9,7 +9,10 @@ from pydantic import BaseModel
 from rich import print
 from typerdrive import TyperdriveClient, attach_client, attach_settings
 
+from typerdrive_demo.helpers import demo
 
+
+@demo("attach_client")
 def demo_1__attach_client__use_base_url_from_settings():
     """
     This function demonstrates how to use the `@attach_client()` decorator
@@ -42,6 +45,7 @@ def demo_1__attach_client__use_base_url_from_settings():
     cli()
 
 
+@demo("attach_client")
 def demo_2__attach_client__use_explicit_base_url():
     """
     This function demonstrates how a client can be initialized without
@@ -66,6 +70,7 @@ def demo_2__attach_client__use_explicit_base_url():
     cli()
 
 
+@demo("attach_client")
 def demo_3__attach_client__multiple_clients():
     """
     This function demonstrates how multiple clients may be attached.

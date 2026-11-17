@@ -2,15 +2,13 @@
 This set of demos shows the use of the various cache-related commands.
 """
 
-
 import typer
-from typerdrive import CacheManager, add_cache_subcommand, set_typerdrive_config
+from typerdrive import CacheManager, add_cache_subcommand
 
-from typerdrive_demo.helpers import fake_input
-
-set_typerdrive_config(app_name="cache-command-demo")
+from typerdrive_demo.helpers import demo
 
 
+@demo("cache_commands")
 def demo_1__show__basic():
     """
     This function demonstrates the use of the `show` cache command.
@@ -36,6 +34,7 @@ def demo_1__show__basic():
     cli(["cache", "show"])
 
 
+@demo("cache_commands")
 def demo_2__show__with_filters():
     """
     This function demonstrates the use of the `show` cache command
@@ -58,6 +57,7 @@ def demo_2__show__with_filters():
     cli(["cache", "show", "--group=users"])
 
 
+@demo("cache_commands")
 def demo_3__show__stats():
     """
     This function demonstrates the use of the `show` cache command
@@ -94,6 +94,7 @@ def demo_3__show__stats():
         pass
 
 
+@demo("cache_commands")
 def demo_4__clear__by_group():
     """
     This function demonstrates the use of the `clear` cache command
@@ -111,6 +112,7 @@ def demo_4__clear__by_group():
     cli(["cache", "clear", "--group=users"])
 
 
+@demo("cache_commands", input_lines=["y"])
 def demo_5__clear__full_cache():
     """
     This function demonstrates the use of the `clear` cache command
@@ -132,6 +134,4 @@ def demo_5__clear__full_cache():
 
     cli = typer.Typer()
     add_cache_subcommand(cli)
-
-    fake_input("y")
     cli(["cache", "clear"])

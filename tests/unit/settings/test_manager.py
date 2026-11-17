@@ -1,13 +1,25 @@
 import json
 from collections.abc import Generator
+from datetime import datetime
 from pathlib import Path
-from typing import Annotated, cast
+from typing import Annotated, Any, cast
 
 import pytest
-from rich.console import Console
 import snick
-from pydantic import AfterValidator, BaseModel, SecretStr, ValidationError
+from pydantic import (
+    AfterValidator,
+    AliasChoices,
+    AliasPath,
+    AnyHttpUrl,
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationError,
+    field_validator,
+)
 from pytest_mock import MockerFixture
+from rich.console import Console
+from typerdrive import PlaintextSecretStr
 from typerdrive.config import get_typerdrive_config, set_typerdrive_config
 from typerdrive.env import tweak_env
 from typerdrive.settings.exceptions import SettingsInitError, SettingsSaveError, SettingsUpdateError
@@ -32,6 +44,14 @@ class RequiredFieldsModel(BaseModel):
     planet: str
     is_humanoid: bool = True
     alignment: Annotated[str, AfterValidator(valid_alignment)] = "neutral"
+
+
+class FixedTupleSettings(BaseModel):
+    value: tuple[PlaintextSecretStr, int]
+
+
+class VariadicTupleSettings(BaseModel):
+    value: tuple[PlaintextSecretStr, ...]
 
 
 @pytest.fixture(autouse=True)
@@ -118,7 +138,7 @@ class TestSettingsManager:
         assert manager.settings_instance.alignment == "neutral"
 
     def test_init__raises_error_on_failure(self, mocker: MockerFixture):
-        mocker.patch.object(DefaultSettingsModel, "__init__", side_effect=RuntimeError("BOOM"))
+        mocker.patch.object(DefaultSettingsModel, "model_validate", side_effect=RuntimeError("BOOM"))
         with pytest.raises(SettingsInitError, match="Failed to initialize settings"):
             SettingsManager(DefaultSettingsModel)
 
@@ -181,7 +201,7 @@ class TestSettingsManager:
 
     def test_update__raises_error_on_failure(self, mocker: MockerFixture):
         manager = SettingsManager(DefaultSettingsModel)
-        mocker.patch.object(manager.settings_model, "__init__", side_effect=RuntimeError("BOOM"))
+        mocker.patch.object(manager.settings_model, "model_validate", side_effect=RuntimeError("BOOM"))
         with pytest.raises(SettingsUpdateError, match="Failed to update settings"):
             manager.update()
 
@@ -309,7 +329,10 @@ class TestSettingsManager:
         manager.save()
 
         assert json.loads(fake_settings_path.read_text()) == {
-            "name": "jawa", "planet": "tatooine", "is_humanoid": True, "alignment": "neutral"
+            "name": "jawa",
+            "planet": "tatooine",
+            "is_humanoid": True,
+            "alignment": "neutral",
         }
 
     def test_save__raises_error_on_failure(self, mocker: MockerFixture):
@@ -321,7 +344,7 @@ class TestSettingsManager:
     def test_secret_str__is_masked_in_display(self):
         class SecretSettingsModel(BaseModel):
             username: str = "leia"
-            api_token: SecretStr = SecretStr("s3cr3t")
+            api_token: PlaintextSecretStr = PlaintextSecretStr("s3cr3t")
 
         manager = SettingsManager(SecretSettingsModel)
         console = Console()
@@ -334,7 +357,7 @@ class TestSettingsManager:
     def test_secret_str__is_persisted_as_plaintext_and_reloaded(self, fake_settings_path: Path):
         class SecretSettingsModel(BaseModel):
             username: str = "leia"
-            api_token: SecretStr = SecretStr("s3cr3t")
+            api_token: PlaintextSecretStr = PlaintextSecretStr("s3cr3t")
 
         manager = SettingsManager(SecretSettingsModel)
         manager.save()
@@ -348,7 +371,7 @@ class TestSettingsManager:
     def test_secret_str__survives_update_round_trip(self):
         class SecretSettingsModel(BaseModel):
             username: str = "leia"
-            api_token: SecretStr = SecretStr("s3cr3t")
+            api_token: PlaintextSecretStr = PlaintextSecretStr("s3cr3t")
 
         manager = SettingsManager(SecretSettingsModel)
         manager.update(username="han")
@@ -358,7 +381,7 @@ class TestSettingsManager:
     def test_secret_str__survives_unset_round_trip(self):
         class SecretSettingsModel(BaseModel):
             username: str = "leia"
-            api_token: SecretStr = SecretStr("s3cr3t")
+            api_token: PlaintextSecretStr = PlaintextSecretStr("s3cr3t")
 
         manager = SettingsManager(SecretSettingsModel)
         manager.unset("username")
@@ -367,7 +390,7 @@ class TestSettingsManager:
 
     def test_nested_secret_str__is_masked_in_display_and_persisted_as_plaintext(self, fake_settings_path: Path):
         class NestedSettingsModel(BaseModel):
-            api_token: SecretStr = SecretStr("nested-secret")
+            api_token: PlaintextSecretStr = PlaintextSecretStr("nested-secret")
 
         class ParentSettingsModel(BaseModel):
             child: NestedSettingsModel = NestedSettingsModel()
@@ -392,3 +415,122 @@ class TestSettingsManager:
         assert cast(ParentSettingsModel, reloaded_manager.settings_instance).child.api_token.get_secret_value() == (
             "nested-secret"
         )
+
+    def test_regular_settings__preserves_malformed_nested_secret_values(self, fake_settings_path: Path):
+
+        class Child(BaseModel):
+            token: PlaintextSecretStr
+
+        class Parent(BaseModel):
+            child: Child
+
+        malformed = {"child": {"token": {"unexpected": "shape"}}}
+        fake_settings_path.write_text(json.dumps(malformed))
+
+        manager = SettingsManager(Parent)
+        manager.save()
+
+        assert json.loads(fake_settings_path.read_text()) == malformed
+
+    def test_regular_settings__loads_alias_choices_and_paths(self, fake_settings_path: Path):
+
+        class AliasSettings(BaseModel):
+            first: str = Field(validation_alias=AliasChoices("preferred", "legacy"))
+            second: str = Field(validation_alias=AliasPath("credentials", "display"))
+
+        fake_settings_path.write_text(json.dumps({"preferred": "primary", "credentials": {"display": "nested"}}))
+
+        manager = SettingsManager(AliasSettings)
+
+        settings = cast(AliasSettings, manager.settings_instance)
+        assert settings.first == "primary"
+        assert settings.second == "nested"
+
+    def test_save__restricts_settings_file_to_current_user(self, fake_settings_path: Path):
+        class Settings(BaseModel):
+            name: str = "leia"
+
+        SettingsManager(Settings).save()
+
+        assert fake_settings_path.stat().st_mode & 0o777 == 0o600
+
+    def test_regular_settings__ignores_model_extras_when_saving(self, fake_settings_path: Path):
+
+        class ExtraSettings(BaseModel):
+            model_config = ConfigDict(extra="allow")
+            name: str
+
+        fake_settings_path.write_text(json.dumps({"name": "leia", "unmodeled": "preserved-in-memory"}))
+
+        manager = SettingsManager(ExtraSettings)
+        assert manager.settings_instance.model_extra == {"unmodeled": "preserved-in-memory"}
+        manager.save()
+
+        assert json.loads(fake_settings_path.read_text()) == {"name": "leia"}
+
+    def test_regular_settings__does_not_validate_on_save(self, fake_settings_path: Path):
+        validator_calls = []
+
+        class ValidatedSettings(BaseModel):
+            value: int
+
+            @field_validator("value")
+            @classmethod
+            def track_validation(cls, value: int) -> int:
+                validator_calls.append(value)
+                return value
+
+        fake_settings_path.write_text(json.dumps({"value": 1}))
+        manager = SettingsManager(ValidatedSettings)
+        assert validator_calls == [1]
+        validator_calls.clear()
+        cast(Any, manager.settings_instance).value = "invalid"
+
+        manager.save()
+
+        assert validator_calls == []
+        assert json.loads(fake_settings_path.read_text()) == {"value": "invalid"}
+
+    @pytest.mark.parametrize(
+        ("settings_model", "value"),
+        [
+            (FixedTupleSettings, "malformed"),
+            (FixedTupleSettings, ["ordinary", 1, 2]),
+            (FixedTupleSettings, ["ordinary"]),
+            (VariadicTupleSettings, "malformed"),
+            (VariadicTupleSettings, ["ordinary", "extra"]),
+            (VariadicTupleSettings, []),
+        ],
+    )
+    def test_regular_settings__preserves_malformed_tuple_shapes(
+        self, fake_settings_path: Path, settings_model: type[BaseModel], value: Any
+    ):
+        data = {"value": value}
+        fake_settings_path.write_text(json.dumps(data))
+
+        manager = SettingsManager(settings_model)
+        manager.save()
+
+        assert json.loads(fake_settings_path.read_text()) == data
+
+    def test_save__serializes_non_json_types(self):
+        class Settings(BaseModel):
+            url: AnyHttpUrl = AnyHttpUrl("https://example.com/")
+            path: Path = Path("/tmp/example")
+            when: datetime = datetime(2026, 1, 2, 3, 4, 5)
+            token: PlaintextSecretStr = PlaintextSecretStr("plain-token")
+            nested: dict[str, AnyHttpUrl] = {"a": AnyHttpUrl("https://a.example.com/")}
+
+        manager = SettingsManager(Settings)
+        manager.save()
+
+        assert json.loads(manager.settings_path.read_text()) == {
+            "url": "https://example.com/",
+            "path": "/tmp/example",
+            "when": "2026-01-02T03:04:05",
+            "token": "plain-token",
+            "nested": {"a": "https://a.example.com/"},
+        }
+        reloaded = SettingsManager(Settings).settings_instance
+        assert isinstance(reloaded, Settings)
+        assert str(reloaded.url) == "https://example.com/"

@@ -1,6 +1,7 @@
 from typing import Annotated
 
-from pydantic import AfterValidator, BaseModel, SecretStr
+from pydantic import AfterValidator, BaseModel
+from typerdrive import PlaintextSecretStr
 
 
 def valid_alignment(value: str) -> str:
@@ -25,5 +26,5 @@ class RequiredFieldsModel(BaseModel):
 
 class SecretFieldsModel(BaseModel):
     name: str
-    api_key: SecretStr
-    token: SecretStr = SecretStr("default-token")
+    api_key: PlaintextSecretStr
+    token: PlaintextSecretStr = PlaintextSecretStr("default-token")

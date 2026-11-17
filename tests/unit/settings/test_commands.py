@@ -1,11 +1,20 @@
 import json
+import subprocess
+import sys
 from pathlib import Path
+from typing import Optional
 
+import pytest
+import snick
 import typer
-from auto_name_enum import AutoNameEnum, LowerCaseMixin, auto
+from enumatic import Enumatic, LowerCaseMixin, auto
 from pydantic import BaseModel, ConfigDict
+from typerdrive import EncryptedSecretStr, PlaintextSecretStr
+from typerdrive.config import get_typerdrive_config
 from typerdrive.constants import ExitCode
 from typerdrive.settings.commands import add_bind, add_reset, add_settings_subcommand, add_show, add_unset, add_update
+from typerdrive.settings.secrets import encryption as encryption_module
+from typerdrive.settings.secrets.encryption import SecretEncryption
 
 from tests.unit.helpers import match_help, match_output
 from tests.unit.settings.commands_string_annotation_module import (
@@ -18,7 +27,94 @@ from tests.unit.settings.commands_string_annotation_module import (
 from tests.unit.settings.models import DefaultSettingsModel, RequiredFieldsModel, SecretFieldsModel
 
 
-class Faction(AutoNameEnum, LowerCaseMixin):
+def run_python(script: str) -> None:
+    subprocess.run(
+        [sys.executable, "-c", snick.dedent(script), str(Path(__file__).resolve().parents[3] / "src")],
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+
+
+def test_settings_import_and_optional_encryption_backend_without_pyrage():
+    run_python(
+        """
+        import builtins
+        import json
+        import sys
+        import tempfile
+        from pathlib import Path
+
+        sys.path.insert(0, sys.argv[1])
+        original_import = builtins.__import__
+
+        def import_without_pyrage(name, *args, **kwargs):
+            if name == "pyrage":
+                raise ModuleNotFoundError("No module named 'pyrage'", name="pyrage")
+            return original_import(name, *args, **kwargs)
+
+        builtins.__import__ = import_without_pyrage
+        import typerdrive
+        from pydantic import BaseModel
+        from typerdrive import PlaintextSecretStr
+        from typerdrive.config import TyperdriveConfig, set_typerdrive_config
+        from typerdrive.settings.manager import SettingsManager
+
+        assert TyperdriveConfig(app_name="without_extra").app_name == "without_extra"
+        assert "encrypt_secrets" not in TyperdriveConfig.model_fields
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            set_typerdrive_config(
+                app_name="without-extra",
+                state_home=Path(temporary_directory) / "state",
+                cache_home=Path(temporary_directory) / "cache",
+            )
+
+            class Settings(BaseModel):
+                value: PlaintextSecretStr = PlaintextSecretStr("ordinary")
+
+            manager = SettingsManager(Settings)
+            manager.save()
+            assert json.loads(manager.settings_path.read_text()) == {"value": "ordinary"}
+        assert "typerdrive.settings.secrets.encryption" not in sys.modules
+
+        try:
+            typerdrive.EncryptedSecretStr
+        except ImportError as exc:
+            assert "typerdrive[encrypt-secrets]" in str(exc)
+        else:
+            raise AssertionError("EncryptedSecretStr unexpectedly imported without pyrage")
+
+        """
+    )
+
+
+def test_missing_nested_pyrage_dependency_is_not_masked():
+    run_python(
+        """
+        import builtins
+        import sys
+
+        sys.path.insert(0, sys.argv[1])
+        original_import = builtins.__import__
+
+        def import_with_broken_pyrage(name, *args, **kwargs):
+            if name == "pyrage":
+                raise ModuleNotFoundError("No module named 'pyrage_backend_dep'", name="pyrage_backend_dep")
+            return original_import(name, *args, **kwargs)
+
+        builtins.__import__ = import_with_broken_pyrage
+        try:
+            import typerdrive.settings.secrets.encryption
+        except ModuleNotFoundError as exc:
+            assert exc.name == "pyrage_backend_dep"
+        else:
+            raise AssertionError("broken pyrage import was not propagated")
+        """
+    )
+
+
+class Faction(Enumatic, LowerCaseMixin):
     REBEL = auto()
     EMPIRE = auto()
     NEUTRAL = auto()
@@ -211,7 +307,7 @@ class TestBind:
             "planets_by_name": {"home": {"name": "tatooine"}},
         }
 
-    def test_bind__with_auto_name_enum_default(self, fake_settings_path: Path):
+    def test_bind__with_enumatic_enum_default(self, fake_settings_path: Path):
         class Settings(BaseModel):
             name: str = "jawa"
             faction: Faction = Faction.NEUTRAL
@@ -637,20 +733,20 @@ class TestSubcommand:
 
 class TestSecretFields:
     """
-    Typer does not support `pydantic.SecretStr` as a CLI parameter type — passing it directly
+    Typer does not support `pydantic.PlaintextSecretStr` as a CLI parameter type — passing it directly
     raises `RuntimeError: Type not yet supported`.  The fix in `commands.py` substitutes `str`
     so Typer can build the command tree, while `SettingsManager` continues to round-trip the
-    values through `SecretStr` when persisting to / loading from disk.
+    values through `PlaintextSecretStr` when persisting to / loading from disk.
     """
 
     def test_bind__does_not_raise_on_registration(self):
-        """add_bind must not crash when the model contains SecretStr fields."""
+        """add_bind must not crash when the model contains PlaintextSecretStr fields."""
         cli = typer.Typer()
-        # Previously raised: RuntimeError: Type not yet supported: <class 'pydantic.types.SecretStr'>
+        # Previously raised: RuntimeError: Type not yet supported: <class 'pydantic.types.PlaintextSecretStr'>
         add_bind(cli, SecretFieldsModel)
 
     def test_bind__help_shows_secret_fields_as_text(self):
-        """SecretStr fields must appear as TEXT options in --help output."""
+        """PlaintextSecretStr fields must appear as TEXT options in --help output."""
         cli = typer.Typer()
         add_bind(cli, SecretFieldsModel)
 
@@ -682,14 +778,14 @@ class TestSecretFields:
         assert data == {"name": "han", "api_key": "s3cr3t", "token": "tok123"}
 
     def test_bind__secretstr_default_does_not_crash_registration(self):
-        """A SecretStr field with a default value must not crash CLI registration."""
+        """A PlaintextSecretStr field with a default value must not crash CLI registration."""
         cli = typer.Typer()
-        # SecretFieldsModel.token has default=SecretStr("default-token")
+        # SecretFieldsModel.token has default=PlaintextSecretStr("default-token")
         add_bind(cli, SecretFieldsModel)
         match_help(cli, expected_pattern=[r"--token TEXT"], prog_name="test")
 
     def test_update__does_not_raise_on_registration(self):
-        """add_update must not crash when the model contains SecretStr fields."""
+        """add_update must not crash when the model contains PlaintextSecretStr fields."""
         cli = typer.Typer()
         add_update(cli, SecretFieldsModel)
 
@@ -717,7 +813,7 @@ class TestSecretFields:
         add_settings_subcommand(cli, SecretFieldsModel)
 
     def test_add_settings_subcommand__top_level_help_does_not_raise(self):
-        """`--help` at the top level must exit cleanly when settings contain SecretStr fields."""
+        """`--help` at the top level must exit cleanly when settings contain PlaintextSecretStr fields."""
         cli = typer.Typer()
         add_settings_subcommand(cli, SecretFieldsModel)
 
@@ -726,6 +822,165 @@ class TestSecretFields:
             expected_pattern=[r"settings.*Manage settings for the app"],
             prog_name="test",
         )
+
+
+class OptionalSecretSettings(BaseModel):
+    required: Optional[PlaintextSecretStr]
+    optional: PlaintextSecretStr | None = None
+    defaulted: None | PlaintextSecretStr = PlaintextSecretStr("optional-default-secret")
+    direct: PlaintextSecretStr = PlaintextSecretStr("direct-default-secret")
+    name: str = "jawa"
+
+
+class EncryptedOptionalSecretSettings(BaseModel):
+    required: Optional[EncryptedSecretStr]
+    optional: EncryptedSecretStr | None = None
+    defaulted: None | EncryptedSecretStr = EncryptedSecretStr("optional-default-secret")
+    direct: EncryptedSecretStr = EncryptedSecretStr("direct-default-secret")
+    name: str = "jawa"
+
+
+class TestOptionalSecretFields:
+    def test_subcommand_help_hides_secret_defaults(self):
+        cli = typer.Typer()
+        add_settings_subcommand(cli, OptionalSecretSettings)
+
+        for command in ("bind", "update"):
+            match_output(
+                cli,
+                "settings",
+                command,
+                "--help",
+                expected_pattern=[r"--required TEXT", r"--optional TEXT", r"--defaulted TEXT", r"--direct TEXT"],
+                unwanted_pattern=["optional-default-secret", "direct-default-secret"],
+                prog_name="test",
+            )
+        match_output(
+            cli,
+            "settings",
+            "bind",
+            "--help",
+            expected_pattern=[r"--name TEXT \[default: jawa\]"],
+            prog_name="test",
+        )
+
+    def test_subcommand_help_hides_encrypted_secret_defaults(self):
+        cli = typer.Typer()
+        add_settings_subcommand(cli, EncryptedOptionalSecretSettings)
+
+        for command in ("bind", "update"):
+            match_output(
+                cli,
+                "settings",
+                command,
+                "--help",
+                expected_pattern=[r"--required TEXT", r"--optional TEXT", r"--defaulted TEXT", r"--direct TEXT"],
+                unwanted_pattern=["optional-default-secret", "direct-default-secret"],
+                prog_name="test",
+            )
+
+    def test_bind__optional_secrets_and_defaults(self, fake_settings_path: Path):
+        cli = typer.Typer()
+        add_settings_subcommand(cli, OptionalSecretSettings)
+
+        match_output(
+            cli,
+            "settings",
+            "bind",
+            "--required=first-secret",
+            "--optional=second-secret",
+            unwanted_pattern=["first-secret", "second-secret", "optional-default-secret", "direct-default-secret"],
+            prog_name="test",
+        )
+        assert json.loads(fake_settings_path.read_text()) == {
+            "required": "first-secret",
+            "optional": "second-secret",
+            "defaulted": "optional-default-secret",
+            "direct": "direct-default-secret",
+            "name": "jawa",
+        }
+
+    def test_bind__required_optional_and_none_default(self, fake_settings_path: Path):
+        cli = typer.Typer()
+        add_settings_subcommand(cli, OptionalSecretSettings)
+
+        match_output(cli, "settings", "bind", exit_code=2, expected_pattern=["Missing option"], prog_name="test")
+        match_output(cli, "settings", "bind", "--required=first-secret", prog_name="test")
+        assert json.loads(fake_settings_path.read_text())["optional"] is None
+
+    def test_update__preserves_omitted_optional_secret(self, fake_settings_path: Path):
+        fake_settings_path.write_text(json.dumps({"required": "old-required", "optional": "old-optional"}))
+        cli = typer.Typer()
+        add_settings_subcommand(cli, OptionalSecretSettings)
+
+        match_output(
+            cli,
+            "settings",
+            "update",
+            "--required=new-secret",
+            unwanted_pattern=["new-secret", "old-optional"],
+            prog_name="test",
+        )
+        data = json.loads(fake_settings_path.read_text())
+        assert data["required"] == "new-secret"
+        assert data["optional"] == "old-optional"
+
+        match_output(cli, "settings", "update", "--optional=updated-secret", prog_name="test")
+        data = json.loads(fake_settings_path.read_text())
+        assert data["required"] == "new-secret"
+        assert data["optional"] == "updated-secret"
+
+    def test_bind_and_update__encrypt_explicit_optional_secrets(self, fake_settings_path: Path, mocker):
+        pytest.importorskip("pyrage")
+        encryption = SecretEncryption(get_typerdrive_config())
+        passphrase = "private-save-passphrase"
+        encryption.setup(passphrase)
+        prompt = mocker.spy(encryption_module.typer, "prompt")
+        cli = typer.Typer()
+        add_settings_subcommand(cli, EncryptedOptionalSecretSettings)
+
+        match_output(
+            cli,
+            "settings",
+            "bind",
+            "--required=first-secret",
+            "--optional=second-secret",
+            unwanted_pattern=[
+                "first-secret",
+                "second-secret",
+                "optional-default-secret",
+                "direct-default-secret",
+                passphrase,
+            ],
+            prog_name="test",
+        )
+        assert prompt.call_count == 0
+        assert not encryption.cache_path.exists()
+        encryption.unlock(passphrase)
+        initial = json.loads(fake_settings_path.read_text())
+        assert encryption.decrypt(initial["required"]) == "first-secret"
+        assert encryption.decrypt(initial["optional"]) == "second-secret"
+        assert encryption.decrypt(initial["defaulted"]) == "optional-default-secret"
+        assert encryption.decrypt(initial["direct"]) == "direct-default-secret"
+        assert "first-secret" not in fake_settings_path.read_text()
+        assert "second-secret" not in fake_settings_path.read_text()
+        assert "passphrase" not in fake_settings_path.read_text()
+
+        match_output(
+            cli,
+            "settings",
+            "update",
+            "--optional=updated-secret",
+            unwanted_pattern=["updated-secret", "optional-default-secret", "direct-default-secret"],
+            prog_name="test",
+        )
+        assert prompt.call_count == 0
+        updated = json.loads(fake_settings_path.read_text())
+        assert updated["required"] == initial["required"]
+        assert updated["defaulted"] == initial["defaulted"]
+        assert updated["direct"] == initial["direct"]
+        assert encryption.decrypt(updated["optional"]) == "updated-secret"
+        assert "updated-secret" not in fake_settings_path.read_text()
 
 
 class TestStringAnnotations:

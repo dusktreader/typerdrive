@@ -10,6 +10,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - name: Checkout repository
@@ -23,6 +25,19 @@ jobs:
 
     - name: Build package
       run: uv build
+
+    - name: Read changelog entry
+      id: changelog
+      uses: mindsers/changelog-reader-action@v2
+      with:
+        version: ${{ github.ref_name }}
+        path: ./CHANGELOG.md
+        version_scheme: semver
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        body: ${{ steps.changelog.outputs.changes }}
 
     - name: Publish package
       run: uv publish --token=${{ secrets.PYPI_API_KEY }}

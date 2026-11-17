@@ -7,7 +7,6 @@ from inspect import signature
 from typing import Annotated
 
 import typer
-
 from typerdrive.cloaked import CloakingDevice
 from typerdrive.signature import SignatureRewriter
 
@@ -39,6 +38,7 @@ class TestSignatureRewriter:
 
     def test_build__applies_multiple_overrides(self):
         class Foo: ...
+
         class Bar: ...
 
         def func(ctx: typer.Context, foo: Foo, bar: Bar, name: str) -> None: ...
@@ -67,6 +67,7 @@ class TestSignatureRewriter:
 
         ann = result.parameters["group"].annotation
         from typing import get_args
+
         assert get_args(ann)[1] is opt
 
     def test_build__does_not_mutate_original_signature(self):
@@ -86,7 +87,9 @@ class TestSignatureRewriter:
         When decorators are stacked, the outer decorator's SignatureRewriter
         should not overwrite annotations already cloaked by an inner decorator.
         """
+
         class Inner: ...
+
         class Outer: ...
 
         cloaked_inner = Annotated[Inner | None, CloakingDevice]
@@ -140,6 +143,7 @@ class TestSignatureRewriterApply:
 
     def test_apply__annotations_is_plain_dict(self):
         """__annotations__ must be a plain resolved dict, not a lazy __annotate__ closure."""
+
         def func(ctx: typer.Context, name: str) -> None: ...
 
         rewriter = SignatureRewriter(func)
@@ -176,6 +180,7 @@ class TestSignatureRewriterApply:
         apply() must neutralise it so Python 3.14 lazy evaluation never fires —
         either by deletion or by replacing it with one that returns the resolved dict.
         """
+
         def func(ctx: typer.Context, name: str) -> None: ...
 
         rewriter = SignatureRewriter(func)

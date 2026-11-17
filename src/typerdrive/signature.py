@@ -43,8 +43,7 @@ class SignatureRewriter:
         Parameters with no override retain their existing annotation.
         """
         new_params: list[Parameter] = [
-            p.replace(annotation=self.overrides.get(p.name, p.annotation))
-            for p in self.sig.parameters.values()
+            p.replace(annotation=self.overrides.get(p.name, p.annotation)) for p in self.sig.parameters.values()
         ]
         return self.sig.replace(parameters=new_params)
 
@@ -72,11 +71,7 @@ class SignatureRewriter:
             pass
         sig = self.build()
         setattr(wrapper, "__signature__", sig)
-        resolved = {
-            name: p.annotation
-            for name, p in sig.parameters.items()
-            if p.annotation is not p.empty
-        }
+        resolved = {name: p.annotation for name, p in sig.parameters.items() if p.annotation is not p.empty}
         wrapper.__annotations__ = resolved
         # Replace __annotate__ (copied by update_wrapper on Python 3.13+) with a
         # callable that returns the pre-resolved dict. On Python 3.14 it cannot be

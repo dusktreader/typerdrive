@@ -3,7 +3,6 @@ from pathlib import Path
 
 import pytest
 from pytest_mock import MockerFixture
-
 from typerdrive.cache.exceptions import CacheInitError
 from typerdrive.cache.manager import CacheManager
 

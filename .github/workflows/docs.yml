@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - 'docs/**'
-      - 'src/typer_repyt/**'
+      - 'src/typerdrive/**'
 
 jobs:
   docs:

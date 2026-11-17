@@ -2,7 +2,9 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config, set_typerdrive_config
+from typerdrive.exceptions import TyperdriveConfigError
 
 
 class TestTyperdriveConfig:
@@ -47,18 +49,18 @@ class TestTyperdriveConfig:
             expected = Path.home() / ".local/state/test_app/settings.json"
             assert config.settings_path == expected
 
-    def test_cache_dir_uses_xdg_cache_home(self):
+    def test_app_cache_home_uses_xdg_cache_home(self):
         with patch.dict(os.environ, {"XDG_CACHE_HOME": "/custom/cache"}):
             config = TyperdriveConfig(app_name="test_app")
             expected = Path("/custom/cache/test_app")
-            assert config.cache_dir == expected
+            assert config.app_cache_home == expected
 
-    def test_cache_dir_default_fallback(self):
+    def test_app_cache_home_default_fallback(self):
         env = {k: v for k, v in os.environ.items() if k != "XDG_CACHE_HOME"}
         with patch.dict(os.environ, env, clear=True):
             config = TyperdriveConfig(app_name="test_app")
             expected = Path.home() / ".cache/test_app"
-            assert config.cache_dir == expected
+            assert config.app_cache_home == expected
 
     def test_database_path_uses_xdg_state_home(self):
         with patch.dict(os.environ, {"XDG_STATE_HOME": "/custom/state"}):
@@ -77,7 +79,7 @@ class TestTyperdriveConfig:
             second = TyperdriveConfig(app_name="second")
             assert first.database_path != second.database_path
             assert first.database_path.parent == Path("/custom/state/first")
-            assert first.database_path != first.cache_dir
+            assert first.database_path != first.app_cache_home
             assert first.database_path != first.files_dir
 
     def test_custom_home_overrides(self):
@@ -93,14 +95,15 @@ class TestTyperdriveConfig:
         assert config.settings_path == Path("/custom/state/test_app/settings.json")
         assert config.files_dir == Path("/custom/state/test_app/files")
         assert config.database_path == Path("/custom/state/test_app/db.sqlite")
-        assert config.cache_dir == Path("/custom/cache/test_app")
+        assert config.app_cache_home == Path("/custom/cache/test_app")
+        assert config.managed_cache_dir == Path("/custom/cache/test_app/managed")
 
     def test_custom_app_name(self):
         config = TyperdriveConfig(app_name="my_custom_app")
 
         assert "my_custom_app" in str(config.log_dir)
         assert "my_custom_app" in str(config.settings_path)
-        assert "my_custom_app" in str(config.cache_dir)
+        assert "my_custom_app" in str(config.app_cache_home)
 
 
 class TestConfigGettersAndSetters:
@@ -136,6 +139,23 @@ class TestConfigGettersAndSetters:
             # Restore original config
             set_typerdrive_config(**original.model_dump())
 
+    def test_config_has_no_encryption_toggle(self):
+        assert "encrypt_secrets" not in TyperdriveConfig.model_fields
+
+    def test_regular_config_updates(self):
+        with patch("typerdrive.config._typerdrive_config", TyperdriveConfig()):
+            set_typerdrive_config(app_name="no_extra")
+            set_typerdrive_config(version="1.0")
+            assert get_typerdrive_config().app_name == "no_extra"
+            assert get_typerdrive_config().version == "1.0"
+
+    def test_invalid_config_preserves_existing_values(self):
+        original = TyperdriveConfig(app_name="original")
+        with patch("typerdrive.config._typerdrive_config", original):
+            with pytest.raises(TyperdriveConfigError, match="Invalid typerdrive config provided"):
+                set_typerdrive_config(encryption_cache_ttl=-1)
+            assert get_typerdrive_config() == original
+
     def test_set_config_preserves_other_values(self):
         original = get_typerdrive_config()
 
@@ -155,3 +175,50 @@ class TestConfigGettersAndSetters:
         finally:
             # Restore original config
             set_typerdrive_config(**original.model_dump())
+
+    def test_missing_extra_preserves_regular_imports_and_guards_encryption(self, run_without_pyrage):
+        run_without_pyrage(
+            """
+import sys
+import typer
+from pydantic import BaseModel
+from typer.testing import CliRunner
+
+import typerdrive
+from typerdrive.config import TyperdriveConfig
+from typerdrive.settings.commands import add_settings_subcommand
+from typerdrive.settings.manager import SettingsManager
+
+assert "typerdrive.settings.secrets.encryption" not in sys.modules
+wildcard_namespace = {}
+exec("from typerdrive import *", wildcard_namespace)
+assert "EncryptedSecretStr" not in wildcard_namespace
+config = TyperdriveConfig(app_name="without_extra")
+assert config.app_name == "without_extra"
+assert "encrypt_secrets" not in TyperdriveConfig.model_fields
+
+class Settings(BaseModel):
+    value: str = "ordinary"
+
+SettingsManager(Settings)
+assert "typerdrive.settings.secrets.encryption" not in sys.modules
+
+try:
+    typerdrive.EncryptedSecretStr
+except ImportError as error:
+    assert "typerdrive[encrypt-secrets]" in str(error)
+else:
+    raise AssertionError("EncryptedSecretStr unexpectedly imported without pyrage")
+
+app = typer.Typer()
+add_settings_subcommand(app, Settings)
+assert "typerdrive.settings.secrets.encryption" not in sys.modules
+runner = CliRunner()
+for command in ("setup", "change-passphrase", "unlock", "lock", "reset"):
+    result = runner.invoke(app, ["settings", "encryption", command], input="private-pass\\nprivate-pass\\n")
+    assert result.exit_code != 0
+    assert "typerdrive[encrypt-secrets]" in result.output
+    assert "private-pass" not in result.output
+assert "typerdrive.settings.secrets.encryption" not in sys.modules
+"""
+        )

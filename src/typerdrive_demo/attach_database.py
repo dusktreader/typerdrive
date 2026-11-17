@@ -1,10 +1,12 @@
 import typer
 from rich import print
-
 from typerdrive import DatabaseSession, MigrationRegistry, attach_database, get_database_session
 from typerdrive.config import get_typerdrive_config
 
+from typerdrive_demo.helpers import demo
 
+
+@demo("attach_database")
 def demo_1__attach_database__async_sql():
     """
     This function demonstrates how to attach a database manager to an async Typer command and use parameterized SQL.
@@ -38,11 +40,12 @@ def demo_1__attach_database__async_sql():
         print("Attachment created the file, enabled WAL, and applied the starships migration")
         await database.execute("INSERT INTO starships (name) VALUES (?)", ("Millennium Falcon",))
         rows = await database.fetch_all("SELECT name FROM starships ORDER BY id")
-        print(f"[green]Starships:[/green] {', '.join([r['name'] for r  in rows])}")
+        print(f"[green]Starships:[/green] {', '.join([r['name'] for r in rows])}")
 
     cli()
 
 
+@demo("attach_database")
 def demo_2__attach_database__sync_wrappers():
     """
     This function demonstrates the synchronous database convenience API in a Typer command. The attachment keeps the
@@ -68,11 +71,12 @@ def demo_2__attach_database__sync_wrappers():
     @attach_database(migration_registry)
     def add_sync_item(ctx: typer.Context, database: DatabaseSession):
         rows = database.fetch_all_sync("SELECT name FROM starships ORDER BY id")
-        print(f"[green]Starships:[/green] {', '.join([r['name'] for r  in rows])}")
+        print(f"[green]Starships:[/green] {', '.join([r['name'] for r in rows])}")
 
     cli()
 
 
+@demo("attach_database")
 def demo_3__attach_database__context_lookup():
     """
     This function demonstrates retrieving a database session from the Typer context instead of declaring a parameter.
@@ -99,6 +103,6 @@ def demo_3__attach_database__context_lookup():
     async def list_items(ctx: typer.Context):
         database = get_database_session(ctx)
         rows = await database.fetch_all("SELECT name FROM starships ORDER BY id")
-        print(f"[green]Starships:[/green] {', '.join([r['name'] for r  in rows])}")
+        print(f"[green]Starships:[/green] {', '.join([r['name'] for r in rows])}")
 
     cli()

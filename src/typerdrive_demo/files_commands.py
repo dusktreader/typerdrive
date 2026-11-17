@@ -3,11 +3,12 @@ This set of demos shows the use of the various files-related commands.
 """
 
 import typer
-from typerdrive import FilesManager, add_files_subcommand, set_typerdrive_config
+from typerdrive import FilesManager, add_files_subcommand
 
-set_typerdrive_config(app_name="files-command-demo")
+from typerdrive_demo.helpers import demo
 
 
+@demo("files_commands")
 def demo_1__show__basic():
     """
     This function demonstrates the use of the `show` files command.
@@ -25,6 +26,7 @@ def demo_1__show__basic():
     cli(["files", "show"])
 
 
+@demo("files_commands")
 def demo_2__workflow__complete():
     """
     This function demonstrates a complete workflow:

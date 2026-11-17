@@ -11,10 +11,8 @@ import typer
 from click.testing import Result
 from pytest_bdd import given, parsers, scenario, then, when
 from typer.testing import CliRunner
-
 from typerdrive.cache.commands import add_cache_subcommand
 from typerdrive.cache.manager import CacheManager
-
 
 # ---------------------------------------------------------------------------
 # Scenario bindings

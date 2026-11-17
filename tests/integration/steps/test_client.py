@@ -15,14 +15,12 @@ from click.testing import Result
 from pydantic import BaseModel
 from pytest_bdd import given, parsers, scenario, then, when
 from typer.testing import CliRunner
-
 from typerdrive.client.attach import attach_client, get_client, get_client_manager
 from typerdrive.client.base import TyperdriveClient
 from typerdrive.client.exceptions import ClientError
 from typerdrive.config import get_typerdrive_config
 from typerdrive.handle_errors import handle_errors
 from typerdrive.settings.attach import attach_settings
-
 
 # ---------------------------------------------------------------------------
 # Settings model for client scenarios that need settings

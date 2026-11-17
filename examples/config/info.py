@@ -1,7 +1,6 @@
 import typer
 from typerdrive import add_info_subcommand, set_typerdrive_config
 
-
 set_typerdrive_config(
     app_name="config-example",
     version="1.2.3",

@@ -1,6 +1,5 @@
 import typer
 from typer.testing import CliRunner
-
 from typerdrive.config import TyperdriveConfig
 from typerdrive.info import add_info_subcommand
 
@@ -73,7 +72,7 @@ def test_info_full_shows_effective_typerdrive_config(monkeypatch):
     assert "console_width" in result.stdout
     assert "90" in result.stdout
     assert "log_dir" in result.stdout
-    assert "cache_dir" in result.stdout
+    assert "app_cache_home" in result.stdout
     assert "database_path" in result.stdout
 
 

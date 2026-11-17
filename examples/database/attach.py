@@ -1,9 +1,7 @@
 from pathlib import Path
 
 import typer
-
 from typerdrive import DatabaseManager, DatabaseSession, MigrationRegistry, attach_database, terminal_message
-
 
 cli = typer.Typer()
 registry = MigrationRegistry()

@@ -15,10 +15,8 @@ from click.testing import Result
 from pydantic import BaseModel, field_validator
 from pytest_bdd import given, parsers, scenario, then, when
 from typer.testing import CliRunner
-
 from typerdrive.config import get_typerdrive_config
 from typerdrive.settings.commands import add_settings_subcommand
-
 
 # ---------------------------------------------------------------------------
 # Settings model shared across all settings scenarios

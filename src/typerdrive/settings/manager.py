@@ -8,13 +8,15 @@ from typing import Any, cast
 
 from inflection import dasherize
 from loguru import logger
-from pydantic import BaseModel, SecretStr, ValidationError
+from pydantic import BaseModel, ValidationError
 from rich.console import Group, RenderableType
 from rich.table import Table
 
 from typerdrive.config import TyperdriveConfig, get_typerdrive_config
+from typerdrive.file_ops import atomic_write
 from typerdrive.format import pretty_annotation, pretty_field_info
 from typerdrive.model_parser import is_model_collection, is_model_type
+from typerdrive.settings.constants import DUMP_CONTEXT_KEY, LOADING_CONTEXT_KEY, DumpMode
 from typerdrive.settings.exceptions import (
     SettingsDisplayError,
     SettingsInitError,
@@ -23,7 +25,9 @@ from typerdrive.settings.exceptions import (
     SettingsUnsetError,
     SettingsUpdateError,
 )
-from typerdrive.settings.utilities import construct_permissive
+from typerdrive.settings.utilities import (
+    construct_permissive,
+)
 
 
 class SettingsManager:
@@ -52,88 +56,65 @@ class SettingsManager:
 
         with SettingsInitError.handle_errors("Failed to initialize settings"):
             settings_values: dict[str, Any] = {}
-            if self.settings_path.exists():
+            loading = self.settings_path.exists()
+            if loading:
                 settings_values = json.loads(self.settings_path.read_text())
-            self.construct_instance(**settings_values)
+            self._construct_instance(settings_values, loading=loading)
 
     def construct_instance(self, **settings_values: Any):
+        self._construct_instance(settings_values)
+
+    def _construct_instance(self, settings_values: dict[str, Any], loading: bool = False):
+        context: dict[str, Any] = {LOADING_CONTEXT_KEY: loading}
+        error = None
         try:
-            self.settings_instance = self.settings_model(**settings_values)
-            self.invalid_warnings = {}
+            instance = self.settings_model.model_validate(settings_values, context=context)
         except ValidationError as err:
-            self.settings_instance = construct_permissive(self.settings_model, **settings_values)
-            self.set_warnings(err)
+            instance = construct_permissive(self.settings_model, context, **settings_values)
+            error = err
+        self.settings_instance = instance
+        if error is None:
+            self.invalid_warnings = {}
+        else:
+            self.set_warnings(error)
 
     def set_warnings(self, err: ValidationError):
-        """
-        Given a `ValidationError`, extract the field names and messages to the `invalid_warnings` dict.
-        """
+        """Extract field names and messages from a validation error."""
         self.invalid_warnings = {}
         for data in err.errors():
             key: str = cast(str, data["loc"][0])
             message = data["msg"]
             self.invalid_warnings[key] = message
 
-    def _dump_value(self, value: Any, annotation: Any = None) -> Any:
-        if annotation is SecretStr and isinstance(value, str):
-            value = SecretStr(value)
-        if isinstance(value, SecretStr):
-            return value.get_secret_value()
-        if isinstance(value, BaseModel):
-            result: dict[str, Any] = {}
-            for field_name, field_info in value.__class__.model_fields.items():
-                try:
-                    field_value = getattr(value, field_name)
-                except AttributeError:
-                    continue
-                result[field_name] = self._dump_value(field_value, field_info.annotation)
-            return result
-        if isinstance(value, dict):
-            return {key: self._dump_value(item) for key, item in value.items()}
-        if isinstance(value, (list, tuple, set, frozenset)):
-            return [self._dump_value(item) for item in value]
-        return value
+    def dump(self) -> dict[str, Any]:
+        """Dump settings as plain JSON-compatible data, with all secrets unwrapped."""
+        return self.settings_instance.model_dump(mode="json", context={DUMP_CONTEXT_KEY: DumpMode.PLAINTEXT})
 
-    def _dump(self) -> dict[str, Any]:
-        """
-        Dump the settings instance to a plain dict, unwrapping any `SecretStr` values to bare strings
-        so that the data can be round-tripped through JSON and back into pydantic without loss.
-        """
-        result: dict[str, Any] = {}
-        for k, field_info in self.settings_instance.__class__.model_fields.items():
-            try:
-                val = getattr(self.settings_instance, k)
-            except AttributeError:
-                continue
-            result[k] = self._dump_value(val, field_info.annotation)
-        return result
+    def _snapshot(self) -> dict[str, Any]:
+        """Dump settings for re-validation. Secrets stay wrapped, so encrypted secrets remain lazy."""
+        instance = self.settings_instance
+        return {name: getattr(instance, name) for name in type(instance).model_fields if hasattr(instance, name)}
+
+    def to_dict(self) -> dict[str, Any]:
+        """Return settings values as plain data."""
+        return self.dump()
 
     def update(self, **settings_values: Any):
-        """
-        Update the app settings given the provided key/value pairs.
-
-        If validation fails, the `invalid_warngings` will be updated, but all valid fields will remain set.
-        """
-        logger.debug(f"Updating settings with {settings_values}")
-
+        """Update settings and retain warnings for invalid values."""
+        logger.debug("Updating settings")
         with SettingsUpdateError.handle_errors("Failed to update settings"):
-            combined_settings = {**self._dump(), **settings_values}
+            combined_settings = {**self._snapshot(), **settings_values}
             self.construct_instance(**combined_settings)
 
     def unset(self, *unset_keys: str):
-        """
-        Remove all the settings corresponding to the provided keys.
-        """
+        """Remove the settings corresponding to the provided keys."""
         logger.debug(f"Unsetting keys {unset_keys}")
-
         with SettingsUnsetError.handle_errors("Failed to remove keys"):
-            settings_values = {k: v for (k, v) in self._dump().items() if k not in unset_keys}
+            settings_values = {key: value for key, value in self._snapshot().items() if key not in unset_keys}
             self.construct_instance(**settings_values)
 
     def reset(self):
-        """
-        Reset the settings back to defaults.
-        """
+        """Reset the settings back to defaults."""
         logger.debug("Resetting all settings")
 
         with SettingsResetError.handle_errors("Failed to reset settings"):
@@ -145,12 +126,10 @@ class SettingsManager:
 
         If invalid, `ValidationError` exceptions will be raised
         """
-        self.settings_model(**self._dump())
+        self.settings_model.model_validate(self._snapshot())
 
     def pretty(self, with_style: bool = True) -> RenderableType:
-        """
-        Return a pretty representation of the settings.
-        """
+        """Return a pretty representation of the settings."""
         (bold_, _bold) = ("[bold]", "[/bold]") if with_style else ("", "")
         (italic_, _italic) = ("[italic]", "[/italic]") if with_style else ("", "")
         (underline_, _underline) = ("[underline]", "[/underline]") if with_style else ("", "")
@@ -158,9 +137,7 @@ class SettingsManager:
         (blue_, _blue) = ("[blue]", "[/blue]") if with_style else ("", "")
 
         nested: list[str] = []
-
         items: list[RenderableType] = []
-
         values_table: Table = Table(
             title="Settings Values",
             title_style="bold underline",
@@ -177,8 +154,6 @@ class SettingsManager:
                 continue
             try:
                 val = getattr(self.settings_instance, field_name)
-                if field_info.annotation is SecretStr and isinstance(val, str):
-                    val = SecretStr(val)
                 field_string = str(val)
             except AttributeError:
                 field_string = "<UNSET>"
@@ -196,8 +171,7 @@ class SettingsManager:
         items.append(values_table)
 
         if self.invalid_warnings:
-            items.append("")
-            items.append("")
+            items.extend(["", ""])
             invalid_table: Table = Table(
                 title="Invalid Values",
                 title_style="bold underline",
@@ -207,20 +181,12 @@ class SettingsManager:
             invalid_table.add_column(justify="right", style="bold", no_wrap=True)
             invalid_table.add_column(justify="center")
             invalid_table.add_column(justify="left", no_wrap=True)
-
             for field_name, invalid_warning in self.invalid_warnings.items():
-                invalid_table.add_row(
-                    dasherize(field_name),
-                    "->",
-                    invalid_warning,
-                )
-
+                invalid_table.add_row(dasherize(field_name), "->", invalid_warning)
             items.append(invalid_table)
 
         if nested:
-            items.append("")
-            items.append("")
-            items.append(f"{blue_}{bold_}{underline_}{_underline}{_bold}{_blue}")
+            items.extend(["", "", f"{blue_}{bold_}{underline_}{_underline}{_bold}{_blue}"])
             nested_table: Table = Table(
                 title="*Nested Model Types",
                 title_style="blue bold underline",
@@ -230,17 +196,20 @@ class SettingsManager:
             nested_table.add_column(style="bold")
             for model in nested:
                 nested_table.add_row(model)
-
             items.append(nested_table)
 
         return Group(*items)
 
     def save(self):
-        """
-        Write the current settings to disk.
-        """
+        """Write the current settings to disk."""
         logger.debug(f"Saving settings to {self.settings_path}")
 
         with SettingsSaveError.handle_errors(f"Failed to save settings to {self.settings_path}"):
+            data = self.settings_instance.model_dump(
+                mode="json",
+                include=set(type(self.settings_instance).model_fields),
+                context={DUMP_CONTEXT_KEY: DumpMode.PERSIST},
+            )
+            content = json.dumps(data, indent=2)
             self.settings_path.parent.mkdir(parents=True, exist_ok=True)
-            self.settings_path.write_text(json.dumps(self._dump(), indent=2))
+            atomic_write(self.settings_path, content.encode("utf-8"))

@@ -6,14 +6,16 @@ import json
 from pathlib import Path
 
 import typer
-from pydantic import BaseModel
-from typerdrive import add_settings_subcommand, set_typerdrive_config
+from pydantic import BaseModel, ConfigDict
+from typerdrive import EncryptedSecretStr, add_settings_subcommand
+from typerdrive.config import get_typerdrive_config
+from typerdrive.settings.manager import SettingsManager
+from typerdrive.settings.secrets.encryption import SecretEncryption
 
-from typerdrive_demo.helpers import fake_input
-
-set_typerdrive_config(app_name="settings-commands-demo")
+from typerdrive_demo.helpers import demo
 
 
+@demo("settings_commands")
 def demo_01__bind__basic():
     """
     This function demonstrates the use of the `bind` settings command.
@@ -35,6 +37,7 @@ def demo_01__bind__basic():
     cli(["settings", "bind", "--name=jawa", "--planet=tatooine"])
 
 
+@demo("settings_commands")
 def demo_02__bind__invalid_settings():
     """
     This function demonstrates how the `bind` settings command
@@ -54,6 +57,7 @@ def demo_02__bind__invalid_settings():
     cli(["settings", "bind", "--name=jawa"])
 
 
+@demo("settings_commands")
 def demo_03__bind__help():
     """
     This function demonstrates the help text that's provided with
@@ -71,6 +75,7 @@ def demo_03__bind__help():
     cli(["settings", "bind", "--help"])
 
 
+@demo("settings_commands")
 def demo_04__update():
     """
     This function demonstrates the use of the `update` settings command.
@@ -93,6 +98,7 @@ def demo_04__update():
     cli(["settings", "update", "--planet=tatooine"])
 
 
+@demo("settings_commands")
 def demo_05__update__help():
     """
     This function demonstrates the help text that's provided with
@@ -110,6 +116,7 @@ def demo_05__update__help():
     cli(["settings", "update", "--help"])
 
 
+@demo("settings_commands")
 def demo_06__unset():
     """
     This function demonstrates the use of the `unset` settings command.
@@ -148,6 +155,7 @@ def demo_06__unset():
     cli(["settings", "unset", "--name", "--alignment"])
 
 
+@demo("settings_commands")
 def demo_07__unset__help():
     """
     This function demonstrates the help text that's provided with
@@ -165,6 +173,7 @@ def demo_07__unset__help():
     cli(["settings", "unset", "--help"])
 
 
+@demo("settings_commands")
 def demo_08__show():
     """
     This function demonstrates the `show` command. It simply shows
@@ -182,6 +191,7 @@ def demo_08__show():
     cli(["settings", "show"])
 
 
+@demo("settings_commands", input_lines=["y"])
 def demo_09__reset():
     """
     This function demonstrates the `reset` command. It clears all the
@@ -217,10 +227,10 @@ def demo_09__reset():
 
     cli = typer.Typer()
     add_settings_subcommand(cli, ExampleSettings)
-
-    fake_input("y")
     cli(["settings", "reset"])
 
+
+@demo("settings_commands")
 def demo_10__bind__nested():
     """
     This function demonstrates the use of the `bind` settings command
@@ -246,10 +256,144 @@ def demo_10__bind__nested():
 
     cli = typer.Typer()
     add_settings_subcommand(cli, ExampleSettings)
-    cli([
-        "settings",
-        "bind",
-        "--name=jawa",
-        """--coloration={"eyes": "yellow", "hair": "black"}""",
-        """--planet={"name": "tatooine", "climate": "desert"}""",
-    ])
+    cli(
+        [
+            "settings",
+            "bind",
+            "--name=jawa",
+            """--coloration={"eyes": "yellow", "hair": "black"}""",
+            """--planet={"name": "tatooine", "climate": "desert"}""",
+        ]
+    )
+
+
+@demo("settings_commands", input_lines=["demo-passphrase", "demo-passphrase"])
+def demo_11__encryption_setup():
+    """
+    This function demonstrates the use of the `encryption setup` settings command.
+    This command creates the encryption material that is needed to save any field
+    of type `EncryptedSecretStr`. By default, the private key is protected by a
+    passphrase that you enter (and confirm) at a hidden prompt. Setup will refuse
+    to replace encryption material that already exists.
+    """
+
+    class ExampleSettings(BaseModel):
+        model_config = ConfigDict(validate_default=True)
+
+        api_token: EncryptedSecretStr
+
+    cli = typer.Typer()
+    add_settings_subcommand(cli, ExampleSettings)
+    cli(["settings", "encryption", "setup"])
+
+
+@demo("settings_commands")
+def demo_12__encryption_setup__no_passphrase():
+    """
+    This function demonstrates the `--no-passphrase` option of the `encryption setup`
+    settings command. This creates a private key that is not protected by a passphrase,
+    so saving and decrypting secrets never prompts. The tradeoff is that anyone who can
+    read the key file can decrypt your secrets, and locking cannot protect it. The key
+    file is only readable by the current user.
+    """
+
+    class ExampleSettings(BaseModel):
+        model_config = ConfigDict(validate_default=True)
+
+        api_token: EncryptedSecretStr
+
+    cli = typer.Typer()
+    add_settings_subcommand(cli, ExampleSettings)
+    cli(["settings", "encryption", "setup", "--no-passphrase"])
+
+
+@demo("settings_commands", input_lines=["demo-passphrase"])
+def demo_13__encryption_unlock():
+    """
+    This function demonstrates the use of the `encryption unlock` settings command.
+    This command asks for the passphrase of a passphrase-protected key, verifies it, and
+    caches the unlocked key for a limited time (`encryption_cache_ttl`, 300 seconds by
+    default). While the cache is valid, saving and decrypting secrets will not prompt.
+    """
+
+    class ExampleSettings(BaseModel):
+        model_config = ConfigDict(validate_default=True)
+
+        api_token: EncryptedSecretStr
+
+    SecretEncryption(get_typerdrive_config()).setup("demo-passphrase")
+    cli = typer.Typer()
+    add_settings_subcommand(cli, ExampleSettings)
+    cli(["settings", "encryption", "unlock"])
+
+
+@demo("settings_commands")
+def demo_14__encryption_lock():
+    """
+    This function demonstrates the use of the `encryption lock` settings command.
+    This command removes the cached unlocked key, so the next save or decryption
+    of a secret will prompt for the passphrase again.
+    """
+
+    class ExampleSettings(BaseModel):
+        model_config = ConfigDict(validate_default=True)
+
+        api_token: EncryptedSecretStr
+
+    encryption = SecretEncryption(get_typerdrive_config())
+    encryption.setup("demo-passphrase")
+    encryption.unlock("demo-passphrase")
+    cli = typer.Typer()
+    add_settings_subcommand(cli, ExampleSettings)
+    cli(["settings", "encryption", "lock"])
+
+
+@demo("settings_commands", input_lines=["demo-passphrase", "demo-new-passphrase", "demo-new-passphrase"])
+def demo_15__encryption_change_passphrase():
+    """
+    This function demonstrates the use of the `encryption change-passphrase` settings command.
+    This command asks for the current passphrase, then for a new passphrase (and a confirmation),
+    and protects the private key with the new one. Your saved secrets are not re-encrypted,
+    so they do not change. This is only possible for passphrase-protected keys.
+    """
+
+    class ExampleSettings(BaseModel):
+        model_config = ConfigDict(validate_default=True)
+
+        api_token: EncryptedSecretStr
+
+    SecretEncryption(get_typerdrive_config()).setup("demo-passphrase")
+    cli = typer.Typer()
+    add_settings_subcommand(cli, ExampleSettings)
+    cli(["settings", "encryption", "change-passphrase"])
+
+
+@demo("settings_commands", input_lines=["y"])
+def demo_16__encryption_reset():
+    """
+    This function demonstrates the use of the `encryption reset` settings command.
+    This command is for starting over, for example if you lose your passphrase. After asking for
+    confirmation, it permanently removes the encryption key (and any cached copy of it) and resets every
+    encrypted settings value back to its default. Other settings are left alone. Afterward, you can
+    run `encryption setup` again to create a new key.
+    """
+
+    class ExampleSettings(BaseModel):
+        model_config = ConfigDict(validate_default=True)
+
+        name: str = "yoda"
+        api_token: EncryptedSecretStr = EncryptedSecretStr("default-token")
+
+    encryption = SecretEncryption(get_typerdrive_config())
+    encryption.setup("demo-passphrase")
+    encryption.unlock("demo-passphrase")
+    manager = SettingsManager(ExampleSettings)
+    manager.update(name="grogu", api_token="my-secret-token")
+    manager.save()
+
+    cli = typer.Typer()
+    add_settings_subcommand(cli, ExampleSettings)
+    cli(["settings", "encryption", "reset"], standalone_mode=False)
+
+    print("Settings file after reset:")
+    print(get_typerdrive_config().settings_path.read_text())

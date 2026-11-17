@@ -1,5 +1,5 @@
 import typer
-from typerdrive import add_files_subcommand, attach_files, FilesManager, set_typerdrive_config
+from typerdrive import FilesManager, add_files_subcommand, attach_files, set_typerdrive_config
 
 cli = typer.Typer()
 add_files_subcommand(cli)

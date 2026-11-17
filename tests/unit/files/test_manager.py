@@ -172,9 +172,7 @@ class TestFilesManager:
         (fake_files_path / "documents/root.yaml").touch()
         manager = FilesManager()
 
-        assert set(manager.list_items("documents", recursive=True, pattern="*.md.j2")) == {
-            "documents/root.md.j2"
-        }
+        assert set(manager.list_items("documents", recursive=True, pattern="*.md.j2")) == {"documents/root.md.j2"}
         assert set(manager.list_items("documents", recursive=True, pattern="**/*.md.j2")) == {
             "documents/root.md.j2",
             "documents/nested/nested.md.j2",
@@ -182,9 +180,7 @@ class TestFilesManager:
         }
         assert manager.list_items("documents", pattern="**/*.md.j2") == ["root.md.j2"]
 
-    def test_list_items__pattern_preserves_missing_and_symlink_behavior(
-        self, fake_files_path: Path, tmp_path: Path
-    ):
+    def test_list_items__pattern_preserves_missing_and_symlink_behavior(self, fake_files_path: Path, tmp_path: Path):
         (fake_files_path / "documents").mkdir()
         (fake_files_path / "documents/visible.txt").touch()
         (fake_files_path / "documents/linked.txt").symlink_to(fake_files_path / "documents/visible.txt")

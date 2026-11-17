@@ -16,10 +16,10 @@ from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, Field, computed_field
-from xdg_base_dirs import xdg_state_home, xdg_cache_home
+from xdg_base_dirs import xdg_cache_home, xdg_state_home
 
-from typerdrive.exceptions import TyperdriveError
-from typerdrive.types import FileRetentionSpec, FileRotationSpec, FileCompressionSpec
+from typerdrive.exceptions import TyperdriveConfigError
+from typerdrive.types import FileCompressionSpec, FileRetentionSpec, FileRotationSpec
 
 
 class TyperdriveConfig(BaseModel):
@@ -93,13 +93,24 @@ class TyperdriveConfig(BaseModel):
     Base directory for cache data, defaulting to XDG_CACHE_HOME.
     """
 
+    encryption_cache_ttl: int = Field(default=300, ge=0)
+    """Seconds to cache the unwrapped identity on disk; zero disables caching."""
+
+    @computed_field
+    @property
+    def app_state_home(self) -> Path:
+        """
+        Retrieve the app's state directory.
+        """
+        return self.state_home / self.app_name
+
     @computed_field
     @property
     def log_dir(self) -> Path:
         """
         Retrieve the directory where logs will be stored.
         """
-        return self.state_home / self.app_name / "logs"
+        return self.app_state_home / "logs"
 
     @computed_field
     @property
@@ -107,11 +118,11 @@ class TyperdriveConfig(BaseModel):
         """
         Retrieve the file where settings will be stored.
         """
-        return self.state_home / self.app_name / "settings.json"
+        return self.app_state_home / "settings.json"
 
     @computed_field
     @property
-    def cache_dir(self) -> Path:
+    def app_cache_home(self) -> Path:
         """
         Retrieve the directory where the cache data will be stored.
         """
@@ -119,11 +130,22 @@ class TyperdriveConfig(BaseModel):
 
     @computed_field
     @property
+    def managed_cache_dir(self) -> Path:
+        """
+        Retrieve the directory where the `diskcache` data will be stored.
+
+        This is kept separate from the rest of the app's cache directory so that other internal files can live
+        alongside it without showing up in (or being removed by) the cache commands.
+        """
+        return self.app_cache_home / "managed"
+
+    @computed_field
+    @property
     def files_dir(self) -> Path:
         """
         Retrieve the directory where files will be stored.
         """
-        return self.state_home / self.app_name / "files"
+        return self.app_state_home / "files"
 
     @computed_field
     @property
@@ -131,7 +153,7 @@ class TyperdriveConfig(BaseModel):
         """
         Retrieve the file where the application database will be stored.
         """
-        return self.state_home / self.app_name / "db.sqlite"
+        return self.app_state_home / "db.sqlite"
 
 
 _typerdrive_config: TyperdriveConfig = TyperdriveConfig.model_construct()
@@ -144,8 +166,7 @@ def set_typerdrive_config(**kwargs: Any):
     global _typerdrive_config
     combined_config = {**_typerdrive_config.model_dump(), **kwargs}
 
-    # TyperdriveConfigError?
-    with TyperdriveError.handle_errors("Invalid typerdrive config provided"):
+    with TyperdriveConfigError.handle_errors("Invalid typerdrive config provided"):
         _typerdrive_config = TyperdriveConfig(**combined_config)
 
 

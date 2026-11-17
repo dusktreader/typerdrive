@@ -12,7 +12,6 @@ from typerdrive.database.manager import DatabaseManager
 from typerdrive.database.migrations import MigrationRegistry
 from typerdrive.handle_errors import handle_errors
 
-
 T = TypeVar("T")
 
 

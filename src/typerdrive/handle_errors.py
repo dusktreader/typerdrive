@@ -6,15 +6,14 @@ from collections.abc import Awaitable, Callable
 from inspect import isawaitable, iscoroutinefunction
 from typing import NoReturn, ParamSpec, TypeVar, cast
 
-from buzz import DoExceptParams, get_traceback, reformat_exception
 import snick
 import typer
+from buzz import DoExceptParams, get_traceback, reformat_exception
 
 from typerdrive.constants import ExitCode
 from typerdrive.exceptions import TyperdriveError
 from typerdrive.format import terminal_message
 from typerdrive.signature import SignatureRewriter
-
 
 P = ParamSpec("P")
 T = TypeVar("T")
@@ -118,9 +117,11 @@ def handle_errors(
                     do_finally()
 
         if iscoroutinefunction(func):
+
             async def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
                 return await await_result(cast(Awaitable[T], func(*args, **kwargs)))
         else:
+
             def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
                 return_value: T | Awaitable[T] | None = None
                 try:

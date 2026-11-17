@@ -1,3 +1,6 @@
+from importlib import import_module
+from importlib.util import find_spec
+
 from loguru import logger
 
 from typerdrive.cache.attach import attach_cache, get_cache_manager
@@ -9,28 +12,28 @@ from typerdrive.client.attach import attach_client, get_client, get_client_manag
 from typerdrive.client.base import TyperdriveClient
 from typerdrive.client.exceptions import ClientError
 from typerdrive.client.manager import ClientManager
+from typerdrive.config import TyperdriveConfig, get_typerdrive_config, set_typerdrive_config
+from typerdrive.constants import EvictionPolicy, Validation
 from typerdrive.database import (
     DatabaseError,
-    add_database_subcommand,
     DatabaseInitError,
     DatabaseLifecycleError,
     DatabaseManagementError,
     DatabaseManager,
-    DatabaseSession,
     DatabaseMigrationError,
     DatabaseMigrationIntegrityError,
     DatabaseQueryError,
     DatabaseRollbackError,
+    DatabaseSession,
     DatabaseTransactionError,
     Migration,
     MigrationRegistry,
+    add_database_subcommand,
     attach_database,
     get_database_manager,
     get_database_session,
 )
-from typerdrive.config import TyperdriveConfig, get_typerdrive_config, set_typerdrive_config
-from typerdrive.constants import EvictionPolicy, Validation
-from typerdrive.exceptions import TyperdriveError
+from typerdrive.exceptions import TyperdriveConfigError, TyperdriveError
 from typerdrive.files.attach import attach_files, get_files_manager
 from typerdrive.files.commands import add_files_subcommand
 from typerdrive.files.exceptions import FilesClearError, FilesError, FilesInitError, FilesLoadError, FilesStoreError
@@ -54,9 +57,26 @@ from typerdrive.settings.exceptions import (
     SettingsUpdateError,
 )
 from typerdrive.settings.manager import SettingsManager
+from typerdrive.settings.secrets.models import PlaintextSecretStr
 
 # Disable the logger unless @attach_logging is used
 logger.disable("typerdrive")
+
+
+def __getattr__(name: str):
+    if name != "EncryptedSecretStr":
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    try:
+        import_module("pyrage")
+    except ModuleNotFoundError as exc:
+        if exc.name != "pyrage":
+            raise
+        raise ImportError(
+            "EncryptedSecretStr requires the 'encrypt-secrets' extra: install typerdrive[encrypt-secrets]"
+        ) from exc
+    from typerdrive.settings.secrets.models import EncryptedSecretStr
+
+    return EncryptedSecretStr
 
 
 __all__ = [
@@ -97,6 +117,7 @@ __all__ = [
     "SettingsUpdateError",
     "TyperdriveClient",
     "TyperdriveConfig",
+    "TyperdriveConfigError",
     "Migration",
     "MigrationRegistry",
     "TyperdriveError",
@@ -127,9 +148,17 @@ __all__ = [
     "get_typerdrive_config",
     "handle_errors",
     "log_error",
+    "PlaintextSecretStr",
     "set_typerdrive_config",
     "simple_message",
     "status_message",
     "strip_rich_style",
     "terminal_message",
 ]
+
+try:
+    if find_spec("pyrage") is not None:
+        __all__.append("EncryptedSecretStr")
+except ModuleNotFoundError as exc:
+    if exc.name != "pyrage":
+        raise
